@@ -66,6 +66,10 @@
   .btn-sm{background:linear-gradient(135deg,var(--navy),#2b3a63);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-weight:800;font-size:13px;cursor:pointer;}
   .btn-ghost-sm{background:#fff;color:var(--muted);border:1px solid var(--line);}
   .done_hint{font-size:12.5px;color:var(--muted);text-align:center;margin:14px 0 0;}
+  .tut-cta{text-align:center;margin-top:14px;padding:16px;background:linear-gradient(135deg,#1a2333,#101a2c);border:1px solid #22D3EE55;border-radius:14px;}
+  .tut-cta .tut-q{font-weight:800;color:#fff;font-size:15px;margin-bottom:8px;}
+  .tut-cta a{display:inline-block;background:linear-gradient(135deg,#22D3EE,#7C5CFC);color:#fff;border-radius:11px;padding:12px 22px;font-weight:800;font-size:15px;text-decoration:none;box-shadow:0 10px 26px rgba(34,211,238,.3);}
+  .tut-cta .tut-sub{font-size:11.5px;color:#8A97AD;margin-top:8px;}
   @media(max-width:520px){.bc-top .name{font-size:24px;} .bc-top,.bc-body{padding:18px;} h1{font-size:25px;}}
   @media print{body{background:#fff;} .no-print{display:none!important;} .stage{max-width:100%;padding:0;} .bcard{box-shadow:none;}}
 </style>
@@ -99,12 +103,10 @@
       <div class="q-sub">Pick the one that's costing you the most right now — this shapes your archetype and your agent.</div>
       <div class="optgrid">
         <label class="opt"><input type="radio" name="battle" value="leads"><span>Getting more leads &amp; follow-ups</span><small>The pipeline is dry or going quiet.</small></label>
-        <label class="opt"><input type="radio" name="battle" value="sales"><span>Closing sales &amp; follow-through</span><small>Interest, but too few "yes"s.</small></label>
-        <label class="opt"><input type="radio" name="battle" value="price"><span>Raising prices / being valued</span><small>You're under-charged for the value you give.</small></label>
-        <label class="opt"><input type="radio" name="battle" value="time"><span>Time, staffing &amp; operations</span><small>You're the bottleneck and it's eating your week.</small></label>
-        <label class="opt"><input type="radio" name="battle" value="cash"><span>Cash flow &amp; getting paid</span><small>Work is done; invoices sit unpaid.</small></label>
-        <label class="opt"><input type="radio" name="battle" value="scale"><span>Scaling &amp; growing bigger</span><small>You have a machine; you want it bigger.</small></label>
-        <label class="opt"><input type="radio" name="battle" value="stand"><span>Standing out &amp; brand</span><small>You blend in when you shouldn't.</small></label>
+        <label class="opt"><input type="radio" name="battle" value="data"><span>Turning mess into clean records</span><small>Details get lost retyping.</small></label>
+        <label class="opt"><input type="radio" name="battle" value="admin"><span>Admin &amp; onboarding</span><small>The same paperwork every time.</small></label>
+        <label class="opt"><input type="radio" name="battle" value="marketing"><span>Marketing &amp; standing out</span><small>You blend in when you shouldn't.</small></label>
+        <label class="opt"><input type="radio" name="battle" value="invoice"><span>Getting paid &amp; chasing invoices</span><small>Work is done; invoices sit unpaid.</small></label>
       </div>
       <div class="btnrow"><button class="btn btn-ghost" onclick="prev(0)">← Back</button><button class="btn btn-primary" onclick="next(2)">Continue →</button></div>
     </div>
@@ -165,6 +167,11 @@
       </div>
     </div>
     <div class="done_hint no-print">Your card stays on this device — save it or screenshot it. It's yours.</div>
+    <div class="tut-cta no-print">
+      <div class="tut-q">Next — deploy it. Take the free 4-day mini-course.</div>
+      <a href="course.html">⚡ Continue → The 4-Day Mini-Course</a>
+      <div class="tut-sub">~15 min a day · build your agent on ChatGPT · bring it to your real tools</div>
+    </div>
   </div>
 
 </div>
@@ -180,36 +187,26 @@ var BATTLES = {
     missionAdd:'fill your pipeline with people who already want you',
     fix:'Text your 10 happiest customers for referrals and re-chase 10 leads you never followed up — this week.',
     agent:'You are my referral & follow-up agent. My superpower is [SUPER]. I\'ll give you past customers and missed leads; write a short, warm, personal follow-up for each with ONE next step. Keep it human, no hard sell.'},
-  sales:{a:'The Closer', tag:'closing & follow-through',
-    fight:'You get the conversation — the battle is turning interest into a "yes." Too many open loops, too few commitments.',
-    missionAdd:'turn more of the conversations you already win into done deals',
-    fix:'Give every call a dated yes/no next step and re-engage your last 20 people who went quiet — this week.',
-    agent:'You are my closing agent. My superpower is [SUPER]. For each prospect, write a dated yes/no close, a re-engagement message, and a confident reply to "I\'ll think about it." Never sound scripted.'},
-  price:{a:'The Valuer', tag:'pricing & being valued',
-    fight:'You deliver real results — the battle is getting paid for them. You\'re under-charged for the value you actually create.',
-    missionAdd:'capture the full value you already deliver',
-    fix:'Write your one-sentence transformation and raise your price 10% on your next 3 quotes — this week.',
-    agent:'You are my value & pricing agent. My superpower is [SUPER]. Write my one-line transformation, a premium tier at 2x, and confident pushback scripts for "too expensive" — no discounting.'},
-  time:{a:'The Operator', tag:'time, staffing & operations',
-    fight:'You have the skills — the battle is that you\'re the only one who can do it. You\'re the bottleneck and it\'s eating your week.',
-    missionAdd:'get your week back and build a team that runs it for you',
-    fix:'Pick your single most repetitive task, write the checklist, and hand it to someone (or an agent) — this week.',
-    agent:'You are my operations agent. My superpower is [SUPER]. Turn my most repetitive task into a checklist + 1-page handoff + who should own it. Ask me which task first.'},
-  cash:{a:'The Steward', tag:'cash flow & getting paid',
-    fight:'You build things that last — the battle is cash sitting in unpaid invoices and money you can\'t see coming.',
-    missionAdd:'protect every dollar and see 13 weeks ahead',
-    fix:'Run your 13-week cash forecast and move to 50% deposits on every new order — this week.',
-    agent:'You are my cash-flow agent. My superpower is [SUPER]. For each overdue invoice, write a reminder scaled by days overdue — soft at 7, direct at 14, a friendly deadline at 30+. Never rude.'},
-  scale:{a:'The Builder', tag:'scaling & growth',
-    fight:'You have a working machine — the battle is making it bigger, repeatably, without rebuilding it every time.',
-    missionAdd:'turn your one success into a machine that repeats',
-    fix:'Write your #1 service as a fixed-scope, fixed-price product and add your premium tier — this week.',
-    agent:'You are my scaling agent. My superpower is [SUPER]. Turn my #1 service into a repeatable product with three ways to buy (entry, core, premium) and the ONE metric to grow 30% in 90 days.'},
-  stand:{a:'The Differentiator', tag:'brand & standing out',
-    fight:'You refuse to be a commodity — the battle is that too many people still see you as one of the crowd.',
+  data:{a:'The Steward', tag:'clean records & data entry',
+    fight:'You handle a flood of inquiries — the battle is details lost in the retyping and records that never stay straight.',
+    missionAdd:'turn every new inquiry into clean, usable records',
+    fix:'Kill the retyping: this week, route every new inquiry to one place and let your agent turn each one into clean, consistent fields.',
+    agent:'You are my data-entry agent. My superpower is [SUPER]. Given a messy inquiry, output clean fields: name / phone / service / urgency / notes. Don\'t invent anything.'},
+  admin:{a:'The Operator', tag:'admin & onboarding',
+    fight:'You have the skills — but you\'re the only one who can run the admin, so every new client costs you the same repeated paperwork.',
+    missionAdd:'hand every new client the same great onboarding, every time',
+    fix:'Stop rebuilding onboarding: this week, write your welcome email + checklist ONCE and hand them to every new client.',
+    agent:'You are my onboarding agent. My superpower is [SUPER]. For each new client, write a warm welcome email + a 6-item onboarding checklist, in my voice.'},
+  marketing:{a:'The Differentiator', tag:'marketing & standing out',
+    fight:'You refuse to be a commodity — the battle is that too many people still don\'t see how you\'re different.',
     missionAdd:'become the obvious choice for the people you serve',
-    fix:'Write your "only we" statement and post your first specific client story — this week.',
-    agent:'You are my brand agent. My superpower is [SUPER]. Write my "only we" statement, turn one client win into a shareable story with a number, and one opinion I can own.'}
+    fix:'Stop being invisible: this week, turn ONE past win into a week of ready-to-post content with your agent.',
+    agent:'You are my content agent. My superpower is [SUPER]. For every idea, return a hook, an 80-word caption that tells a story with a result, a story version, and a 30s video script.'},
+  invoice:{a:'The Closer', tag:'getting paid & invoices',
+    fight:'You build things that last — the battle is cash sitting in unpaid invoices and money you aren\'t chasing.',
+    missionAdd:'protect every dollar and never let an invoice go cold',
+    fix:'Stop letting invoices go cold: this week, send a reminder on every overdue invoice you\'ve been avoiding.',
+    agent:'You are my payment follow-up agent. My superpower is [SUPER]. For each invoice (client, amount, days overdue), write a reminder scaled by days — soft at 7, direct at 14, a friendly deadline at 30+. Never rude.'}
 };
 
 var STAGE = {
