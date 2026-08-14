@@ -3,111 +3,157 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Legion — Your Battle-Tested Card</title>
+<title>LEGION — Your Battle-Tested Card</title>
 <style>
-  :root{--ink:#14100c;--brand:#0f172a;--gold:#caa14c;--gold2:#e4c87f;--paper:#f4ecdd;--card:#fffdf7;--line:#e6d9c1;--muted:#6b6256;--dark:#0a0d16;}
+  :root{--navy:#0f172a;--navy2:#1d2740;--gold:#caa14c;--gold2:#e4c87f;--paper:#fbf7ef;--card:#fffdf7;--line:#e6d9c1;--muted:#6b6256;--dark:#0a0d16;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1100px 600px at 15% -5%,#232c48 0%,var(--paper) 60%) fixed;color:var(--ink);min-height:100vh;padding:24px 12px;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1200px 700px at 18% -10%, #232c48 0%, #e9dfc8 55%, var(--paper) 100%) fixed;color:#14100c;padding:24px 12px 60px;min-height:100vh;-webkit-font-smoothing:antialiased;}
   .stage{max-width:720px;margin:0 auto;}
   .brand{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:6px;}
   .brand .logo{width:54px;height:63px;filter:drop-shadow(0 8px 16px rgba(15,23,42,.25));}
-  .wm{font-size:22px;letter-spacing:4px;font-weight:800;color:var(--brand);line-height:1;}
+  .wm{font-size:24px;letter-spacing:5px;font-weight:800;color:var(--navy);line-height:1;}
   .wm em{font-style:normal;color:var(--gold);}
-  .wm-tag{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:2px;}
-  h1{font-size:34px;text-align:center;color:var(--brand);margin:10px 0 6px;font-weight:800;}
+  .wm-tag{font-size:11px;color:var(--muted);letter-spacing:1px;text-align:left;margin-top:2px;}
+  h1{font-size:30px;text-align:center;color:var(--navy);margin:8px 0 4px;font-weight:800;}
   h1 .gold{color:var(--gold);}
-  .lede{text-align:center;color:var(--muted);font-size:15px;max-width:540px;margin:0 auto 18px;line-height:1.55;}
-  .banner{background:#10261b;color:#d9f2e4;border-radius:12px;padding:11px 14px;font-size:13px;line-height:1.5;margin-bottom:16px;}
+  .lede{text-align:center;color:var(--muted);font-size:14.5px;max-width:560px;margin:0 auto 14px;line-height:1.55;}
+  .banner{background:#10261b;color:#d9f2e4;border-radius:12px;padding:11px 14px;font-size:12.5px;line-height:1.5;margin-bottom:16px;}
   .banner b{color:#fff;}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 10px 30px rgba(15,23,42,.10);margin-bottom:16px;}
-  .card label{font-weight:800;color:var(--brand);font-size:15px;display:block;margin-bottom:8px;}
-  .card .hint{font-size:12px;color:var(--muted);margin:-4px 0 10px;}
-  textarea,select{width:100%;border:1.5px solid var(--line);border-radius:10px;padding:12px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink);}
-  textarea{resize:vertical;min-height:70px;}
-  select{margin-top:6px;}
-  .optgrid{display:grid;gap:8px;margin-bottom:8px;}
-  .opt{position:relative;border:1.5px solid var(--line);border-radius:10px;padding:11px 13px 11px 40px;cursor:pointer;background:#fff;font-size:14px;}
-  .opt input{position:absolute;left:14px;top:50%;transform:translateY(-50%);accent-color:var(--gold);width:16px;height:16px;}
-  .opt:has(input:checked){border-color:var(--gold2);background:#fff8e6;box-shadow:0 0 0 3px rgba(202,161,76,.18);font-weight:600;}
-  .btn{display:inline-block;border:none;border-radius:12px;padding:14px 22px;font-size:16px;font-weight:800;cursor:pointer;}
-  .btn-primary{background:linear-gradient(135deg,var(--brand),#2b3a63);color:#fff;width:100%;margin-top:8px;}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;box-shadow:0 12px 34px rgba(15,23,42,.10);}
+  .steps{display:flex;gap:6px;justify-content:center;margin-bottom:18px;}
+  .steps .dot{width:9px;height:9px;border-radius:50%;background:#e0d4bb;transition:.2s;}
+  .steps .dot.on{background:var(--gold);transform:scale(1.25);}
+  .q-label{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+  .q-sub{font-size:13.5px;color:var(--muted);margin-bottom:16px;line-height:1.5;}
+  textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:14px;font-size:15.5px;font-family:inherit;background:#fff;color:#14100c;resize:vertical;min-height:96px;}
+  textarea:focus{outline:none;border-color:var(--gold);}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5;}
+  .optgrid{display:grid;gap:8px;}
+  .opt{position:relative;border:1.5px solid var(--line);border-radius:12px;padding:13px 14px 13px 42px;cursor:pointer;background:#fff;font-size:14.5px;transition:.12s;}
+  .opt:hover{border-color:var(--gold);background:#fffcf4;}
+  .opt input{position:absolute;left:16px;top:50%;transform:translateY(-50%);accent-color:var(--gold);width:17px;height:17px;}
+  .opt:has(input:checked){border-color:var(--gold2);background:#fff8e6;box-shadow:0 0 0 3px rgba(202,161,76,.16);font-weight:600;}
+  .opt small{display:block;color:var(--muted);font-weight:400;font-size:12.5px;margin-top:1px;}
+  .btnrow{display:flex;gap:10px;margin-top:18px;}
+  .btn{flex:1;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;}
+  .btn-primary{background:linear-gradient(135deg,var(--navy),#2b3a63);color:#fff;}
   .btn-primary:hover{filter:brightness(1.1);}
+  .btn-ghost{background:#fff;color:var(--muted);border:1px solid var(--line);}
   .hidden{display:none!important;}
   .center{text-align:center;}
-  /* the card */
-  .bcard{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 20px 50px rgba(15,23,42,.20);}
-  .bc-top{background:linear-gradient(135deg,var(--brand),#203052);color:#eee9dd;padding:22px 24px;}
+  /* card */
+  .bcard{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 20px 50px rgba(15,23,42,.20);}
+  .bc-top{background:linear-gradient(135deg,var(--navy),#203052);color:#eee9dd;padding:24px 26px;}
   .bc-top .lbl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold2);font-weight:800;}
-  .bc-top .name{font-size:27px;font-weight:800;color:#fff;margin:4px 0 6px;}
+  .bc-top .name{font-size:30px;font-weight:800;color:#fff;margin:4px 0 2px;}
   .bc-top .name span{color:var(--gold2);}
-  .bc-top .super{font-size:15px;line-height:1.5;color:#e3ddcb;}
-  .bc-body{padding:16px 22px 6px;}
-  .sec{padding:10px 0;border-bottom:1px solid var(--line);}
+  .bc-style{display:inline-block;margin-top:6px;background:rgba(228,200,127,.15);border:1px solid rgba(228,200,127,.5);color:var(--gold2);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;}
+  .bc-top .super{font-size:15.5px;line-height:1.5;color:#e9e3d2;margin-top:8px;font-style:italic;}
+  .bc-body{padding:18px 24px 6px;}
+  .sec{padding:11px 0;border-bottom:1px solid var(--line);}
+  .sec:last-child{border-bottom:none;}
   .sec .h{font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:5px;}
-  .sec p{font-size:14px;line-height:1.5;color:#3a342a;}
-  .mission{background:linear-gradient(135deg,#fbf3df,#f6e9cd);border:1px solid var(--gold2);border-radius:11px;padding:12px 14px;margin:8px 0;}
-  .agentbox{background:var(--dark);color:#e9e2d2;border-radius:11px;padding:12px 14px;margin-top:8px;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.5;white-space:pre-wrap;}
+  .sec p{font-size:14px;line-height:1.55;color:#3a342a;}
+  .sec p b{color:var(--navy);}
+  .agentbox{background:var(--dark);color:#e9e2d2;border-radius:11px;padding:13px 15px;margin-top:8px;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.55;white-space:pre-wrap;}
   .outcome{background:var(--gold);color:#2b2110;border-radius:11px;padding:12px 14px;font-weight:700;font-size:13.5px;line-height:1.45;margin-top:8px;}
-  .bcard-foot{display:flex;justify-content:space-between;padding:12px 22px 16px;color:var(--muted);font-size:11px;}
-  .bcard-foot .ctr span{color:var(--gold);font-weight:800;}
+  .bcard-foot{display:flex;justify-content:space-between;padding:12px 24px 16px;color:var(--muted);font-size:11px;}
   .actbar{display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:14px;}
-  .stars{font-size:28px;line-height:1;letter-spacing:3px;cursor:pointer;color:#ddd;}
+  .stars{font-size:26px;line-height:1;letter-spacing:3px;cursor:pointer;color:#ddd;}
   .stars span:hover{color:var(--gold);}
-  .rateask{font-size:12.5px;font-weight:700;color:var(--brand);margin-bottom:3px;}
+  .rateask{font-size:12.5px;font-weight:700;color:var(--navy);margin-bottom:3px;}
   .ratethanks{font-size:12px;color:var(--muted);margin-top:3px;}
-  .btn-sm{background:linear-gradient(135deg,var(--brand),#2b3a63);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-weight:800;font-size:13px;cursor:pointer;}
-  .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--line);}
+  .btn-sm{background:linear-gradient(135deg,var(--navy),#2b3a63);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-weight:800;font-size:13px;cursor:pointer;}
+  .btn-ghost-sm{background:#fff;color:var(--muted);border:1px solid var(--line);}
   .done_hint{font-size:12.5px;color:var(--muted);text-align:center;margin:14px 0 0;}
-  @media(max-width:520px){.bc-top .name{font-size:23px;} .bc-top,.bc-body{padding:18px 18px;} h1{font-size:24px;}}
+  @media(max-width:520px){.bc-top .name{font-size:24px;} .bc-top,.bc-body{padding:18px;} h1{font-size:25px;}}
   @media print{body{background:#fff;} .no-print{display:none!important;} .stage{max-width:100%;padding:0;} .bcard{box-shadow:none;}}
 </style>
 </head>
 <body>
 <div class="stage">
+
   <div class="brand">
-    <svg class="logo" viewBox="0 0 120 140" role="img" aria-label="LEGION shield"><defs><linearGradient id="gld" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e4c87f"/><stop offset="1" stop-color="#caa14c"/></linearGradient><linearGradient id="navg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d2740"/><stop offset="1" stop-color="#0f172a"/></linearGradient></defs><path d="M60 8 L110 27 V74 C110 106 88 126 60 137 C32 126 10 106 10 74 V27 Z" fill="url(#navg)" stroke="url(#gld)" stroke-width="3.5"/><text x="60" y="96" text-anchor="middle" font-family="Georgia,serif" font-size="50" font-weight="bold" fill="url(#gld)">L</text></svg>
-    <div style="text-align:left;"><div class="wm">LEG<em>ION</em></div><div class="wm-tag">Bring your superpower</div></div>
+    <svg class="logo" viewBox="0 0 120 140" role="img" aria-label="LEGION shield"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e4c87f"/><stop offset="1" stop-color="#caa14c"/></linearGradient><linearGradient id="n" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d2740"/><stop offset="1" stop-color="#0f172a"/></linearGradient></defs><path d="M60 8 L110 27 V74 C110 106 88 126 60 137 C32 126 10 106 10 74 V27 Z" fill="url(#n)" stroke="url(#g)" stroke-width="3.5"/><text x="60" y="96" text-anchor="middle" font-family="Georgia,serif" font-size="50" font-weight="bold" fill="url(#g)">L</text></svg>
+    <div><div class="wm">LEG<em>ION</em></div><div class="wm-tag">Bring your superpower</div></div>
   </div>
   <h1>Your <span class="gold">Battle-Tested</span> Card</h1>
-  <div class="lede">Name your superpower. We hand you the card that multiplies it — and the agent to build it today, free, on the tool you already have.</div>
-</div>
+  <div class="lede">Five short steps. Tell us about your superpower, your battle, and where you're headed — we'll hand you a card that's truly yours, plus the agent to multiply it.</div>
 
-  <!-- ===== INPUT ===== -->
-  <div id="inputView">
-    <div class="banner">🛡 <b>Totally private.</b> This page builds your card <b>on your device</b> — nothing you type is sent anywhere, and we collect no personal info (no name, email, or company needed). <b>Screenshot or save your card</b> when it's ready.</div>
+  <!-- ============ WIZARD ============ -->
+  <div id="wizard" class="panel">
+    <div class="steps" id="steps"><div class="dot on" ></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
 
-    <div class="card">
-      <label for="superpower">What is your superpower?</label>
-      <div class="hint">The one thing you're better at than almost anyone — your battle-tested skill. (No names or company names — this stays on your device.)</div>
-      <textarea id="superpower" placeholder="e.g. I'm the best at closing jobs when the owner doesn't trust contractors."></textarea>
+    <!-- S1 superpower -->
+    <div id="s1" class="step-pane">
+      <div class="q-label">What is your superpower?</div>
+      <div class="q-sub">The one thing you're quietly better at than almost anyone — the skill that wins you the battles nobody else can.</div>
+      <textarea id="superpower" placeholder="e.g. I can turn the most skeptical homeowner into a signed contract — the one everyone else gives up on."></textarea>
+      <div class="hint">Make it vivid — this becomes the heart of your card. (No names or company names — it stays on your device.)</div>
+      <button class="btn btn-primary btnrow" onclick="next(1)">Continue →</button>
+    </div>
 
-      <label style="margin-top:16px;">Where does it help your business most? (pick one)</label>
+    <!-- S2 battle -->
+    <div id="s2" class="step-pane hidden">
+      <div class="q-label">Which battle are you fighting hardest right now?</div>
+      <div class="q-sub">Pick the one that's costing you the most right now — this shapes your archetype and your agent.</div>
       <div class="optgrid">
-        <label class="opt"><input type="radio" name="avenue" value="email"><span>Getting more leads / follow-ups</span></label>
-        <label class="opt"><input type="radio" name="avenue" value="data"><span>Turning mess into clean records</span></label>
-        <label class="opt"><input type="radio" name="avenue" value="admin"><span>Admin &amp; onboarding</span></label>
-        <label class="opt"><input type="radio" name="avenue" value="marketing"><span>Marketing content</span></label>
-        <label class="opt"><input type="radio" name="avenue" value="invoice"><span>Getting paid / chasing invoices</span></label>
+        <label class="opt"><input type="radio" name="battle" value="leads"><span>Getting more leads &amp; follow-ups</span><small>The pipeline is dry or going quiet.</small></label>
+        <label class="opt"><input type="radio" name="battle" value="sales"><span>Closing sales &amp; follow-through</span><small>Interest, but too few "yes"s.</small></label>
+        <label class="opt"><input type="radio" name="battle" value="price"><span>Raising prices / being valued</span><small>You're under-charged for the value you give.</small></label>
+        <label class="opt"><input type="radio" name="battle" value="time"><span>Time, staffing &amp; operations</span><small>You're the bottleneck and it's eating your week.</small></label>
+        <label class="opt"><input type="radio" name="battle" value="cash"><span>Cash flow &amp; getting paid</span><small>Work is done; invoices sit unpaid.</small></label>
+        <label class="opt"><input type="radio" name="battle" value="scale"><span>Scaling &amp; growing bigger</span><small>You have a machine; you want it bigger.</small></label>
+        <label class="opt"><input type="radio" name="battle" value="stand"><span>Standing out &amp; brand</span><small>You blend in when you shouldn't.</small></label>
       </div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(0)">← Back</button><button class="btn btn-primary" onclick="next(2)">Continue →</button></div>
+    </div>
 
-      <label style="margin-top:16px;">Your goal this year?</label>
+    <!-- S3 stage -->
+    <div id="s3" class="step-pane hidden">
+      <div class="q-label">What stage is your business in?</div>
+      <div class="q-sub">This tunes how sharp your "fix now" should be.</div>
       <div class="optgrid">
-        <label class="opt"><input type="radio" name="goal" value="more"><span>More customers</span></label>
-        <label class="opt"><input type="radio" name="goal" value="price"><span>Higher prices / more income</span></label>
+        <label class="opt"><input type="radio" name="stage" value="start"><span>Just getting started</span></label>
+        <label class="opt"><input type="radio" name="stage" value="have"><span>Getting sales — want consistency</span></label>
+        <label class="opt"><input type="radio" name="stage" value="established"><span>Established — want to scale</span></label>
+        <label class="opt"><input type="radio" name="stage" value="exit"><span>Building toward a sale / exit</span></label>
+      </div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(1)">← Back</button><button class="btn btn-primary" onclick="next(3)">Continue →</button></div>
+    </div>
+
+    <!-- S4 goal -->
+    <div id="s4" class="step-pane hidden">
+      <div class="q-label">What matters most to you this year?</div>
+      <div class="q-sub">This becomes your mission.</div>
+      <div class="optgrid">
+        <label class="opt"><input type="radio" name="goal" value="customers"><span>More customers</span></label>
+        <label class="opt"><input type="radio" name="goal" value="income"><span>Higher prices / more income</span></label>
         <label class="opt"><input type="radio" name="goal" value="time"><span>More free time</span></label>
-        <label class="opt"><input type="radio" name="goal" value="scale"><span>Scale it bigger</span></label>
+        <label class="opt"><input type="radio" name="goal" value="team"><span>A bigger team</span></label>
+        <label class="opt"><input type="radio" name="goal" value="exit"><span>A sale / exit</span></label>
+        <label class="opt"><input type="radio" name="goal" value="peace"><span>Less stress / better systems</span></label>
       </div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(2)">← Back</button><button class="btn btn-primary" onclick="next(4)">Continue →</button></div>
+    </div>
 
-      <button class="btn btn-primary" onclick="go()">Build My Battle-Tested Card</button>
-      <div class="rateask" style="display:none;"></div>
+    <!-- S5 style -->
+    <div id="s5" class="step-pane hidden">
+      <div class="q-label">How do you like to build?</div>
+      <div class="q-sub">This gives your card its personality — and tells your agent how to sound.</div>
+      <div class="optgrid">
+        <label class="opt"><input type="radio" name="style" value="direct"><span>Direct &amp; decisive</span><small>Cut to it, no fluff.</small></label>
+        <label class="opt"><input type="radio" name="style" value="coach"><span>Coach &amp; build</span><small>Teach and grow people.</small></label>
+        <label class="opt"><input type="radio" name="style" value="steady"><span>Steady &amp; systematic</span><small>Process and precision.</small></label>
+      </div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(3)">← Back</button><button class="btn btn-primary" onclick="build()">Build My Card ⚔️</button></div>
     </div>
   </div>
 
-  <!-- ===== CARD ===== -->
+  <!-- ============ CARD ============ -->
   <div id="resultView" class="hidden">
     <div class="bcard" id="bcard"></div>
-
-    <div class="actbar">
+    <div class="actbar no-print">
       <div class="rate">
         <div class="rateask">Was this valuable? Rate us:</div>
         <div class="stars" id="stars"><span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span></div>
@@ -115,87 +161,112 @@
       </div>
       <div>
         <button class="btn-sm" onclick="downloadCard()">⬇ Save your card</button>
-        <button class="btn-sm btn-ghost" onclick="again()" style="margin-left:8px;">← New card</button>
+        <button class="btn-sm btn-ghost-sm" onclick="again()" style="margin-left:8px;">← New card</button>
       </div>
     </div>
-    <div class="done_hint">Your card stays on this device. Save it or screenshot it — it's yours.</div>
+    <div class="done_hint no-print">Your card stays on this device — save it or screenshot it. It's yours.</div>
   </div>
 
 </div>
 
 <script>
-/* LEGION — Battle-Tested Card generator. DETERMINISTIC, CLIENT-SIDE ONLY.
-   The superpower text is used ONLY in this page in memory — it is NEVER transmitted.
-   Beacons send only event names + star counts (anonymous aggregate), no content. */
-
+/* LEGION Battle-Tested Card. Deterministic, client-side ONLY. Superpower text never transmitted.
+   Beacons send event names + star counts only. */
 function trk(e,v){ try{ fetch('/track?e='+e+((v===undefined)?'':'&v='+v), {mode:'no-cors'}); }catch(x){} }
 
-var AVE = {
-  email:{label:'leads & follow-ups', name:'The Attractor',
-    fix:'Turn the follow-ups you already owe into a machine: this week, message your 10 happiest customers for referrals and re-chase 10 leads you never followed up.',
-    agent:'You are my referral & follow-up agent. My superpower is [SUPERPOWER]. I\'ll give you past customers and missed leads; write a short, warm, personal follow-up for each with ONE next step. Keep it human, no hard sell.'},
-  data:{label:'clean records', name:'The Steward',
-    fix:'Kill the retyping: this week, route new inquiries into one place and paste a messy one into me — I\'ll hand it back as clean fields.',
-    agent:'You are my data-entry agent. My superpower is [SUPERPOWER]. Given a messy inquiry, output clean fields: name / phone / service / urgency / notes. Don\'t invent anything.'},
-  admin:{label:'admin & onboarding', name:'The Operator',
-    fix:'Stop rebuilding onboarding: this week, write once — a welcome email + checklist you hand every new client.',
-    agent:'You are my onboarding agent. My superpower is [SUPERPOWER]. For a new client, write a warm welcome email + a 6-item onboarding checklist, in my voice.'},
-  marketing:{label:'marketing content', name:'The Differentiator',
-    fix:'Stop being invisible: this week, turn ONE past win into a week of ready-to-post content with me.',
-    agent:'You are my content agent. My superpower is [SUPERPOWER]. For every idea, return a hook, an 80-word caption that tells a story with a result, a story version, and a 30s video script.'},
-  invoice:{label:'getting paid', name:'The Closer',
-    fix:'Stop losing cash to invoices: this week, send a friendly reminder to every overdue invoice you\'ve been avoiding.',
-    agent:'You are my payment follow-up agent. My superpower is [SUPERPOWER]. For an invoice (client, amount, days overdue), write a reminder scaled to overdue — soft at 7, direct at 14, a friendly deadline at 30+. Never rude.'}
+var BATTLES = {
+  leads:{a:'The Attractor', tag:'leads & follow-ups',
+    fight:'You turn attention into momentum. Your battle is a pipeline that goes quiet — and every warm lead you never chased is a win you already earned slipping away.',
+    missionAdd:'fill your pipeline with people who already want you',
+    fix:'Text your 10 happiest customers for referrals and re-chase 10 leads you never followed up — this week.',
+    agent:'You are my referral & follow-up agent. My superpower is [SUPER]. I\'ll give you past customers and missed leads; write a short, warm, personal follow-up for each with ONE next step. Keep it human, no hard sell.'},
+  sales:{a:'The Closer', tag:'closing & follow-through',
+    fight:'You get the conversation — the battle is turning interest into a "yes." Too many open loops, too few commitments.',
+    missionAdd:'turn more of the conversations you already win into done deals',
+    fix:'Give every call a dated yes/no next step and re-engage your last 20 people who went quiet — this week.',
+    agent:'You are my closing agent. My superpower is [SUPER]. For each prospect, write a dated yes/no close, a re-engagement message, and a confident reply to "I\'ll think about it." Never sound scripted.'},
+  price:{a:'The Valuer', tag:'pricing & being valued',
+    fight:'You deliver real results — the battle is getting paid for them. You\'re under-charged for the value you actually create.',
+    missionAdd:'capture the full value you already deliver',
+    fix:'Write your one-sentence transformation and raise your price 10% on your next 3 quotes — this week.',
+    agent:'You are my value & pricing agent. My superpower is [SUPER]. Write my one-line transformation, a premium tier at 2x, and confident pushback scripts for "too expensive" — no discounting.'},
+  time:{a:'The Operator', tag:'time, staffing & operations',
+    fight:'You have the skills — the battle is that you\'re the only one who can do it. You\'re the bottleneck and it\'s eating your week.',
+    missionAdd:'get your week back and build a team that runs it for you',
+    fix:'Pick your single most repetitive task, write the checklist, and hand it to someone (or an agent) — this week.',
+    agent:'You are my operations agent. My superpower is [SUPER]. Turn my most repetitive task into a checklist + 1-page handoff + who should own it. Ask me which task first.'},
+  cash:{a:'The Steward', tag:'cash flow & getting paid',
+    fight:'You build things that last — the battle is cash sitting in unpaid invoices and money you can\'t see coming.',
+    missionAdd:'protect every dollar and see 13 weeks ahead',
+    fix:'Run your 13-week cash forecast and move to 50% deposits on every new order — this week.',
+    agent:'You are my cash-flow agent. My superpower is [SUPER]. For each overdue invoice, write a reminder scaled by days overdue — soft at 7, direct at 14, a friendly deadline at 30+. Never rude.'},
+  scale:{a:'The Builder', tag:'scaling & growth',
+    fight:'You have a working machine — the battle is making it bigger, repeatably, without rebuilding it every time.',
+    missionAdd:'turn your one success into a machine that repeats',
+    fix:'Write your #1 service as a fixed-scope, fixed-price product and add your premium tier — this week.',
+    agent:'You are my scaling agent. My superpower is [SUPER]. Turn my #1 service into a repeatable product with three ways to buy (entry, core, premium) and the ONE metric to grow 30% in 90 days.'},
+  stand:{a:'The Differentiator', tag:'brand & standing out',
+    fight:'You refuse to be a commodity — the battle is that too many people still see you as one of the crowd.',
+    missionAdd:'become the obvious choice for the people you serve',
+    fix:'Write your "only we" statement and post your first specific client story — this week.',
+    agent:'You are my brand agent. My superpower is [SUPER]. Write my "only we" statement, turn one client win into a shareable story with a number, and one opinion I can own.'}
 };
-var GOAL = {more:'to grow your customer count', price:'to raise your prices and income', time:'to win back your time', scale:'to scale it bigger'};
 
-function superpowerOf(){
-  var s=(document.getElementById('superpower').value||'').trim();
-  return s ? '"'+s+'"' : 'the one thing you\'re better at than almost anyone';
-}
+var STAGE = {
+  start:{lab:'Just starting', sharp:'You\'re proving it works — keep the moves tiny and repeatable.', depth:'start to make your first consistent win'},
+  have:{lab:'Building consistency', sharp:'Lock it down — repeat what works before you scale it.', depth:'turn your early sales into a repeatable machine'},
+  established:{lab:'Scaling', sharp:'You have proof — now systematize and delegate.', depth:'scale what\'s proven, delegate the rest'},
+  exit:{lab:'Building to exit', sharp:'Protect the numbers and clean the operation — an exit loves tidy systems.', depth:'maximize the value of what you\'ve built'}
+};
 
-function go(){
-  var a=document.querySelector('input[name="avenue"]:checked');
-  var g=document.querySelector('input[name="goal"]:checked');
-  if(!a||!g){ alert('Please pick one "where it helps" and one "goal" so we can build your card.'); return; }
-  var ave=AVE[a.value]; var goal=GOAL[g.value];
-  var sp=document.getElementById('superpower').value.trim();
-  if(sp.length>140) sp=sp.slice(0,140)+'…';
-  var superquote = sp ? '"'+sp+'"' : 'the one thing you\'re better at than almost anyone';
-  var agentPrompt=ave.agent.split('[SUPERPOWER]').join(superquote);
+var GOALS = {customers:'more customers', income:'higher prices and income', time:'your time back', team:'a stronger team', exit:'a clean sale', peace:'less stress and better systems'};
+var STYLE = {direct:{lab:'Direct & decisive', voice:'direct, blunt, zero fluff'}, coach:{lab:'Coach & build', voice:'warm, teaching, builds people up'}, steady:{lab:'Steady & systematic', voice:'calm, methodical, precise'}};
 
-  var profileName = ave.name;
-  var html='';
-  html+='<div class="bc-top"><div class="lbl">Your Battle-Tested Superpower</div><div class="name"><span>'+profileName+'</span></div><div class="super">'+superquote+'</div></div>';
-  html+='<div class="bc-body">';
-  html+='<div class="mission sec"><div class="h">Your Mission · New Purpose</div><p>Turn your superpower for <b>'+ave.label+'</b> into the engine that lets you <b>'+goal+'</b> — so the thing you\'re best at works <b>for you</b>, not just for your clients.</p></div>';
-  html+='<div class="sec"><div class="h">Your Superpower Agent</div><p>We\'ve matched the agent designed to <b>multiply</b> this superpower. Build it right now — copy this into ChatGPT (free) as your first message:</p><div class="agentbox">'+agentPrompt+'</div></div>';
-  html+='<div class="sec"><div class="h">Fix Now · This Week</div><p>'+ave.fix+'</p></div>';
-  html+='<div class="outcome"><b>What you&#39;ll own:</b> a working agent that runs this superpower for you — starting this week, free, on the tool you already have.</div>';
-  html+='</div>';
-  html+='<div class="bcard-foot"><div class="ctr">🛡 Battle-Tested · <span>Legion</span></div><div>Bring your superpower</div></div>';
+var idx=0; var paneIds=['s1','s2','s3','s4','s5'];
+function setStep(i){ idx=i; for(var k=0;k<5;k++){ document.getElementById(paneIds[k]).classList.toggle('hidden', k!==i); }
+  document.querySelectorAll('#steps .dot').forEach(function(d,di){ d.classList.toggle('on', di<=i); });
+  document.getElementById('wizard').scrollIntoView({behavior:'smooth', block:'center'}); }
+function next(i){ setStep(i); } function prev(i){ setStep(i); }
+function val(n){ var e=document.querySelector('input[name="'+n+'"]:checked'); return e? e.value : null; }
 
-  document.getElementById('bcard').innerHTML = html;
-  document.getElementById('inputView').classList.add('hidden');
+function build(){
+  var sp=(document.getElementById('superpower').value||'').trim();
+  var battle=val('battle'), stage=val('stage'), goal=val('goal'), style=val('style');
+  if(!sp||!battle||!stage||!goal||!style){ alert('Please finish all 5 steps so your card is truly yours.'); return; }
+  if(sp.length>160) sp=sp.slice(0,160)+'…';
+  var B=BATTLES[battle], S=STAGE[stage], GO=GOALS[goal], ST=STYLE[style];
+  var superquote='"'+sp+'"';
+  var agentPrompt=B.agent.split('[SUPER]').join(superquote);
+  var mission='Put '+B.missionAdd+' to work — and '+S.depth+' — so the thing you\'re best at does the heavy lifting, not just for your clients but for you.';
+  var fixNow=B.fix+(stage==='start'||stage==='have'?' Start small — one repeat.':' Keep tightening the loop.');
+
+  var h='';
+  h+='<div class="bc-top"><div class="lbl">Your Battle-Tested Superpower</div><div class="name"><span>'+B.a+'</span></div>';
+  h+='<div class="bc-style">'+ST.lab+' · built for '+B.tag+'</div><div class="super">'+superquote+'</div></div>';
+  h+='<div class="bc-body">';
+  h+='<div class="sec"><div class="h">Your Battle</div><p>'+B.fight+'</p></div>';
+  h+='<div class="sec"><div class="h">Your Mission · New Purpose</div><p>'+mission+'</p></div>';
+  h+='<div class="sec"><div class="h">Your Superpower Agent</div><p>Built to <b>multiply</b> this superpower — sound '+ST.voice+'. Copy into ChatGPT (free) as your first message:</p><div class="agentbox">'+agentPrompt+'</div></div>';
+  h+='<div class="sec"><div class="h">Fix Now · This Week</div><p>'+fixNow+'</p></div>';
+  h+='<div class="outcome"><b>What you&#39;ll own:</b> a worker that runs this superpower for you — starting this week, free, on the tool you already have. You&#39;re not scared anymore; you&#39;re armed.</div>';
+  h+='</div>';
+  h+='<div class="bcard-foot"><div class="ctr">🛡 Battle-Tested · <span>Legion</span></div><div>Bring your superpower</div></div>';
+  document.getElementById('bcard').innerHTML=h;
+  document.getElementById('wizard').classList.add('hidden');
   document.getElementById('resultView').classList.remove('hidden');
   trk('card_created');
   document.getElementById('resultView').scrollIntoView({behavior:'smooth'});
 }
 
-/* 1-tap anonymous rating */
 (function(){
   var sels=document.querySelectorAll('#stars span'), sbox=document.getElementById('stars');
-  sels.forEach(function(s){ s.onclick=function(){
-    var v=+s.getAttribute('data-v');
-    sels.forEach(function(x,i){ x.style.color = i<v ? '#caa14c' : '#ddd'; });
-    trk('rating', v);
-    document.getElementById('ratethanks').classList.remove('hidden');
-    sbox.style.pointerEvents='none';
-  };});
+  sels.forEach(function(s){ s.onclick=function(){ var v=+s.getAttribute('data-v');
+    sels.forEach(function(x,i){ x.style.color=i<v?'#caa14c':'#ddd'; });
+    trk('rating', v); document.getElementById('ratethanks').classList.remove('hidden'); sbox.style.pointerEvents='none'; }; });
 })();
-
-function downloadCard(){ trk('card_download'); try{ window.print(); }catch(x){} }
-function again(){ document.getElementById('resultView').classList.add('hidden'); document.getElementById('inputView').classList.remove('hidden'); document.getElementById('superpower').value=''; var r=document.querySelectorAll('input[type=radio]'); r.forEach(function(x){x.checked=false;}); window.scrollTo(0,0); }
+function downloadCard(){ trk('card_download'); try{window.print();}catch(x){} }
+function again(){ document.getElementById('resultView').classList.add('hidden'); document.getElementById('wizard').classList.remove('hidden'); setStep(0); document.getElementById('superpower').value=''; document.querySelectorAll('input[type=radio]').forEach(function(x){x.checked=false;}); window.scrollTo(0,0); }
+trk('card_view');
 </script>
 </body>
 </html>
