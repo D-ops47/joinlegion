@@ -3,34 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LEGION — Build Your Battle-Tested Card</title>
+<title>LEGION — Build Your Own AI Agent</title>
 <style>
+  :root{--navy:#0f172a;--navy2:#1d2740;--gold:#caa14c;--gold2:#e4c87f;--cream:#fbf7ef;--ink:#14100c;--muted:#6b6256;}
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1100px 600px at 20% -10%,#232c48 0%,#f4ecdd 65%) fixed;color:#14100c;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
-  .wrap{max-width:620px;text-align:center;}
-  .mark{width:64px;height:64px;margin:0 auto 16px;border-radius:16px;background:linear-gradient(135deg,#0f172a,#2b3a63);color:#e4c87f;font-weight:800;font-size:30px;display:flex;align-items:center;justify-content:center;letter-spacing:1px;box-shadow:0 12px 30px rgba(15,23,42,.25);}
-  h1{font-size:40px;letter-spacing:8px;color:#0f172a;font-weight:800;}
-  .tag{color:#6b6256;font-size:15px;margin:8px 0 26px;}
-  .cta{display:block;background:linear-gradient(135deg,#0f172a,#2b3a63);color:#fff;border-radius:14px;padding:18px 20px;font-size:19px;font-weight:800;text-decoration:none;box-shadow:0 12px 30px rgba(15,23,42,.25);}
-  .cta:hover{filter:brightness(1.1);}
-  .links{margin-top:22px;}
-  .links a{display:inline-block;background:#fff;color:#0f172a;border:1px solid #e6d9c1;border-radius:10px;padding:10px 16px;font-size:14px;font-weight:700;text-decoration:none;margin:5px;}
-  .links a:hover{border-color:#caa14c;}
-  .privacy{font-size:12.5px;color:#6b6256;margin-top:26px;line-height:1.5;}
-  @media(max-width:520px){h1{font-size:32px;}}
+  html,body{height:100%;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:radial-gradient(1200px 700px at 18% -10%, #232c48 0%, #e9dfc8 55%, var(--cream) 100%) fixed;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:680px;text-align:center;position:relative;}
+  .logo{width:104px;height:122px;margin:0 auto 18px;filter:drop-shadow(0 16px 34px rgba(15,23,42,.30));animation:pop .7s ease both;}
+  @keyframes pop{0%{opacity:0;transform:translateY(14px) scale(.94);}100%{opacity:1;transform:none;}}
+  h1{font-size:56px;letter-spacing:12px;color:var(--navy);font-weight:800;line-height:1;animation:rise .7s .08s ease both;}
+  h1 em{font-style:normal;color:var(--gold);}
+  .tag{color:var(--muted);font-size:16px;margin:12px 0 8px;letter-spacing:.3px;animation:rise .7s .16s ease both;}
+  .punch{font-size:21px;font-weight:800;color:var(--navy);margin:10px 0 26px;animation:rise .7s .24s ease both;}
+  .punch span{color:var(--gold);}
+  @keyframes rise{0%{opacity:0;transform:translateY(12px);}100%{opacity:1;transform:none;}}
+  .cta{display:block;background:linear-gradient(135deg,var(--navy),#2b3a63);color:#fff;border-radius:16px;padding:20px 22px;font-size:21px;font-weight:800;text-decoration:none;box-shadow:0 18px 42px rgba(15,23,42,.28);position:relative;overflow:hidden;transition:.2s;animation:rise .7s .32s ease both;}
+  .cta::after{content:'';position:absolute;top:0;left:-120%;height:100%;width:60%;background:linear-gradient(100deg,transparent,rgba(228,200,127,.35),transparent);transform:skewX(-20deg);animation:shine 3.2s 1.2s infinite;}
+  @keyframes shine{0%{left:-120%;}60%,100%{left:140%;}}
+  .cta:hover{filter:brightness(1.08);transform:translateY(-2px);}
+  .cta small{display:block;font-size:12.5px;font-weight:600;opacity:.75;margin-top:4px;}
+  .links{margin-top:22px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;animation:rise .7s .4s ease both;}
+  .links a{background:#fff;color:var(--navy);border:1px solid #e6d9c1;border-radius:12px;padding:12px 18px;font-size:14.5px;font-weight:700;text-decoration:none;transition:.15s;}
+  .links a:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-1px);}
+  .privacy{font-size:13px;color:var(--muted);margin-top:30px;line-height:1.6;animation:rise .7s .5s ease both;}
+  .privacy b{color:var(--navy);}
+  .shield-bg{position:fixed;top:-60px;right:-60px;width:340px;height:400px;opacity:.06;pointer-events:none;background:radial-gradient(circle at 30% 30%, var(--gold), transparent 70%);}
+  @media(max-width:520px){h1{font-size:40px;letter-spacing:8px;} .punch{font-size:18px;}}
 </style>
 </head>
 <body>
+<div class="shield-bg"></div>
 <div class="wrap">
-  <div class="mark">L</div>
-  <h1>LEGION</h1>
-  <div class="tag">Bring your superpower. Build the agent that multiplies it.</div>
-  <a class="cta" href="card.html">⚔️ Build My Battle-Tested Card</a>
+
+  <!-- Shield-L gladiator mark -->
+  <svg class="logo" viewBox="0 0 120 140" role="img" aria-label="LEGION shield">
+    <defs>
+      <linearGradient id="gld" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#e4c87f"/><stop offset="1" stop-color="#caa14c"/>
+      </linearGradient>
+      <linearGradient id="nav" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#1d2740"/><stop offset="1" stop-color="#0f172a"/>
+      </linearGradient>
+    </defs>
+    <path d="M60 8 L110 27 V74 C110 106 88 126 60 137 C32 126 10 106 10 74 V27 Z" fill="url(#nav)" stroke="url(#gld)" stroke-width="3.5"/>
+    <path d="M60 24 L97 37 V71 C97 97 81 113 60 122 C39 113 23 97 23 71 V37 Z" fill="none" stroke="url(#gld)" stroke-width="1.4" opacity=".45"/>
+    <path d="M60 40 L84 50 V66 C84 82 74 94 60 101 C46 94 36 82 36 66 V50 Z" fill="url(#gld)" opacity=".16"/>
+    <text x="60" y="96" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="50" font-weight="bold" fill="url(#gld)">L</text>
+  </svg>
+
+  <h1>LEG<em>ION</em></h1>
+  <div class="tag">Bring your superpower.</div>
+  <div class="punch">Build Your Own <span>AI Agent</span> — in minutes, on the tool you already have.</div>
+
+  <a class="cta" href="card.html">⚔️ Build My Battle-Tested Card<small>free · private · nothing collected</small></a>
+
   <div class="links">
-    <a href="course.html">The Mini-Course</a>
-    <a href="avenues.html">The 5 Ways</a>
+    <a href="course.html">The 4-Day Mini-Course</a>
+    <a href="avenues.html">The 5 Ways to Free Your Time</a>
   </div>
-  <div class="privacy">🛡 Free · private · nothing collected. Your card and words stay on your device.<br>No signup. Just a real gift — built by owners, for owners.</div>
+
+  <div class="privacy">🛡 <b>Free.</b> Nothing is collected — no email, no signup, no names. Your card and words stay <b>on your device</b>.<br>Battle-tested. Built by owners, for owners.</div>
 </div>
 </body>
 </html>
