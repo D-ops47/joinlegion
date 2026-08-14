@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legion — The Agent Mini-Course</title>
+<style>
+  :root{--ink:#14100c;--brand:#0f172a;--gold:#caa14c;--gold2:#e4c87f;--paper:#f4ecdd;--card:#fffdf7;--line:#e6d9c1;--muted:#6b6256;--dark:#0a0d16;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1100px 600px at 15% -5%,#232c48 0%,var(--paper) 60%) fixed;color:var(--ink);min-height:100vh;padding:40px 16px;}
+  .stage{max-width:820px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:8px;justify-content:center;}
+  .brand .m{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--brand),#2b3a63);color:var(--gold2);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .brand b{letter-spacing:5px;color:var(--brand);font-size:20px;}
+  .eyebrow{text-align:center;color:var(--muted);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+  h1{font-size:30px;text-align:center;color:var(--brand);margin:6px 0 4px;}
+  .lede{text-align:center;color:var(--muted);font-size:15px;max-width:680px;margin:0 auto 22px;line-height:1.55;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-bottom:16px;box-shadow:0 8px 22px rgba(15,23,42,.08);}
+  .card h2{font-size:20px;color:var(--brand);margin-bottom:6px;}
+  .card h2 .n{color:var(--gold);}
+  .card p{font-size:14.5px;line-height:1.6;color:#3a342a;}
+  .day{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);}
+  .day:last-child{border-bottom:none;}
+  .day .d{width:84px;flex-shrink:0;background:var(--brand);color:#fff;border-radius:12px;padding:10px 6px;text-align:center;font-weight:800;font-size:13px;line-height:1.3;height:fit-content;}
+  .day .d small{display:block;font-weight:600;opacity:.75;font-size:11px;margin-top:2px;}
+  .day h3{font-size:16px;color:var(--brand);margin-bottom:3px;}
+  .day p{font-size:13.5px;color:#3a342a;line-height:1.5;margin-bottom:4px;}
+  .day .out{font-size:12.5px;color:var(--muted);font-weight:600;}
+  .pill{display:inline-block;background:#fff8e6;border:1px solid var(--gold2);color:#5a4513;border-radius:20px;padding:3px 11px;font-size:12px;font-weight:600;margin:2px 4px 2px 0;}
+  .loop{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
+  .loop .s{flex:1 1 150px;border:1.5px solid var(--line);border-radius:12px;padding:12px;background:#fdfaf2;}
+  .loop .s b{display:block;color:var(--brand);margin-bottom:3px;}
+  .loop .s p{font-size:12.5px;line-height:1.5;color:var(--muted);margin:0;}
+  .honest{background:#10261b;color:#d9f2e4;border-radius:12px;padding:14px 16px;margin-top:18px;font-size:13px;line-height:1.6;}
+  .honest b{color:#fff;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  @media(max-width:640px){.grid2{grid-template-columns:1fr;} .day .d{width:64px;}}
+  .note{max-width:820px;margin:14px auto 0;color:var(--muted);font-size:12.5px;text-align:center;}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="eyebrow">Legion · The Agent Mini-Course</div>
+  <div class="brand"><div class="m">L</div><b>LEGION</b></div>
+  <h1>Deploy your first AI agent in 4 days</h1>
+  <p class="lede"><b>Our course teaches. You work inside ChatGPT and connect the tools you already use.</b> Fully hand-held, super simple — so nobody's scared of AI agents anymore. About 15 minutes a day, completely free.</p>
+
+  <div class="card">
+    <h2><span class="n">How it works</span> — the loop on every lesson</h2>
+    <p>Each lesson on our course follows the same simple rhythm. You never have to figure it out alone — we hand you the exact next step and the exact words to use.</p>
+    <div class="loop">
+      <div class="s"><b>💡 LEARN</b><p>We teach it in plain, fun language — what an agent is, what to change, why.</p></div>
+      <div class="s"><b>🛠️ DO</b><p>We hand you the exact prompt to paste into ChatGPT + what to click. You do it, right there in your own ChatGPT.</p></div>
+      <div class="s"><b>🔗 CONNECT</b><p>We walk you through connecting your real tools (Gmail, Sheets, Slack, Monday, Outlook) so it can actually act.</p></div>
+      <div class="s"><b>✅ APPLY</b><p>Bring it home to your business — test it on the real thing. That's the fun part.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">1 · The Syllabus</span> — 4 days, ~15 min a day</h2>
+
+    <div class="day">
+      <div class="d">DAY 1<small>~15 min</small></div>
+      <div><h3>See it — What an AI agent actually is</h3>
+      <p>Plain-English intro + a hands-on, scripted win in ChatGPT so you <b>feel</b> it, not just read it. You'll try a real prompt and watch it work.</p>
+      <div class="out">You finish: you've used an agent, and it wasn't scary.</div></div>
+    </div>
+
+    <div class="day">
+      <div class="d">DAY 2<small>~15 min</small></div>
+      <div><h3>Build the brain — your first prototype agent</h3>
+      <p>Hand-held, step by step: you set up and save a prototype agent in ChatGPT (a Project / pinned chat with instructions). Pick your practice project from the <b>5 avenues</b>.</p><div class="pill">Email &amp; follow-ups</div><div class="pill">Data entry</div><div class="pill">Admin</div><div class="pill">Marketing content</div><div class="pill">Invoice follow-ups</div>
+      <div class="out">You finish: a working prototype agent, built by you, in your ChatGPT.</div></div>
+    </div>
+
+    <div class="day">
+      <div class="d">DAY 3<small>~20 min</small></div>
+      <div><h3>Connect your real tools</h3>
+      <p>We walk you through the free connector and connecting what you already use — <b>Gmail, Google Sheets, Outlook, Slack, Monday.com</b> — so your agent can actually act in them. Exact clicks, no guesswork.</p>
+      <div class="out">You finish: your agent can reach your real tools.</div></div>
+    </div>
+
+    <div class="day">
+      <div class="d">DAY 4<small>~15 min</small></div>
+      <div><h3>Test a real workflow + deploy it</h3>
+      <p>Run it on your real data, fix what's off, and turn it on. You leave with a <b>tested, working workflow</b> living in your business.</p>
+      <div class="out">You finish: an agent doing a job for you — and you're not scared anymore.</div></div>
+    </div>
+
+    <p style="margin-top:12px;"><b>Optional Day 5:</b> level up — build more agents, explore more tools, go deeper on any avenue.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">Free vs Plus</span> — one course, both audiences</h2>
+    <p>We teach the free way first so <b>everyone</b> succeeds — you build your agent as a <b>Project</b> in ChatGPT (free). Then, if you already have <b>Plus / Pro ($20/mo)</b>, you get the power-up and can go fully hands-off:</p>
+    <p style="margin-top:8px;">▪ <b>Free (everyone):</b> a Project agent that writes, thinks, and remembers — the brain of your workflow.</p>
+    <p>▪ <b>Plus / Pro power-up:</b> save it as a <b>custom GPT</b>, <b>schedule it to run automatically</b>, and use <b>ChatGPT Work + native connectors</b> to reach Gmail / Sheets / Slack / Outlook directly — real automation, no extra connector needed.</p>
+    <p style="margin-top:6px;"><b>Our promise:</b> it works on free — and if you already pay, you leave with truly hands-off automation. Either way, you finish the course.</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">2 · How doable is this?</span> — honest</h2>
+    <p><b>Very doable, because we're not building the technology — we're guiding.</b> ChatGPT is the agent's brain (free, they already have it). The tools (Gmail, Sheets, Slack, Monday, Outlook) already exist. The free connector (Zapier free tier) makes them work together, no code required. What we build is the <b>guided course + the exact prompts + the step-by-step connection walkthroughs</b> — that's content, and it's realistic to produce for all 5 avenues.</p>
+    <p style="margin-top:10px;"><b>Honest constraints we teach around:</b> free Zapier covers ~100 tasks/month (plenty to <b>test</b> a real workflow); free ChatGPT is your copilot (it does the work, but truly hands-off autonomy is the paid tier) — the course is honest about where "free" ends, so nobody's surprised.</p>
+    <p style="margin-top:10px;"><b>Timeline:</b> ~4 days × 15 min ≈ an hour total — a little longer than 3 days because connecting real tools adds a step, but still short enough that people finish. Right balance of "substantial, not scary."</p>
+  </div>
+
+  <div class="card">
+    <h2><span class="n">3 · How they work inside ChatGPT</span></h2>
+    <p>Three layers — the brain, the connection, the test:</p>
+    <p style="margin-top:8px;">🧠 <b>The brain (ChatGPT):</b> each lesson hands them the exact prompt to paste into a ChatGPT chat/Project. They build and talk to their agent there — it thinks, writes, and understands their business.</p>
+    <p>🔗 <b>The connection (free connector):</b> to make it <i>act</i> — send the email, write the sheet row, ping Slack — we walk them through a free connector (Zapier) connected to their real Gmail/Sheets/Slack/Monday/Outlook. Copy-paste the Zap's AI instruction; they click it into place.</p>
+    <p>✅ <b>The test (their business):</b> the course says "now test it on one real customer / one real invoice / one real idea." They run it, see it work, and tweak it with our guidance.</p>
+  </div>
+
+  <div class="honest"><b>The whole idea in one line:</b> Legion is the hand that guides; your ChatGPT is where the agent lives; your real tools are where it works. Super simple, free, ~15 min a day for four days — and you leave with a real workflow you built and understand.</div>
+
+  <div class="note">Course concept for the Legion Gladiator build — free, nothing collected, no signup. Built by owners, for owners.</div>
+  <script>try{fetch('/track?e=course_open')}catch(x){}</script>
+</div>
+</body>
+</html>

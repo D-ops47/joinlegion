@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LEGION — Build Your Own AI Agent in 3 Days</title>
+<style>
+  :root{
+    --ink:#14100c; --brand:#0f172a; --gold:#caa14c; --gold2:#e4c87f;
+    --paper:#fbf7ef; --card:#ffffff; --line:#e7ddc9; --muted:#6b6256;
+    --green:#1f7a4d; --red:#a44a3a; --accent:#2b4a8a; --dark:#14100c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; color:var(--ink); background:var(--paper); -webkit-font-smoothing:antialiased;}
+  body{min-height:100vh; background:radial-gradient(1200px 600px at 20% -10%, #232c48 0%, var(--paper) 60%) fixed;}
+  .wrap{max-width:860px; margin:0 auto; padding:28px 20px 80px;}
+  .brand{display:flex; align-items:center; gap:14px; margin-bottom:6px;}
+  .brand .mark{width:46px;height:46px;border-radius:10px; background:linear-gradient(135deg,var(--brand),#2b3a63); display:flex;align-items:center;justify-content:center; color:var(--gold2); font-weight:800; font-size:20px; letter-spacing:1px; box-shadow:0 6px 16px rgba(15,23,42,.25);}
+  .brand h1{font-size:24px; letter-spacing:6px; font-weight:800; color:var(--brand);}
+  .tag{color:var(--muted); font-size:13px; letter-spacing:.4px; margin-bottom:18px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:26px; box-shadow:0 10px 30px rgba(20,16,12,.07);}
+  .card h2{font-size:20px; margin-bottom:4px; color:var(--brand);}
+  .card .sub{color:var(--muted); font-size:14px; margin-bottom:18px;}
+  .banner{background:#10261b; color:#d9f2e4; border-radius:10px; padding:10px 14px; font-size:13px; line-height:1.5; margin-bottom:20px; display:flex; gap:8px; align-items:flex-start;}
+  .banner b{color:#fff;}
+  /* HERO */
+  .hero{text-align:center; padding:26px 10px 6px;}
+  .hero .kicker{display:inline-block; background:var(--gold); color:#2b2110; font-weight:800; font-size:12px; letter-spacing:2px; padding:5px 14px; border-radius:20px; margin-bottom:14px;}
+  .hero h2{font-size:34px; line-height:1.12; color:var(--brand); font-weight:800;}
+  .hero h2 span{color:var(--gold);}
+  .hero p{color:var(--muted); font-size:16px; max-width:560px; margin:12px auto 0; line-height:1.5;}
+  .hero .proof{margin-top:14px; display:flex; gap:22px; justify-content:center; flex-wrap:wrap; font-size:13px; color:var(--muted);}
+  .hero .proof b{color:var(--brand);}
+  /* quiz */
+  .qblock{margin-bottom:20px;}
+  .qblock .qlabel{font-weight:700; font-size:15px; margin-bottom:10px; display:flex; gap:8px; align-items:center;}
+  .qblock .step{background:var(--gold); color:#2b2110; font-size:12px; font-weight:800; border-radius:6px; padding:2px 8px;}
+  .opts{display:grid; gap:8px;}
+  .opt{position:relative; border:1.5px solid var(--line); border-radius:10px; padding:11px 13px 11px 40px; cursor:pointer; transition:.12s; background:#fff; font-size:14px;}
+  .opt:hover{border-color:var(--gold); background:#fffcf4;}
+  .opt input{position:absolute; left:14px; top:50%; transform:translateY(-50%); accent-color:var(--gold); width:16px;height:16px;}
+  .opt:has(input:checked){border-color:var(--gold2); background:#fff8e6; box-shadow:0 0 0 3px rgba(202,161,76,.18); font-weight:600;}
+  .btn{display:inline-block; border:none; border-radius:10px; padding:13px 22px; font-size:15px; font-weight:700; cursor:pointer;}
+  .btn-primary{background:linear-gradient(135deg,var(--brand),#2b3a63); color:#fff; width:100%;}
+  .btn-primary:hover{filter:brightness(1.08);}
+  .btn-ghost{background:transparent; color:var(--muted); border:1px solid var(--line);}
+  .hidden{display:none !important;}
+  .center{text-align:center;}
+  .footnote{font-size:12px;color:var(--muted);margin-top:14px;text-align:center;}
+  /* agent tutorial (the hero value) */
+  .agent{background:linear-gradient(150deg,#0f172a,#1d2740); color:#e9e6dc; border-radius:18px; padding:26px; margin-bottom:0;}
+  .agent .who{font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--gold2); font-weight:800;}
+  .agent h2{font-size:28px; color:#fff; margin:2px 0 8px; font-weight:800;}
+  .agent .value{font-size:15px; line-height:1.55; color:#d8d4c8; margin-bottom:16px;}
+  .agent .value b{color:#fff;}
+  .ag-step{display:flex; gap:14px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:14px; margin-bottom:10px;}
+  .ag-step .st{width:32px;height:32px;border-radius:8px; background:var(--gold); color:#2b2110; font-weight:800; display:flex;align-items:center;justify-content:center; flex-shrink:0; font-size:15px;}
+  .ag-step h4{font-size:15px; color:#fff; margin-bottom:4px;}
+  .ag-step p{font-size:13.5px; line-height:1.5; color:#cec9bb;}
+  .ag-prompt{margin-top:6px;}
+  .ag-prompt h4{font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--gold2); margin-bottom:8px;}
+  .ag-prompt pre{background:#0a0d16; color:#e9e2d2; border:1px solid #2b3550; border-radius:10px; padding:14px; font-size:12.5px; line-height:1.55; overflow-x:auto; white-space:pre-wrap; font-family:ui-monospace,Menlo,monospace;}
+  .ag-outcome{margin-top:14px; background:var(--gold); color:#2b2110; border-radius:10px; padding:12px 14px; font-weight:700; font-size:14px; line-height:1.4;}
+  .ag-outcome span{font-weight:800;}
+  /* bonus diagnostic */
+  .bonus{margin-top:20px;}
+  .bonus summary{cursor:pointer; font-weight:700; color:var(--brand); font-size:15px; padding:8px 0;}
+  .onepager{background:#fff; border:1px solid var(--line); border-radius:18px; padding:30px; max-width:760px; margin:0 auto; position:relative; overflow:hidden;}
+  .op-head{display:flex; justify-content:space-between; align-items:flex-start; border-bottom:3px solid var(--brand); padding-bottom:12px;}
+  .op-head .l{font-weight:800; letter-spacing:4px; font-size:18px; color:var(--brand);}
+  .op-head .l span{color:var(--gold);}
+  .op-head .r{font-size:11px; color:var(--muted); text-align:right; line-height:1.4;}
+  .op-profile{margin:16px 0; background:linear-gradient(135deg,#fbf3df,#f7ead0); border:1px solid var(--gold2); border-radius:12px; padding:14px 16px;}
+  .op-profile .who{font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--gold); font-weight:800;}
+  .op-profile .name{font-size:24px; font-weight:800; color:var(--brand); margin-top:2px;}
+  .op-profile .desc{font-size:13px; color:var(--muted); margin-top:4px;}
+  .op-sec{margin-top:18px;}
+  .op-sec h3{font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--gold); margin-bottom:8px;}
+  .op-week{background:var(--brand); color:#fff; border-radius:12px; padding:14px 16px; margin-top:16px;}
+  .op-week h3{color:var(--gold2); font-size:12px; letter-spacing:2px; margin-bottom:6px;}
+  .op-week p{font-size:15px; line-height:1.5; font-weight:600;}
+  .acts{display:grid; gap:10px;}
+  .act{display:flex; gap:10px; align-items:flex-start; border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:#fdfaf2;}
+  .act .n{background:var(--gold); color:#2b2110; width:22px;height:22px;border-radius:50%; font-weight:800; font-size:12px; display:flex;align-items:center;justify-content:center; flex-shrink:0;}
+  .act p{font-size:14px; line-height:1.45;}
+  .areas{display:grid; gap:7px;}
+  .areas .row{display:grid; grid-template-columns:120px 1fr 34px; gap:8px; align-items:center; font-size:13px;}
+  .areas .bar{height:9px; border-radius:6px; background:#eee4cf; overflow:hidden;}
+  .areas .bar i{display:block; height:100%; border-radius:6px; background:linear-gradient(90deg,var(--gold),var(--gold2));}
+  .areas .val{text-align:right; font-weight:700; color:var(--brand);}
+  .areas .row.wk .bar i{background:linear-gradient(90deg,#c96a55,#e49a84);}
+  .top3{display:grid; gap:8px;}
+  .top3 .t{border-left:4px solid var(--gold); padding:8px 12px; background:#fdfaf2; border-radius:6px; font-size:14px;}
+  .top3 .t b{color:var(--brand);}
+  .op-foot{margin-top:20px; padding-top:12px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-size:11px; color:var(--muted);}
+  .op-foot .ctr span{color:var(--gold); font-weight:800;}
+  @media print{ body{background:#fff;} .wrap{max-width:100%;padding:0;} .no-print{display:none!important;} .card{box-shadow:none;} .agent{background:#fff;color:var(--ink);border:1px solid var(--line);} .agent h2{color:var(--brand);} .agent .ag-step{background:#fdfaf2;border-color:var(--line);} .agent .ag-step h4{color:var(--brand);} .agent .ag-step p{color:var(--ink);} .agent .ag-prompt pre{border:1px solid var(--line);} .op-head .r{display:none;} }
+  @media (max-width:520px){ .areas .row{grid-template-columns:96px 1fr 30px;} .onepager{padding:20px;} .hero h2{font-size:27px;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">
+    <div class="mark">L</div>
+    <div><h1>LEGION</h1><div class="tag">Build your own AI agent. Battle-tested, built by owners.</div></div>
+  </div>
+
+  <!-- ============= HERO ============= -->
+  <div class="hero">
+    <div class="kicker">Free · Build it today · Keep it forever</div>
+    <h2>Build Your Own <span>AI Agent</span> in 3 Days</h2>
+    <p>An AI agent isn't a chatbot you talk to — it's a worker you train. Answer 5 questions and we'll hand you the <b>right agent for your exact challenge</b>, plus a step-by-step tutorial to build it and have it working for you <b>today</b>.</p>
+    <div class="proof"><span><b>5</b> quick questions</span><span><b>3</b> days to level it up</span><span><b>~5</b> minutes to a working agent</span><span>100% <b>free tools</b></span></div>
+  </div>
+
+  <!-- ============= QUIZ (on-ramp) ============= -->
+  <div id="quizView" class="card" style="margin-top:22px;">
+    <div class="banner">🛡 <span><b>Free.</b> Nothing is collected, no email, no signup — we can't even see your answers. Answer 5 questions to find the right agent for you.</span></div>
+    <h2>Find your agent</h2>
+    <div class="sub">Pick the closest answer to your situation. We'll match you to the agent built for it.</div>
+
+    <div class="qblock"><div class="qlabel"><span class="step">1</span> What's your industry?</div><div class="opts">
+      <label class="opt"><input type="radio" name="industry" value="trades"><span>Trades / Contracting / Home Services</span></label>
+      <label class="opt"><input type="radio" name="industry" value="realestate"><span>Real Estate</span></label>
+      <label class="opt"><input type="radio" name="industry" value="services"><span>Services / Salon / Professional</span></label>
+      <label class="opt"><input type="radio" name="industry" value="retail"><span>Retail / Ecommerce</span></label>
+      <label class="opt"><input type="radio" name="industry" value="health"><span>Health / Fitness</span></label>
+      <label class="opt"><input type="radio" name="industry" value="other"><span>Other</span></label>
+    </div></div>
+
+    <div class="qblock"><div class="qlabel"><span class="step">2</span> What's your #1 challenge right now?</div><div class="opts">
+      <label class="opt"><input type="radio" name="challenge" value="leads"><span>Getting more leads / marketing</span></label>
+      <label class="opt"><input type="radio" name="challenge" value="sales"><span>Closing sales / follow-through</span></label>
+      <label class="opt"><input type="radio" name="challenge" value="price"><span>Raising prices / being valued</span></label>
+      <label class="opt"><input type="radio" name="challenge" value="time"><span>Time / staffing / operations</span></label>
+      <label class="opt"><input type="radio" name="challenge" value="cash"><span>Cash flow / money</span></label>
+      <label class="opt"><input type="radio" name="challenge" value="scale"><span>Scaling / growing bigger</span></label>
+      <label class="opt"><input type="radio" name="challenge" value="stand"><span>Standing out / brand</span></label>
+    </div></div>
+
+    <div class="qblock"><div class="qlabel"><span class="step">3</span> What stage is your business in?</div><div class="opts">
+      <label class="opt"><input type="radio" name="stage" value="start"><span>Just getting started</span></label>
+      <label class="opt"><input type="radio" name="stage" value="have"><span>Getting sales, want consistency</span></label>
+      <label class="opt"><input type="radio" name="stage" value="established"><span>Established, want to scale</span></label>
+      <label class="opt"><input type="radio" name="stage" value="exit"><span>Building toward a sale / exit</span></label>
+    </div></div>
+
+    <div class="qblock"><div class="qlabel"><span class="step">4</span> Which growth area feels weakest right now?</div><div class="opts">
+      <label class="opt"><input type="radio" name="weak" value="map"><span>My map (strategy &amp; direction)</span></label>
+      <label class="opt"><input type="radio" name="weak" value="marketing"><span>Marketing (getting attention)</span></label>
+      <label class="opt"><input type="radio" name="weak" value="sales"><span>Sales (closing)</span></label>
+      <label class="opt"><input type="radio" name="weak" value="money"><span>Money (finances)</span></label>
+      <label class="opt"><input type="radio" name="weak" value="systems"><span>Systems (operations)</span></label>
+      <label class="opt"><input type="radio" name="weak" value="team"><span>Team (people)</span></label>
+      <label class="opt"><input type="radio" name="weak" value="fans"><span>Raving customers (retention &amp; referrals)</span></label>
+    </div></div>
+
+    <div class="qblock"><div class="qlabel"><span class="step">5</span> What's your goal for this year?</div><div class="opts">
+      <label class="opt"><input type="radio" name="goal" value="customers"><span>More customers</span></label>
+      <label class="opt"><input type="radio" name="goal" value="income"><span>Higher prices / more income</span></label>
+      <label class="opt"><input type="radio" name="goal" value="time"><span>More free time</span></label>
+      <label class="opt"><input type="radio" name="goal" value="team"><span>A bigger team</span></label>
+      <label class="opt"><input type="radio" name="goal" value="exit"><span>A sale / exit</span></label>
+      <label class="opt"><input type="radio" name="goal" value="peace"><span>Less stress / better systems</span></label>
+    </div></div>
+
+    <button class="btn btn-primary" onclick="generate()">Show Me My Agent →</button>
+    <div class="footnote">🛡 Free — nothing collected, nothing stored. You keep everything.</div>
+  </div>
+
+  <!-- ============= RESULT: AGENT TUTORIAL (HERO) + BONUS DIAGNOSTIC ============= -->
+  <div id="resultView" class="hidden">
+    <div id="agentView" class="agent"></div>
+
+    <div class="bonus">
+      <details id="bonusDetails"><summary>📋 Bonus: your one-page Battle-Tested plan for this week</summary>
+        <div class="onepager" id="onepager"></div>
+      </details>
+    </div>
+
+    <div class="center no-print" style="margin-top:16px;">
+      <button class="btn btn-primary" onclick="window.print()">🖨 Save / Print</button>
+      <button class="btn btn-ghost" onclick="resetAll()">← Start Over</button>
+    </div>
+    <div class="footnote no-print">Screenshot your agent tutorial — it's yours. Nothing was collected or saved.</div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   LEGION — Build Your Own AI Agent. Deterministic, offline, stores nothing.
+   Quiz = on-ramp. The AGENT TUTORIAL is the hero value.
+   ============================================================ */
+
+var GEN_COUNT = 0;
+function trk(e,v){ try{ fetch('/track?e='+e+(v!==undefined?'&v='+v:'')); }catch(x){} }
+
+var AREA_NAMES = { map:'Your Map', marketing:'Marketing', sales:'Sales', money:'Money', systems:'Systems', team:'Team', fans:'Raving Customers' };
+
+var PROFILES = {
+  leads:{name:'The Attractor', desc:'You turn attention into appointments. Your agent is built to keep a steady flow coming in without you chasing.'},
+  sales:{name:'The Closer', desc:'You get the conversation. Your agent is built to turn interest into yes — everyday.'},
+  price:{name:'The Valuer', desc:'You deliver real results. Your agent is built to capture the value you actually create.'},
+  time:{name:'The Operator', desc:'You have the skills. Your agent is built to get you OUT of the day-to-day.'},
+  cash:{name:'The Steward', desc:'You build things that last. Your agent is built to protect and grow the cash moving through you.'},
+  scale:{name:'The Builder', desc:'You have a working machine. Your agent is built to make it bigger, repeatably.'},
+  stand:{name:'The Differentiator', desc:'You refuse to be a commodity. Your agent is built to make you the obvious choice.'}
+};
+
+var PLAYBOOKS = {
+  leads:[
+    {a:'Send 10 existing, happy customers a 3-line text this week: "It was great working with you. If one friend needs what we do, I\'ll personally take care of them — want me to?" Track how many reply.'},
+    {a:'Publish 1 short video a day for 7 days from your phone, answering the ONE question buyers always ask you. Post to 3 free platforms (Instagram, Facebook, YouTube). No production, just talking to camera.'},
+    {a:'Follow up on every past inquiry you never chased. Script: "Hi [name], I was thinking about you — is the project still on your mind? I have one opening." Do 10 a day for a week.'},
+    {a:'Add one clear, specific offer to your homepage: the exact problem you solve, for who, at what price. Test one headline and one price for 2 weeks. Measure results with one free tool (Google Sheets counts fine).'}
+  ],
+  sales:[
+    {a:'Add ONE next-step to every call: always end with a date and a yes/no question. Script: "If this makes sense, let\'s put it on the calendar for Tuesday. Does that work?" Never end a call open-ended.'},
+    {a:'Re-engage your last 20 people who went quiet. Script: "Closing the books on this — is now bad timing, or is this off your list? Either way, honest answer helps me." Expect ~1/3 to reopen.'},
+    {a:'Get 3 referrals from your best client this week. Script: "Who do you know that\'s been putting this off for a year? I\'d rather talk to THEM than chase strangers." Tell them exactly who you want.'},
+    {a:'Time-box a decision. Script: "I can only hold this price/spot until [date] — after that it changes." Real deadlines close deals; empty offers get "I\'ll think about it."'}
+  ],
+  price:[
+    {a:'Write the #1 transformation you deliver in one sentence, then raise your price 10% on your next 3 quotes. Script for pushback: "I understand — I can trim scope to the essentials to fit your budget, but the full solution is [price]."'},
+    {a:'Add one premium tier that bundles your best outcome + fast delivery + guarantee. Price it 2x your current most common ticket. Sell it FIRST. People often pick the middle option — and you\'ll know your real ceiling.'},
+    {a:'Publish 3 pieces of proof (before/after, a result with a number, a testimonial from a name you have written permission to use) to justify the premium. Value = evidence; without it, every price looks too high.'},
+    {a:'Stop discounting to close. Script instead: "I can\t do that price and give you the result you need. Here\'s what I CAN do for [original price]." One lost deal at a lowball beats ten low-margin ones.'}
+  ],
+  time:[
+    {a:'List your 10 most repetitive weekly tasks. Pick ONE and write a checklist + a template for it this week. Hand it to your first hire (or a free tool like a Zapier workflow / ChatGPT custom prompt).'},
+    {a:'Use a documented handoff for every job: a shared checklist (Google Sheets, free) that says what done looks like, so you\'re not the only one who knows. Delegate the task, not the thinking.'},
+    {a:'Block 90 minutes, same time, 3 days a week, to work ON the business (pricing, marketing, systems) with your phone in another room. Protect it like a client meeting.'},
+    {a:'Write a 1-page "how we do it" SOP for your #1 service. The goal: someone else could run it. Then hire one part-timer or VA for 10 hrs/week to run the checklist.'}
+  ],
+  cash:[
+    {a:'Do a 13-week cash forecast tonight: every expected dollar in (3 realistic scenarios) and out, week by week, in a spreadsheet. You can\'t fix what you can\'t see, and 13 weeks is your tomorrow.'},
+    {a:'Move to 50% deposit up front on every new job/order this month. Script: "A deposit reserves your date and covers materials — full balance on completion." This alone transforms cash flow.'},
+    {a:'Separate your business money from your personal money TODAY — two accounts. Pay yourself a fixed salary. Cash flow is a business problem; you can\'t read it if it\'s mixed with your life.'},
+    {a:'Review your last 2 statements line by line and cut 1 recurring cost you don\'t use. Then set a rule: no new recurring spend for 30 days. Small leaks, closed weekly, are real cash.'}
+  ],
+  scale:[
+    {a:'Turn your #1 service into a repeatable "product": fixed scope, fixed price, fixed delivery process, documented. You can\'t scale something that changes every time.'},
+    {a:'Package 3 ways to buy: an entry offer (low price, low risk, foot in the door), a core offer (your main service), and a premium offer (your best outcome). Most businesses have one. Add the other two.'},
+    {a:'Hire for your bottleneck, not your favorite activity. Pick the ONE task that caps your growth and hire (or promote) someone to own it with a scorecard of 3 KPIs in a shared sheet.'},
+    {a:'Pick ONE metric to grow 30% in 90 days (customers, or average cart, or repeat rate) and put a weekly dashboard on it. One number, watched weekly, is how businesses actually scale.'}
+  ],
+  stand:[
+    {a:'Write your "only we" statement: the one thing only you deliver, and the one group it\'s for. Everything you publish should remind people of that one thing.'},
+    {a:'Tell a specific story instead of listing features: one client, their situation, what you did, the number it moved. Stories with specifics get shared; feature lists get scrolled past.'},
+    {a:'Pick one opinion you\'re willing to take a stand on in your market (e.g., "we won\'t work with anyone who underprices") and say it plainly. Being memorable beats being safe.'},
+    {a:'Own one niche loudly for 30 days: one industry, one problem, all your content on it. It\'s easier to be the obvious choice for someone specific than the option for everyone.'}
+  ]
+};
+
+var AREA_HEALTH = {
+  leads:{map:6, marketing:3, sales:6, money:6, systems:6, team:6, fans:7},
+  sales:{map:6, marketing:6, sales:3, money:6, systems:6, team:6, fans:6},
+  price:{map:6, marketing:5, sales:6, money:6, systems:6, team:6, fans:5},
+  time:{map:6, marketing:6, sales:6, money:6, systems:3, team:4, fans:6},
+  cash:{map:6, marketing:6, sales:6, money:3, systems:5, team:6, fans:6},
+  scale:{map:6, marketing:5, sales:6, money:6, systems:4, team:5, fans:6},
+  stand:{map:5, marketing:5, sales:6, money:6, systems:6, team:6, fans:6}
+};
+
+function stageMod(stage, base){ var w=Object.assign({},base); if(stage==='start'){w.map-=1;w.marketing-=1;} if(stage==='have'){w.sales-=1;w.marketing-=1;} if(stage==='established'){w.systems-=1;w.team-=1;} if(stage==='exit'){w.money-=1;w.systems-=1;} return w; }
+
+function val(name){ var e=document.querySelector('input[name="'+name+'"]:checked'); return e? e.value:null; }
+
+/* ============ THE AGENTS — value + tutorial (THE HERO) ============ */
+var AGENTS = {
+  leads:{ title:'The Referral & Follow-Up Agent', tag:'for getting more leads & marketing',
+    value:'Turns people you ALREADY know into a steady stream of new business — and chases the leads you forgot about. It writes the warm referral text, drafts your follow-ups, and keeps your pipeline from going cold. Your sales floor does the closing; this agent feeds it.',
+    steps:[
+      {t:'Get it running (in ~5 min)', p:'Open ChatGPT, Claude, Gemini, or Mistral (all free, in a browser — nothing to install). Paste the prompt below, press send. Ask it to draft 3 messages for a real customer. It works immediately.'},
+      {t:'Feed it your business (Day 1–2)', p:'Tell it your service, your price, and past your 10 favorite customers\' first names. It writes a personal 3-line text for each one. Then hand it your list of past inquiries and get a mapped follow-up for every one.'},
+      {t:'Make it yours (Day 3)', p:'Pin the chat so it remembers you. Give it your voice: "make it warmer," "shorter," "less salesy." Add your best closing line. Now it writes like you — every day, automatically.'}
+    ],
+    prompt:'You are my referral & follow-up agent. I run a [service] business. I\'ll give you my customers\' first names and my past inquiries. For each customer, write a short, warm, personal 3-line message asking if one friend needs my help that I can personally take care of — no spam feel, no hard sell. For each past inquiry I never chased, write a 5-line follow-up offering one opening. Output ready-to-send texts. Ask me my service and my price first, then ask for the names.' ,
+    outcome:'A working agent that writes your referral and follow-up messages on demand — so your pipeline never goes cold. You can have this running before you leave today.' },
+
+  sales:{ title:'The Closing Agent', tag:'for closing sales & follow-through',
+    value:'Gives you the exact words that turn interest into a yes. It writes dated next-step closes, re-engages the people who went quiet, and answered the "I\'ll think about it" objection for you. You bring the live call; it hands you the line that closes.',
+    steps:[
+      {t:'Get it running (in ~5 min)', p:'Open any free tool (ChatGPT, Claude, Gemini, Mistral). Paste the prompt, press send. Tell it what you sell and your price, and ask for one closing script for a real prospect. Watch it write something you\'d actually say.'},
+      {t:'Feed it your real situations (Day 1–2)', p:'Give it the actual objections you hear ("too expensive", "I need to ask my partner", "let me think about it"). It returns dead-on responses. Give it your last 20 quiet prospects and it writes each a re-engagement message.'},
+      {t:'Make it yours (Day 3)', p:'Pin the chat. Add the phrases only you say. Ask it to never sound scripted. Now you have a coach that writes your closes — faster and sharper than you would under pressure.'}
+    ],
+    prompt:'You are my sales-closing agent. I sell [service/offer] at [price]. I\'ll describe the real objections I hear and the people who went quiet. You write: (1) a closing script that always ends with a dated, yes/no commitment, (2) a warm re-engagement message for people who went quiet, (3) a real-deadline close, and (4) a confident, non-scripted reply to "I\'ll think about it." Keep them short and human. Ask me what I sell and my price first, then ask for the situations.',
+    outcome:'A working agent that hands you the exact words to close, handle objections, and revive dead leads — on call, whenever you need it.' },
+
+  price:{ title:'The Valuer Agent', tag:'for raising prices & being valued',
+    value:'Stops the race to the bottom. It writes your one-line transformation, designs a premium tier at 2x, and gives you the pushback script when someone says your price is too high — so you get paid for the value you already deliver.',
+    steps:[
+      {t:'Get it running (in ~5 min)', p:'Open a free tool. Paste the prompt, press send. Tell it what you do and what you charge. Ask for your one-sentence transformation — the core of every price you\'ll ever set.'},
+      {t:'Design your premium (Day 1–2)', p:'Ask it to build a premium tier at 2x your common ticket (bundle your best outcome + fast delivery + guarantee). Then ask for the "too expensive" scripts. Keep what feels like you.'},
+      {t:'Make yours — and use it (Day 3)', p:'Pin the chat. Before your next 3 quotes, ask the agent to check your wording against your new price. You\'ll feel the shift the first time a client doesn\'t blink.'}
+    ],
+    prompt:'You are my value & pricing agent. I do [what I do] and currently charge [price]. You help me: (1) write the single-sentence transformation I deliver, (2) design a premium tier priced at 2x my common ticket, and (3) write confident pushback scripts for when someone says my price is too high — no discounting. Be specific. Ask me what I do and my current price first.',
+    outcome:'A working agent that keeps you priced by value, not by fear — your transformation, your premium tier, and your pushback scripts, ready whenever you need them.' },
+
+  time:{ title:'The Operator Agent', tag:'for time, staffing & operations',
+    value:'Turns the ONE repetitive task eating your week into a checklist anyone can run — so you stop being the bottleneck. It writes the step-by-step handoff, the SOP, and tells you exactly who to hand it to.',
+    steps:[
+      {t:'Get it running (in ~5 min)', p:'Open a free tool. Paste the prompt, press send. Tell it your single most repetitive task (in your words). It returns a clear, doable checklist and a 1-page handoff.'},
+      {t:'Hand off the task (Day 1–2)', p:'Take its checklist to a hire, a virtual assistant, or a free automation. Follow its "who should own this" suggestion. The goal: you never do that task again.'},
+      {t:'Systematize the next one (Day 3)', p:'Pin the chat. Run it on your second-biggest time sink. Keep going one a week. Within a month you\'ve handed off your whole week.'}
+    ],
+    prompt:'You are my operations agent. I run [business] and the most repetitive task that eats my time is [task]. Turn it into: (1) a clear step-by-step checklist someone else could follow, (2) a 1-page handoff doc, and (3) 3 suggestions for who/how to delegate it (hire, VA, or a free automation). Ask me which task first, then walk me through it one step at a time.',
+    outcome:'A working agent that turns your worst time-sink into a checklist someone else runs — so you actually get your week back.' },
+
+  cash:{ title:'The Steward Agent', tag:'for cash flow & money',
+    value:'Builds your 13-week cash forecast and a deposit-up-front policy — no spreadsheet genius required. It asks for your numbers one at a time and lays out exactly where cash is leaking and what to fix first.',
+    steps:[
+      {t:'Get it running (in ~5 min)', p:'Open a free tool. Paste the prompt, press send. Answer its questions with rough numbers. It builds a simple 13-week cash forecast table for you in minutes.'},
+      {t:'Fix the leaks (Day 1–2)', p:'Ask it for a deposit-up-front policy and your top 3 things to cut or renegotiate. Apply the first one this week — deposits alone transform cash flow.'},
+      {t:'Stay on top of it (Day 3)', p:'Pin the chat. Each week, paste this week\'s real numbers and let it refresh the forecast. You\'ll see money problems coming 13 weeks out instead of 13 days.'}
+    ],
+    prompt:'You are my cash-flow agent. I\'ll give you my rough expected money in and out over the next 13 weeks, one question at a time. Build me: (1) a simple 13-week cash forecast table (conservative / likely / optimistic), (2) a one-paragraph deposit-up-front policy, and (3) the top 3 things to cut or renegotiate. Ask me my numbers first, one at a time.',
+    outcome:'A working agent that turns your cash flow from a worry into a forecast — you can see 13 weeks ahead and fix leaks before they bite.' },
+
+  scale:{ title:'The Builder Agent', tag:'for scaling & growing bigger',
+    value:'Packages your #1 service into a repeatable, fixed-scope product and designs the three offers that let people buy from you at any level. It shows you the one number to grow 30% in 90 days — and how.',
+    steps:[
+      {t:'Get it running (in ~5 min)', p:'Open a free tool. Paste the prompt, press send. Tell it what you do today. It writes your #1 service as a fixed-scope, fixed-price product you can actually repeat.'},
+      {t:'Build your 3 offers (Day 1–2)', p:'Ask it for the entry, core, and premium packages (premium at 2x). This is how you stop selling yourself once and start selling a system.'},
+      {t:'Pick your number (Day 3)', p:'Pin the chat. Let it name the ONE metric to grow 30% in 90 days and build your weekly dashboard. One watched number is how businesses actually scale.'}
+    ],
+    prompt:'You are my scaling agent. My #1 service is [describe]. Turn it into: (1) a fixed-scope, fixed-price product with clear deliverables, (2) three ways to buy (entry, core, premium, with the premium at 2x), and (3) the ONE metric I should grow 30% in 90 days and how to track it weekly. Ask me what I do and how I deliver it first.',
+    outcome:'A working agent that turns your one service into a repeatable product with three offers — so you can grow without rebuilding the machine every time.' },
+
+  stand:{ title:'The Differentiator Agent', tag:'for standing out & brand',
+    value:'Makes you the obvious choice instead of one of many. It writes your "only we" statement, turns one client win into a story people share, and gives you the opinion worth taking a stand on.',
+    steps:[
+      {t:'Get it running (in ~5 min)', p:'Open a free tool. Paste the prompt, press send. Tell it about your business. Ask for your "only we" statement — the one thing only you deliver.'},
+      {t:'Tell a story (Day 1–2)', p:'Give it one client win. It turns it into a shareable story with a specific number. Post it. Watch what a story with a number does that a feature list never could.'},
+      {t:'Take a stand (Day 3)', p:'Pin the chat. Ask for one opinion you can own in your market. Say it plainly in your next post. Being memorable beats being safe.'}
+    ],
+    prompt:'You are my brand-differentiation agent. My business is [describe] and my market is [describe]. Help me: (1) write my "only we" statement — the one thing only I deliver and who it\'s for, (2) turn one client case into a shareable story with a specific number, and (3) one opinion I can take a stand on to stand out. Ask me about my business and one past client win first.',
+    outcome:'A working agent that keeps you from being a commodity — your "only we" statement, your shared-worthy stories, and the stand that makes you memorable.' }
+};
+
+/* ============ generate + render ============ */
+function generate(){
+  var challenge = val('challenge'), industry = val('industry'), stage = val('stage'), weak = val('weak'), goal = val('goal');
+  if(!challenge||!industry||!stage||!weak||!goal){ alert('Please answer all 5 questions so we can match your agent.'); return; }
+
+  GEN_COUNT++;
+  trk('card_created');
+  renderAgent(challenge);
+
+  var prof = PROFILES[challenge];
+  var weekly = PLAYBOOKS[challenge] || PLAYBOOKS.scale;
+  var health = stageMod(stage, AREA_HEALTH[challenge] || AREA_HEALTH.scale);
+  if(weak && health[weak]!==undefined){ health[weak] = Math.min(health[weak], 2); }
+  var sorted = Object.keys(health).sort(function(a,b){ return health[a]-health[b]; });
+  var top3 = sorted.slice(0,3);
+  var thisWeek = {
+    leads:'This week: text your 10 happiest customers for referrals and phone-follow-up 10 past leads you never chased.',
+    sales:'This week: give every call a dated yes/no next step and re-engage your last 20 people who went quiet.',
+    price:'This week: write your #1 transformation in one sentence and raise your price 10% on your next 3 quotes.',
+    time:'This week: pick your single most repetitive task, write the checklist, and hand it to someone (or an agent).',
+    cash:'This week: run your 13-week cash forecast and move to 50% deposits on every new order.',
+    scale:'This week: write your #1 service as a fixed-scope, fixed-price product and add your premium tier.',
+    stand:'This week: write your "only we" statement and post your first specific client story.'
+  }[challenge];
+  var goalText = ({customers:'more customers',income:'higher prices & income',time:'more free time',team:'a bigger team',exit:'a sale / exit',peace:'less stress & better systems'})[goal]||'growth';
+
+  renderBonus(challenge, goal, prof, weekly, health, top3, thisWeek, goalText);
+
+  document.getElementById('quizView').classList.add('hidden');
+  var rv=document.getElementById('resultView'); rv.classList.remove('hidden');
+  rv.scrollIntoView({behavior:'smooth'});
+}
+
+function renderAgent(c){
+  var g = AGENTS[c] || AGENTS.scale;
+  var html = '';
+  html += '<div class="who">Your agent</div>';
+  html += '<h2>'+g.title+'</h2>';
+  html += '<div class="value"><b>'+g.tag+'.</b> '+g.value+'</div>';
+  html += '<div>';
+  g.steps.forEach(function(s,i){ html += '<div class="ag-step"><div class="st">'+(i+1)+'</div><div><h4>'+s.t+'</h4><p>'+s.p+'</p></div></div>'; });
+  html += '</div>';
+  html += '<div class="ag-prompt"><h4>Your agent prompt — copy &amp; paste</h4><pre>'+(String(g.prompt).replace(/&/g,'&amp;').replace(/</g,'&lt;'))+'</pre></div>';
+  html += '<div class="ag-outcome"><span>What you&#39;ll own:</span> '+g.outcome+'</div>';
+  document.getElementById('agentView').innerHTML = html;
+}
+
+function strengthLabel(h){ return h>=7?'Strong': h>=5?'Solid': h>=3?'Working':'Weakest'; }
+
+function renderBonus(challenge, goal, prof, weekly, health, top3, thisWeek, goalText){
+  var html='';
+  html += '<div class="op-head"><div class="l">LEGION<span>.</span></div><div class="r">BATTLE-TESTED<br>WEEK ONE</div></div>';
+  html += '<div class="op-profile"><div class="who">Your archetype</div><div class="name">'+prof.name+'</div><div class="desc">'+prof.desc+'</div></div>';
+  html += '<div class="op-sec"><h3>Your plan to '+goalText+'</h3><div class="acts">';
+  weekly.forEach(function(it,i){ html += '<div class="act"><div class="n">'+(i+1)+'</div><p>'+it.a+'</p></div>'; });
+  html += '</div></div>';
+  html += '<div class="op-week"><h3>🚀 THIS WEEK</h3><p>'+thisWeek+'</p></div>';
+  html += '<div class="op-sec"><h3>Your seven growth areas</h3><div class="areas">';
+  Object.keys(AREA_NAMES).forEach(function(k){
+    var isWk = top3.indexOf(k)>=0; var h = health[k];
+    html += '<div class="row'+(isWk?' wk':'')+'"><span>'+AREA_NAMES[k]+'</span><div class="bar"><i style="width:'+(h*10)+'%"></i></div><div class="val">'+strengthLabel(h)+'</div></div>';
+  });
+  html += '</div></div>';
+  html += '<div class="op-sec"><h3>Your top 3 to fix first</h3><div class="top3">';
+  top3.forEach(function(k){ html += '<div class="t"><b>'+AREA_NAMES[k]+'</b> — your lowest growth area. Tie your week to this first.</div>'; });
+  html += '</div></div>';
+  html += '<div class="op-foot"><div class="ctr">🛡 Battle-Tested <span>'+GEN_COUNT+'</span> agents matched</div><div>Built by owners. Free. Nothing collected.</div></div>';
+  document.getElementById('onepager').innerHTML = html;
+}
+
+function resetAll(){ document.getElementById('resultView').classList.add('hidden'); document.getElementById('quizView').classList.remove('hidden'); window.scrollTo(0,0); }
+</script>
+</body>
+</html>

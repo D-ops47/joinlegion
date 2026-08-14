@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legion — Build It Today: The Real How-To</title>
+<style>
+  :root{--ink:#14100c;--brand:#0f172a;--gold:#caa14c;--gold2:#e4c87f;--paper:#f4ecdd;--card:#fffdf7;--line:#e6d9c1;--muted:#6b6256;--dark:#0a0d16;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1100px 600px at 15% -5%,#232c48 0%,var(--paper) 60%) fixed;color:var(--ink);min-height:100vh;padding:40px 16px;}
+  .stage{max-width:760px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:8px;justify-content:center;}
+  .brand .m{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--brand),#2b3a63);color:var(--gold2);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:18px;}
+  .brand b{letter-spacing:5px;color:var(--brand);font-size:20px;}
+  .eyebrow{text-align:center;color:var(--muted);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+  h1{font-size:30px;text-align:center;color:var(--brand);margin:6px 0 4px;}
+  .lede{text-align:center;color:var(--muted);font-size:15px;max-width:600px;margin:0 auto 22px;line-height:1.55;}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 24px;margin-bottom:16px;box-shadow:0 10px 30px rgba(15,23,42,.10);}
+  .card h2{font-size:19px;color:var(--brand);margin-bottom:8px;}
+  .card p{font-size:14.5px;line-height:1.6;color:#3a342a;}
+  .path{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 6px;}
+  .path .p{flex:1 1 200px;border:1.5px solid var(--line);border-radius:12px;padding:12px;background:#fdfaf2;}
+  .path .p.reco{border-color:var(--gold);box-shadow:0 0 0 3px rgba(202,161,76,.18);}
+  .path .p .t{font-weight:800;color:var(--brand);margin-bottom:3px;font-size:14px;}
+  .path .p .t em{color:var(--gold);font-style:normal;font-size:11px;letter-spacing:1px;}
+  .path .p p{font-size:12.5px;line-height:1.5;color:var(--muted);}
+  .step{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--line);}
+  .step:last-child{border-bottom:none;}
+  .step .n{width:32px;height:32px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}
+  .step h3{font-size:16px;color:var(--brand);margin-bottom:4px;}
+  .step p{font-size:14px;line-height:1.55;color:#3a342a;}
+  .step p b{color:var(--brand);}
+  .prompt{background:var(--dark);color:#e9e2d2;border-radius:12px;padding:14px 16px;margin:10px 0;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;line-height:1.55;white-space:pre-wrap;}
+  .honest{background:#10261b;color:#d9f2e4;border-radius:12px;padding:14px 16px;margin-top:8px;font-size:13px;line-height:1.55;}
+  .honest b{color:#fff;}
+  .toolrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+  .toolrow span{background:#fff8e6;border:1px solid var(--gold2);color:#5a4513;border-radius:20px;padding:4px 12px;font-size:12.5px;font-weight:600;}
+  .cta{text-align:center;}
+  .btn{display:inline-block;background:linear-gradient(135deg,var(--brand),#2b3a63);color:#fff;border:none;border-radius:12px;padding:14px 26px;font-size:16px;font-weight:800;cursor:pointer;text-decoration:none;}
+  .note{max-width:760px;margin:16px auto 0;color:var(--muted);font-size:12.5px;text-align:center;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="eyebrow">Legion · The implementation tutorial</div>
+  <div class="brand"><div class="m">L</div><b>LEGION</b></div>
+  <h1>Build it today — for real</h1>
+  <p class="lede">Your agent is one paste away. Here's the honest, step-by-step way to get it working in about <b>5 minutes</b> — on the tools you actually already have.</p>
+
+  <div class="card">
+    <h2>Pick your tool</h2>
+    <p>No new subscriptions needed. Three honest paths, from simplest to most powerful.</p>
+    <div class="path">
+      <div class="p reco"><div class="t">ChatGPT <em>· recommended</em></div><p>Everyone has it. Free tier works. You build a <b>pinned chat agent</b> — paste the prompt, save it, it remembers you. 5 minutes.</p></div>
+      <div class="p"><div class="t">Claude / Gemini / Mistral</div><p>Same trick, free tier. Gemini lets you save it as a "Gem"; Claude lets you make a Project with your instructions.</p></div>
+      <div class="p"><div class="t">Manus (full autonomy)</div><p>The upgrade: a real agent that browses and acts on its own. Free trial ≈ 200–300 daily credits — a task or two a day. Best for "just do it" jobs.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>The 7-step build (ChatGPT — works on free)</h2>
+
+    <div class="step"><div class="n">1</div><div><h3>Open your tool</h3><p>Go to <b>chatgpt.com</b> and log in. Free account is fine — no upgrade needed for this.</p></div></div>
+
+    <div class="step"><div class="n">2</div><div><h3>Start a new chat</h3><p>Click <b>New chat</b> (top-left). This is now your agent's workspace.</p></div></div>
+
+    <div class="step"><div class="n">3</div><div><h3>Paste your agent prompt as the FIRST message</h3><p>Copy the prompt from your Battle-Tested Card, paste it, and press send. That single message <b>programs the agent</b> — everything after, it works for you.</p>
+      <div class="prompt">You are my referral &amp; closing agent. I run a home-services business and my superpower is turning skeptical homeowners into signed contracts. I'll give you my past customers' names and past inquiries. For each customer, write a warm 3-line text asking if one worried friend needs my help that I'll personally take care of. For each old inquiry, write a 5-line follow-up with one opening. Keep it human. Ask me for my service, my price, and names first.</div></div></div>
+
+    <div class="step"><div class="n">4</div><div><h3>Save it as your agent</h3><p>Click the chat's title and rename it (e.g., <b>"My Closing Agent"</b>). On the sidebar, <b>pin the chat</b> so it stays at the top. That's your agent, saved and always one click away.</p></div></div>
+
+    <div class="step"><div class="n">5</div><div><h3>Test it on ONE real scenario</h3><p>Give it a real customer or a real objection you faced this week. Check: is it human? Is it "you"? Ask it to make it warmer, shorter, less salesy — it tunes to your voice.</p></div></div>
+
+    <div class="step"><div class="n">6</div><div><h3>Day 2 — feed it your business</h3><p>Paste your real offers, your real prices, the phrases only you say. The more you feed it, the more it writes like you.</p></div></div>
+
+    <div class="step"><div class="n">7</div><div><h3>Day 3 — make it a habit</h3><p>Use the pinned chat every day: this week's referrals, the follow-ups, the tough replies. Within a week it's a worker you trust.</p></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Want the fully-autonomous version? Try Manus</h2>
+    <p>If you want an agent that <b>actually does the task itself</b> — opens a browser, finds leads, drafts and even sends — Manus is the real deal. Sign up at <b>manus.im</b> (free trial ≈ 200–300 daily credits, enough for about a task or two a day), paste the same prompt as your first task, and let it take over the busywork.</p>
+    <div class="toolrow"><span>Manus (free trial)</span><span>ChatGPT (free)</span><span>Claude (free)</span><span>Gemini (free)</span><span>Mistral (free)</span></div>
+  </div>
+
+  <div class="honest"><b>The honest fine print we tell everyone:</b> free ChatGPT can't publish a standalone "custom GPT," but a pinned chat with your prompt IS a working agent that remembers you — and that's all you need to start today. If you ever want the fancier standalone version or unlimited autonomy, that's the paid tier or Manus. Start free; upgrade only when the agent has already paid for itself.</div>
+
+  <div class="cta" style="margin-top:18px;"><a class="btn" href="battle-card-example.html">See the Battle-Tested Card →</a></div>
+  <div class="note">This tutorial is a gift — free, nothing collected, no signup. Built by owners, for owners.</div>
+</div>
+</body>
+</html>

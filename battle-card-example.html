@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legion Battle-Tested Card — Example</title>
+<style>
+  :root{--ink:#14100c;--brand:#0f172a;--gold:#caa14c;--gold2:#e4c87f;--paper:#f4ecdd;--card:#fffdf7;--line:#e6d9c1;--muted:#6b6256;--dark:#0a0d16;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1100px 600px at 15% -5%,#232c48 0%,var(--paper) 60%) fixed;color:var(--ink);min-height:100vh;padding:40px 16px;}
+  .stage{max-width:760px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:12px;justify-content:center;}
+  .brand .m{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--brand),#2b3a63);color:var(--gold2);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:18px;letter-spacing:1px;}
+  .brand b{letter-spacing:5px;color:var(--brand);font-size:20px;}
+  .eyebrow{text-align:center;color:var(--muted);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+  /* THE CARD */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:0 24px 60px rgba(15,23,42,.22);}
+  .card-top{background:linear-gradient(135deg,var(--brand),#203052);color:#eee9dd;padding:26px 28px;}
+  .card-top .lbl{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold2);font-weight:800;}
+  .card-top .name{font-size:30px;font-weight:800;color:#fff;margin:4px 0 6px;}
+  .card-top .name span{color:var(--gold2);}
+  .card-top .super{font-size:16px;line-height:1.5;color:#e3ddcb;}
+  .body{padding:22px 28px 8px;}
+  .sec{padding:12px 0;border-bottom:1px solid var(--line);}
+  .sec:last-child{border-bottom:none;}
+  .sec .h{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:6px;}
+  .sec p{font-size:15px;line-height:1.55;color:#3a342a;}
+  .sec p b{color:var(--brand);}
+  .mission{background:linear-gradient(135deg,#fbf3df,#f6e9cd);border:1px solid var(--gold2);border-radius:12px;padding:14px 16px;margin:8px 0;}
+  .mission .h{color:#8a6d26;margin-bottom:5px;}
+  .pill{display:inline-block;background:#10261b;color:#d9f2e4;border-radius:20px;padding:5px 13px;font-size:12.5px;font-weight:700;margin:2px 4px 2px 0;}
+  .agentbox{background:var(--dark);color:#e9e2d2;border-radius:12px;padding:14px 16px;margin-top:8px;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.5;}
+  .agentbox .tag{color:var(--gold2);font-weight:800;font-family:inherit;letter-spacing:1px;font-size:11px;margin-bottom:4px;}
+  .outcome{background:var(--gold);color:#2b2110;border-radius:12px;padding:13px 16px;font-weight:700;font-size:14px;line-height:1.5;margin:8px 0 4px;}
+  .outcome b{font-weight:800;}
+  .foot{display:flex;justify-content:space-between;align-items:center;padding:14px 28px 18px;color:var(--muted);font-size:11px;}
+  .foot .ctr span{color:var(--gold);font-weight:800;}
+  .note{max-width:760px;margin:18px auto 0;color:var(--muted);font-size:12.5px;line-height:1.6;text-align:center;}
+  .chip{display:inline-block;background:#fff;border:1px solid var(--gold2);color:#6a5318;border-radius:20px;padding:3px 11px;font-size:12px;font-weight:600;margin:2px 3px 2px 0;}
+  @media(max-width:520px){.card-top .name{font-size:24px;}.body,.card-top{padding:18px 18px;}.foot{padding:12px 18px;}}
+  .hidden{display:none!important;}
+  .actbar{max-width:760px;margin:16px auto 0;display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;}
+  .rate .rateask{font-size:13px;font-weight:700;color:var(--brand);margin-bottom:4px;}
+  .stars{font-size:30px;line-height:1;letter-spacing:3px;cursor:pointer;color:#ddd;}
+  .stars span{transition:.12s;}
+  .stars span:hover{color:var(--gold);}
+  .ratethanks{font-size:12px;color:var(--muted);margin-top:4px;}
+  .btn{background:linear-gradient(135deg,var(--brand),#2b3a63);color:#fff;border:none;border-radius:11px;padding:12px 18px;font-weight:800;font-size:14px;cursor:pointer;}
+  .btn:hover{filter:brightness(1.1);}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="eyebrow">Sample · For your review</div>
+  <div class="brand"><div class="m">L</div><b>LEGION</b></div>
+
+  <div class="card">
+    <div class="card-top">
+      <div class="lbl">Your Battle-Tested Superpower</div>
+      <div class="name">The <span>Closer</span></div>
+      <div class="super">"I'm the best at closing jobs with homeowners who don't trust contractors — they've had three people in their house and they're burned out."</div>
+    </div>
+
+    <div class="body">
+
+      <div class="mission sec">
+        <div class="h">Your Mission · New Purpose</div>
+        <p>To become the one owner who <b>only works with people who want you</b> — turning the most skeptical homeowners in town into <b>raving referrals</b> who send you their worried friends. No more chasing strangers; you become the <b>trusted choice</b>, and that trust compounds into a referral machine.</p>
+      </div>
+
+      <div class="sec">
+        <div class="h">Multiply It</div>
+        <p>Your superpower isn't just closing — it's <b>converting distrust into commitment</b>. Multiply it by packaging your closing method into a repeatable story and raising your price <b>10%</b>, while an agent handles the follow-up so <b>3× more</b> of your past clients send referrals.</p>
+        <div><span class="chip">More customers</span><span class="chip">Higher prices</span><span class="chip">Referral engine</span></div>
+      </div>
+
+      <div class="sec">
+        <div class="h">Fix Now · This Week</div>
+        <p>Raise your price <b>10%</b> on your next 3 quotes and <b>text your 10 happiest customers</b> for referrals — with the exact script in hand, so you don't have to make it up under pressure.</p>
+      </div>
+
+      <div class="sec">
+        <div class="h">Your Agent · To Multiply It</div>
+        <p><b>The Closing → Referral Agent.</b> Because your superpower is converting trust, this agent multiplies it: it writes your referral texts, your follow-ups to the people who went quiet, and your "too expensive" responses — so your superpower runs on autopilot.</p>
+        <div class="agentbox">
+          <div class="tag">PASTE-AND-RUN PROMPT</div>
+          You are my referral &amp; closing agent. I run a home-services business and my superpower is turning skeptical homeowners into signed contracts. I'll give you my past customers' names and my past inquiries. For each, write a warm 3-line text asking if one worried friend needs my help that I'll personally take care of. For each old inquiry, write a 5-line follow-up with one opening. Keep it human, no salesy feel...
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="h">What You'll Own</div>
+        <div class="outcome"><b>You'll own a worker that closes referrals for you every day</b> — bringing you the trusting clients you do your best work for, so you stop selling and start compounding.</div>
+      </div>
+
+    </div>
+
+    <div class="foot">
+      <div class="ctr">🛡 Battle-Tested · <span>Legion</span></div>
+      <div>Bring your superpower</div>
+    </div>
+  </div>
+
+  <div class="note">Sample concept card only — created to show the shape: <b>Superpower → Mission → Multiply → Fix Now → Agent → What You'll Own.</b> Build one from your own words, and the agent picks itself from your superpower. Free, nothing collected.</div>
+
+  <!-- Anonymous rating + download (tracks counts only, zero personal data) -->
+  <div class="actbar">
+    <div class="rate">
+      <div class="rateask">Was this valuable? Rate us:</div>
+      <div class="stars" id="stars"><span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span></div>
+      <div class="ratethanks hidden" id="ratethanks">Thanks — anonymous, nothing collected.</div>
+    </div>
+    <button class="btn" onclick="downloadCard()">⬇ Download / Save your card</button>
+  </div>
+
+  <script>
+    function trk(e,v){ try{ fetch('/track?e='+e+(v!==undefined?'&v='+v:'')); }catch(x){} }
+    try{ trk('card_view'); }catch(x){}
+    (function(){
+      var sels=document.querySelectorAll('.stars span'), sbar=document.getElementById('stars'), sbox=document.getElementById('stars');
+      sels.forEach(function(s){
+        s.onclick=function(){
+          var v=+s.getAttribute('data-v');
+          sels.forEach(function(x,i){ x.style.color = i < v ? '#caa14c' : '#ddd'; });
+          trk('rating', v);
+          document.getElementById('ratethanks').classList.remove('hidden');
+          sbox.style.pointerEvents='none';
+        };
+      });
+    })();
+    function downloadCard(){ trk('card_download'); try{ window.print(); }catch(x){} }
+  </script>
+</div>
+</body>
+</html>
