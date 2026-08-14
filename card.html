@@ -71,7 +71,7 @@
   .tut-cta a{display:inline-block;background:linear-gradient(135deg,#22D3EE,#7C5CFC);color:#fff;border-radius:11px;padding:12px 22px;font-weight:800;font-size:15px;text-decoration:none;box-shadow:0 10px 26px rgba(34,211,238,.3);}
   .tut-cta .tut-sub{font-size:11.5px;color:#8A97AD;margin-top:8px;}
   @media(max-width:520px){.bc-top .name{font-size:24px;} .bc-top,.bc-body{padding:18px;} h1{font-size:25px;}}
-  @media print{body{background:#fff;} .no-print{display:none!important;} .stage{max-width:100%;padding:0;} .bcard{box-shadow:none;}}
+  @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact;}body{background:#fff;} .no-print{display:none!important;} .stage{max-width:100%;padding:0;} .bcard{box-shadow:none;}}
 </style>
 </head>
 <body>
@@ -92,9 +92,9 @@
     <div id="s1" class="step-pane">
       <div class="q-label">What is your superpower?</div>
       <div class="q-sub">The one thing you're quietly better at than almost anyone — the skill that wins you the battles nobody else can.</div>
-      <textarea id="superpower" placeholder="e.g. I can turn the most skeptical homeowner into a signed contract — the one everyone else gives up on."></textarea>
+      <textarea id="superpower" maxlength="160" placeholder="e.g. I can turn the most skeptical homeowner into a signed contract — the one everyone else gives up on."></textarea>
       <div class="hint">Make it vivid — this becomes the heart of your card. (No names or company names — it stays on your device.)</div>
-      <button class="btn btn-primary btnrow" onclick="next(1)">Continue →</button>
+      <div class="btnrow"><button class="btn btn-primary" onclick="next(1)">Continue →</button></div>
     </div>
 
     <!-- S2 battle -->
@@ -226,24 +226,27 @@ function setStep(i){ idx=i; for(var k=0;k<5;k++){ document.getElementById(paneId
 function next(i){ setStep(i); } function prev(i){ setStep(i); }
 function val(n){ var e=document.querySelector('input[name="'+n+'"]:checked'); return e? e.value : null; }
 
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
 function build(){
   var sp=(document.getElementById('superpower').value||'').trim();
   var battle=val('battle'), stage=val('stage'), goal=val('goal'), style=val('style');
-  if(!sp||!battle||!stage||!goal||!style){ alert('Please finish all 5 steps so your card is truly yours.'); return; }
-  if(sp.length>160) sp=sp.slice(0,160)+'…';
+  if(!sp){ setStep(0); return; } if(!battle){ setStep(1); return; } if(!stage){ setStep(2); return; } if(!goal){ setStep(3); return; } if(!style){ setStep(4); return; }
   var B=BATTLES[battle], S=STAGE[stage], GO=GOALS[goal], ST=STYLE[style];
-  var superquote='"'+sp+'"';
+  var superquote='"'+esc(sp)+'"';
   var agentPrompt=B.agent.split('[SUPER]').join(superquote);
-  var mission='Put '+B.missionAdd+' to work — and '+S.depth+' — so the thing you\'re best at does the heavy lifting, not just for your clients but for you.';
+  var mission='Put your superpower to work: '+B.missionAdd+' — and '+S.depth+' — so the thing you\'re best at does the heavy lifting, not for your clients but for you.';
+  var multiply='Turn this superpower toward '+GO+'. ' + ({customers:'More of your best work, in front of more of the right people.', income:'The full value of what you deliver — paid for.', time:'Your week back, with the machine running the busywork.', team:'A team that runs it while you steer.', exit:'A business worth more because it runs without you.', peace:'Less firefighting, more craft.'})[goal];
   var fixNow=B.fix+(stage==='start'||stage==='have'?' Start small — one repeat.':' Keep tightening the loop.');
 
   var h='';
   h+='<div class="bc-top"><div class="lbl">Your Battle-Tested Superpower</div><div class="name"><span>'+B.a+'</span></div>';
-  h+='<div class="bc-style">'+ST.lab+' · built for '+B.tag+'</div><div class="super">'+superquote+'</div></div>';
+  h+='<div class="bc-style">'+ST.lab+' · '+S.lab+' · built for '+B.tag+'</div><div class="super">'+superquote+'</div></div>';
   h+='<div class="bc-body">';
   h+='<div class="sec"><div class="h">Your Battle</div><p>'+B.fight+'</p></div>';
   h+='<div class="sec"><div class="h">Your Mission · New Purpose</div><p>'+mission+'</p></div>';
-  h+='<div class="sec"><div class="h">Your Superpower Agent</div><p>Built to <b>multiply</b> this superpower — sound '+ST.voice+'. Copy into ChatGPT (free) as your first message:</p><div class="agentbox">'+agentPrompt+'</div></div>';
+  h+='<div class="sec"><div class="h">Multiply It</div><p>'+multiply+'</p></div>';
+  h+='<div class="sec"><div class="h">Your Superpower Agent</div><p>Built to <b>multiply</b> this superpower — sound '+ST.voice+'. Copy into ChatGPT (free) as your first message:</p><div class="agentbox">'+esc(agentPrompt)+'</div></div>';
   h+='<div class="sec"><div class="h">Fix Now · This Week</div><p>'+fixNow+'</p></div>';
   h+='<div class="outcome"><b>What you&#39;ll own:</b> a worker that runs this superpower for you — starting this week, free, on the tool you already have. You&#39;re not scared anymore; you&#39;re armed.</div>';
   h+='</div>';
@@ -261,8 +264,9 @@ function build(){
     sels.forEach(function(x,i){ x.style.color=i<v?'#caa14c':'#ddd'; });
     trk('rating', v); document.getElementById('ratethanks').classList.remove('hidden'); sbox.style.pointerEvents='none'; }; });
 })();
+function resetRating(){ var sels=document.querySelectorAll('#stars span'); sels.forEach(function(x){ x.style.color='#ddd'; }); document.getElementById('stars').style.pointerEvents=''; document.getElementById('ratethanks').classList.add('hidden'); }
 function downloadCard(){ trk('card_download'); try{window.print();}catch(x){} }
-function again(){ document.getElementById('resultView').classList.add('hidden'); document.getElementById('wizard').classList.remove('hidden'); setStep(0); document.getElementById('superpower').value=''; document.querySelectorAll('input[type=radio]').forEach(function(x){x.checked=false;}); window.scrollTo(0,0); }
+function again(){ resetRating(); document.getElementById('resultView').classList.add('hidden'); document.getElementById('wizard').classList.remove('hidden'); setStep(0); document.getElementById('superpower').value=''; document.querySelectorAll('input[type=radio]').forEach(function(x){x.checked=false;}); window.scrollTo(0,0); }
 trk('card_view');
 </script>
 </body>
