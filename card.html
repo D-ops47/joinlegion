@@ -9,10 +9,14 @@
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1100px 600px at 15% -5%,#232c48 0%,var(--paper) 60%) fixed;color:var(--ink);min-height:100vh;padding:24px 12px;}
   .stage{max-width:720px;margin:0 auto;}
-  .brand{display:flex;align-items:center;gap:12px;margin:0 auto 10px;justify-content:center;}
-  .brand .m{width:38px;height:38px;border-radius:9px;background:linear-gradient(135deg,var(--brand),#2b3a63);color:var(--gold2);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:18px;}
-  .brand b{letter-spacing:5px;color:var(--brand);font-size:20px;}
-  h1{font-size:30px;text-align:center;color:var(--brand);margin:4px 0 14px;}
+  .brand{display:flex;align-items:center;gap:12px;justify-content:center;margin-bottom:6px;}
+  .brand .logo{width:54px;height:63px;filter:drop-shadow(0 8px 16px rgba(15,23,42,.25));}
+  .wm{font-size:22px;letter-spacing:4px;font-weight:800;color:var(--brand);line-height:1;}
+  .wm em{font-style:normal;color:var(--gold);}
+  .wm-tag{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:2px;}
+  h1{font-size:34px;text-align:center;color:var(--brand);margin:10px 0 6px;font-weight:800;}
+  h1 .gold{color:var(--gold);}
+  .lede{text-align:center;color:var(--muted);font-size:15px;max-width:540px;margin:0 auto 18px;line-height:1.55;}
   .banner{background:#10261b;color:#d9f2e4;border-radius:12px;padding:11px 14px;font-size:13px;line-height:1.5;margin-bottom:16px;}
   .banner b{color:#fff;}
   .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 10px 30px rgba(15,23,42,.10);margin-bottom:16px;}
@@ -60,9 +64,13 @@
 </head>
 <body>
 <div class="stage">
-
-  <div class="brand"><div class="m">L</div><b>LEGION</b></div>
-  <h1>Your Battle-Tested Card</h1>
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 120 140" role="img" aria-label="LEGION shield"><defs><linearGradient id="gld" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e4c87f"/><stop offset="1" stop-color="#caa14c"/></linearGradient><linearGradient id="navg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1d2740"/><stop offset="1" stop-color="#0f172a"/></linearGradient></defs><path d="M60 8 L110 27 V74 C110 106 88 126 60 137 C32 126 10 106 10 74 V27 Z" fill="url(#navg)" stroke="url(#gld)" stroke-width="3.5"/><text x="60" y="96" text-anchor="middle" font-family="Georgia,serif" font-size="50" font-weight="bold" fill="url(#gld)">L</text></svg>
+    <div style="text-align:left;"><div class="wm">LEG<em>ION</em></div><div class="wm-tag">Bring your superpower</div></div>
+  </div>
+  <h1>Your <span class="gold">Battle-Tested</span> Card</h1>
+  <div class="lede">Name your superpower. We hand you the card that multiplies it — and the agent to build it today, free, on the tool you already have.</div>
+</div>
 
   <!-- ===== INPUT ===== -->
   <div id="inputView">
