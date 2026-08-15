@@ -229,12 +229,33 @@
 </div>
 
 <script>
-/* LEGION Battle-Tested Card. Deterministic, client-side ONLY. Superpower text never transmitted.
-   Beacons send event names + star counts only, to the anonymous Legion counter (no personal data). */
+/* LEGION Battle-Tested Card. Card generation is deterministic and client-side ONLY.
+   The user's typed superpower text is NEVER transmitted — it stays in this page.
+
+   What IS sent to the anonymous Legion counter: the pre-defined menu choices the user
+   clicked (archetype / stage / goal / style), funnel step reached, star rating, and
+   a per-browser dedupe flag. All values come from a fixed, known vocabulary defined
+   in this file. No free text, no names, no IP-linked identifiers, no cookies. */
+var LEGION_COUNTER = 'https://legion-counter-production.up.railway.app';
+
 function trk(e,v){
   // Fire-and-forget anonymous beacon. Plain no-cors fetch (proven reliable); keepalive so it
   // still attempts on page teardown. sendBeacon was dropped by some browsers — use fetch only.
-  try{ fetch('https://legion-counter-production.up.railway.app/track?e='+e+((v===undefined)?'':'&v='+v), {mode:'no-cors', keepalive:true}); }catch(x){}
+  try{ fetch(LEGION_COUNTER+'/track?e='+encodeURIComponent(e)+((v===undefined)?'':'&v='+encodeURIComponent(v)), {mode:'no-cors', keepalive:true}); }catch(x){}
+}
+
+/* ---- Real-count integrity -------------------------------------------------
+   "Cards built" must mean distinct people, not page reloads or one person
+   clicking New Card five times. We keep a first-build flag in localStorage:
+   the first completed build on a browser counts toward card_created_unique,
+   every build still counts toward card_created (total volume). If storage is
+   unavailable (private mode), we fail open and count it as unique.          */
+function firstBuildOnThisBrowser(){
+  try{
+    if(localStorage.getItem('legion_built')) return false;
+    localStorage.setItem('legion_built','1');
+    return true;
+  }catch(x){ return true; }
 }
 
 var BATTLES = {
@@ -279,8 +300,19 @@ var idx=0; var paneIds=['s1','s2','s3','s4','s5'];
 function setStep(i){ idx=i; for(var k=0;k<5;k++){ document.getElementById(paneIds[k]).classList.toggle('hidden', k!==i); }
   document.querySelectorAll('#steps .dot').forEach(function(d,di){ d.classList.toggle('on', di<=i); });
   document.getElementById('wizard').scrollIntoView({behavior:'smooth', block:'center'}); }
-function next(i){ setStep(i); } function prev(i){ setStep(i); }
+function next(i){ setStep(i); trackStep(i); } function prev(i){ setStep(i); }
 function val(n){ var e=document.querySelector('input[name="'+n+'"]:checked'); return e? e.value : null; }
+
+/* ---- Funnel instrumentation ----
+   Records the deepest step each visitor reaches so drop-off is measurable.
+   Each step counts at most once per page load. */
+var stepSeen={};
+function trackStep(i){
+  var n=i+1;
+  if(stepSeen[n]) return;
+  stepSeen[n]=1;
+  trk('step_'+n+'_reached');
+}
 
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
@@ -310,7 +342,18 @@ function build(){
   document.getElementById('bcard').innerHTML=h;
   document.getElementById('wizard').classList.add('hidden');
   document.getElementById('resultView').classList.remove('hidden');
-  trk('card_created');
+
+  /* ---- Anonymous card analytics ----
+     Which archetype was forged, and the full anonymous combination. All values
+     are fixed menu keys defined above — never user-typed text. */
+  trk('card_created');                                  // total cards built
+  if(firstBuildOnThisBrowser()) trk('card_created_unique');  // distinct browsers
+  trk('archetype_'+battle);        // which of the 5 heroes: The Attractor, Steward, Operator, Differentiator, Closer
+  trk('stage_'+stage);             // business stage
+  trk('goal_'+goal);               // what they want this year
+  trk('style_'+style);             // how they build
+  trk('combo_'+battle+'_'+stage+'_'+goal+'_'+style);  // full anonymous combination
+
   document.getElementById('resultView').scrollIntoView({behavior:'smooth'});
 }
 
@@ -322,8 +365,9 @@ function build(){
 })();
 function resetRating(){ var sels=document.querySelectorAll('#stars span'); sels.forEach(function(x){ x.style.color='#33364a'; }); document.getElementById('stars').style.pointerEvents=''; document.getElementById('ratethanks').classList.add('hidden'); }
 function downloadCard(){ trk('card_download'); try{window.print();}catch(x){} }
-function again(){ resetRating(); document.getElementById('resultView').classList.add('hidden'); document.getElementById('wizard').classList.remove('hidden'); setStep(0); document.getElementById('superpower').value=''; document.querySelectorAll('input[type=radio]').forEach(function(x){x.checked=false;}); window.scrollTo(0,0); }
+function again(){ trk('card_again'); resetRating(); document.getElementById('resultView').classList.add('hidden'); document.getElementById('wizard').classList.remove('hidden'); setStep(0); document.getElementById('superpower').value=''; document.querySelectorAll('input[type=radio]').forEach(function(x){x.checked=false;}); stepSeen={}; window.scrollTo(0,0); }
 trk('card_view');
+trackStep(0);
 </script>
 </body>
 </html>
