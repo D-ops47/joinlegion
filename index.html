@@ -42,8 +42,21 @@
 
   .stage{position:relative;z-index:2;margin-left:40vw;max-width:760px;min-height:100vh;padding:64px 46px 56px;display:flex;flex-direction:column;justify-content:center;text-align:left;}
 
-  .eyebrow{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.5em;text-transform:uppercase;color:var(--purple3);font-weight:600;display:flex;align-items:center;gap:14px;animation:rise .9s .05s ease both;}
-  .eyebrow::before{content:'';width:40px;height:1px;background:var(--purple);display:inline-block;}
+  .eyebrow{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.5em;text-transform:uppercase;color:var(--purple3);font-weight:600;display:flex;align-items:center;gap:16px;animation:rise .9s .05s ease both;}
+  .eyebrow::before{content:'';width:44px;height:1px;background:var(--purple);display:inline-block;}
+
+  /* live card-count badge */
+  .live{display:inline-flex;align-items:center;gap:10px;margin:0 0 6px;background:linear-gradient(180deg,#151327,#0c0e16);
+    border:1px solid rgba(153,51,255,.45);border-radius:999px;padding:9px 18px;font-family:'Oswald',sans-serif;
+    letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:#e6d9ff;box-shadow:0 0 24px rgba(153,51,255,.22);
+    animation:rise .9s .02s ease both;position:relative;overflow:hidden;}
+  .live::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--purple3),transparent);}
+  .live .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 10px #22c55e;animation:blink 1.3s steps(2,start) infinite;flex:none;}
+  .live .num{font-family:'Anton',sans-serif;font-weight:400;font-size:22px;line-height:1;color:#fff;min-width:34px;text-align:center;
+    background:linear-gradient(180deg,#fff,#C084FC 70%,#9933FF);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 12px rgba(153,51,255,.6));font-variant-numeric:tabular-nums;}
+  .live .lbl{color:#b9a8e0;font-size:12.5px;font-weight:600;}
+  .live .z{display:none;}
 
   h1{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(56px,8vw,118px);line-height:.94;color:var(--metal);margin:32px 0 22px;animation:rise .9s .15s ease both;}
   h1 .purple{color:transparent;background:linear-gradient(180deg,#E0E0E0 0%,#fff 40%,#C084FC 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 34px rgba(153,51,255,.55));}
@@ -108,6 +121,7 @@
 <div class="hud"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
 
 <div class="stage">
+  <div class="live" id="liveBadge"><span class="dot"></span><span class="num z" id="liveNum">0</span><span class="lbl" id="liveLbl">Battle-Tested Cards Built</span></div>
   <div class="eyebrow">LEGION AI</div>
   <h1>This changes<br><span class="purple">everything.</span></h1>
 
@@ -164,6 +178,22 @@
     document.getElementById('secs').textContent=pad(s);
   }
   tick(); setInterval(tick,1000);
+
+  // ---- LIVE CARD COUNT ----
+  function loadCount(){
+    try{
+      fetch('https://legion-counter-production.up.railway.app/stats')
+        .then(function(r){return r.json();})
+        .then(function(d){
+          var c = (d && typeof d.card_created==='number') ? d.card_created : 0;
+          var num = document.getElementById('liveNum');
+          var lbl = document.getElementById('liveLbl');
+          if(c>0){ num.textContent = c; num.classList.remove('z'); lbl.textContent = (c===1?'Battle-Tested Card Built':'Battle-Tested Cards Built'); }
+        })
+        .catch(function(){});
+    }catch(x){}
+  }
+  loadCount(); setInterval(loadCount, 30000);
 </script>
 </body>
 </html>
