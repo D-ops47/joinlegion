@@ -8,7 +8,15 @@
  *   node netlify/functions/lib/counter.test.mjs
  */
 
-import { EVENTS, pct, rateOk, resolveKey } from './counter.mjs';
+import {
+  EVENTS,
+  GOALS,
+  QUESTIONS,
+  ROLES,
+  pct,
+  rateOk,
+  resolveKey,
+} from './counter.mjs';
 
 let pass = 0;
 let fail = 0;
@@ -27,23 +35,55 @@ console.log('\n--- allowlist contents ---');
 check('allowlist is large and enumerated', EVENTS.size > 380, `size=${EVENTS.size}`);
 check('card_created present', EVENTS.has('card_created'));
 check('card_created_unique present', EVENTS.has('card_created_unique'));
-check('all 5 archetypes present',
-  ['leads', 'data', 'admin', 'marketing', 'invoice']
-    .every((a) => EVENTS.has(`archetype_${a}`)));
-check('all 5 funnel steps present',
-  [1, 2, 3, 4, 5].every((i) => EVENTS.has(`step_${i}_reached`)));
-check('all 360 combos present',
-  [...EVENTS].filter((k) => k.startsWith('combo_')).length === 360,
-  `found ${[...EVENTS].filter((k) => k.startsWith('combo_')).length}`);
 check('rating_v1..v5 present',
   [1, 2, 3, 4, 5].every((i) => EVENTS.has(`rating_v${i}`)));
+
+console.log('\n--- allowlist: three-role model (current) ---');
+check('all 3 primary roles present',
+  ROLES.every((r) => EVENTS.has(`role_${r}`)), ROLES.join(','));
+check('all 3 secondary roles present',
+  ROLES.every((r) => EVENTS.has(`secondary_${r}`)));
+check('role_split present', EVENTS.has('role_split'));
+check('all 20 question options present',
+  Object.entries(QUESTIONS)
+    .every(([q, opts]) => opts.every((o) => EVENTS.has(`${q}_${o}`))),
+  `${Object.values(QUESTIONS).flat().length} options`);
+check('all 4 current goals present',
+  GOALS.every((g) => EVENTS.has(`goal_${g}`)), GOALS.join(','));
+check('all 36 rolecombos present',
+  [...EVENTS].filter((k) => k.startsWith('rolecombo_')).length === 36,
+  `found ${[...EVENTS].filter((k) => k.startsWith('rolecombo_')).length}`);
+check('all 7 funnel steps present (builder grew from 5)',
+  [1, 2, 3, 4, 5, 6, 7].every((i) => EVENTS.has(`step_${i}_reached`)));
+
+console.log('\n--- allowlist: legacy five-archetype model (kept readable) ---');
+check('all 5 legacy archetypes still present',
+  ['leads', 'data', 'admin', 'marketing', 'invoice']
+    .every((a) => EVENTS.has(`archetype_${a}`)));
+check('all 360 legacy combos still present',
+  [...EVENTS].filter((k) => k.startsWith('combo_')).length === 360,
+  `found ${[...EVENTS].filter((k) => k.startsWith('combo_')).length}`);
+check('legacy-only goal key still accepted (stale cached pages)',
+  EVENTS.has('goal_income') && EVENTS.has('goal_peace'));
+check('legacy style keys still accepted',
+  ['direct', 'coach', 'steady'].every((s) => EVENTS.has(`style_${s}`)));
 
 console.log('\n--- resolveKey: valid input ---');
 check('plain allowlisted event resolves',
   resolveKey('card_created', null).key === 'card_created');
-check('archetype resolves',
+check('role resolves',
+  resolveKey('role_entrepreneur', '').key === 'role_entrepreneur');
+check('secondary role resolves',
+  resolveKey('secondary_artist', '').key === 'secondary_artist');
+check('question answer resolves',
+  resolveKey('q3_finishing', '').key === 'q3_finishing');
+check('rolecombo resolves',
+  resolveKey('rolecombo_artist_operator_time', undefined).key
+    === 'rolecombo_artist_operator_time');
+check('step 7 resolves', resolveKey('step_7_reached', null).key === 'step_7_reached');
+check('legacy archetype still resolves',
   resolveKey('archetype_marketing', '').key === 'archetype_marketing');
-check('combo resolves',
+check('legacy combo still resolves',
   resolveKey('combo_leads_have_customers_direct', undefined).key
     === 'combo_leads_have_customers_direct');
 check('rating with value becomes rating_v4',
@@ -69,6 +109,22 @@ console.log('\n--- resolveKey: the original vulnerability ---');
 {
   const r = resolveKey('totally_made_up_key', null);
   check('unknown event rejected with 403',
+    r.error === 'event not allowed' && r.status === 403, JSON.stringify(r));
+}
+{
+  // A role that does not exist must not sneak through on prefix alone.
+  const r = resolveKey('role_manager', null);
+  check('invented role name rejected',
+    r.error === 'event not allowed' && r.status === 403, JSON.stringify(r));
+}
+{
+  const r = resolveKey('q3_wandering', null);
+  check('invented question option rejected',
+    r.error === 'event not allowed' && r.status === 403, JSON.stringify(r));
+}
+{
+  const r = resolveKey('step_99_reached', null);
+  check('out-of-range step rejected',
     r.error === 'event not allowed' && r.status === 403, JSON.stringify(r));
 }
 

@@ -24,12 +24,59 @@ const STORE_NAME = 'legion-counter';
 // create unlimited arbitrary keys and inflate the public card count.
 // ---------------------------------------------------------------------------
 
+// --- CURRENT MODEL: the three roles -----------------------------------------
+// Michael Gerber's E-Myth trio as taught in Tony Robbins' Business Mastery.
+// The diagnostic in card.html scores five questions and resolves one primary
+// role plus a secondary.
+
+export const ROLES = ['artist', 'operator', 'entrepreneur'];
+
+export const ROLE_LABELS = {
+  artist: 'The Artist',
+  operator: 'The Operator',
+  entrepreneur: 'The Entrepreneur',
+};
+export const ROLE_ALIASES = {
+  artist: 'Creator',
+  operator: 'Technician',
+  entrepreneur: 'Visionary',
+};
+
+// The five diagnostic questions and their option vocabularies, mirroring
+// WEIGHTS in card.html. Kept here so per-answer distributions can be reported.
+export const QUESTIONS = {
+  q1: ['doing', 'running', 'chasing', 'fires'],
+  q2: ['systems', 'ideas', 'quality', 'sleep'],
+  q3: ['admin', 'visible', 'finishing', 'letgo'],
+  q4: ['proud', 'uneasy', 'relieved', 'restless'],
+  q5: ['me', 'time', 'focus', 'systems'],
+};
+export const QUESTION_LABELS = {
+  q1: 'Where the day goes',
+  q2: 'What breaks first',
+  q3: 'What they avoid',
+  q4: 'A month away',
+  q5: 'The real bottleneck',
+};
+
+export const GOALS = ['customers', 'time', 'without', 'prices'];
+export const GOAL_LABELS = {
+  customers: 'More of the right customers',
+  time: 'My time back',
+  without: 'Runs without me',
+  prices: 'Higher prices',
+};
+
+// --- LEGACY MODEL: the five archetypes --------------------------------------
+// Superseded by the three roles. Retained so historical counts keep resolving
+// to readable labels, and so any cached copy of the old page still gets a 200
+// instead of a 403.
+
 export const ARCHETYPES = ['leads', 'data', 'admin', 'marketing', 'invoice'];
 export const STAGES = ['start', 'have', 'established', 'exit'];
-export const GOALS = ['customers', 'income', 'time', 'team', 'exit', 'peace'];
+export const LEGACY_GOALS = ['customers', 'income', 'time', 'team', 'exit', 'peace'];
 export const STYLES = ['direct', 'coach', 'steady'];
 
-// Mirrors the hero names rendered on the card in card.html.
 export const ARCHETYPE_LABELS = {
   leads: 'The Attractor',
   data: 'The Steward',
@@ -43,7 +90,7 @@ export const STAGE_LABELS = {
   established: 'Scaling',
   exit: 'Building to exit',
 };
-export const GOAL_LABELS = {
+export const LEGACY_GOAL_LABELS = {
   customers: 'More customers',
   income: 'Higher prices / income',
   time: 'More free time',
@@ -69,20 +116,40 @@ function buildAllowlist() {
     'example_view',
   ]);
 
-  for (let i = 1; i <= 5; i++) ev.add(`step_${i}_reached`);
+  // The builder is now 7 steps (intro + 5 questions + goal), up from 5.
+  for (let i = 1; i <= 7; i++) ev.add(`step_${i}_reached`);
   for (let i = 1; i <= 5; i++) ev.add(`rating_v${i}`);
   ev.add('rating');
   for (let i = 1; i <= 4; i++) ev.add(`course_day${i}`);
 
+  // --- current: three roles ---
+  for (const r of ROLES) {
+    ev.add(`role_${r}`);
+    ev.add(`secondary_${r}`);
+  }
+  ev.add('role_split'); // primary and secondary within 2 points
+
+  for (const [q, opts] of Object.entries(QUESTIONS)) {
+    for (const o of opts) ev.add(`${q}_${o}`);
+  }
+
+  for (const g of GOALS) ev.add(`goal_${g}`);
+
+  // 3 x 3 x 4 = 36 role combinations, minus same-role pairs. Enumerated rather
+  // than pattern-matched so the allowlist stays a closed set.
+  for (const p of ROLES)
+    for (const s of ROLES)
+      for (const g of GOALS) ev.add(`rolecombo_${p}_${s}_${g}`);
+
+  // --- legacy: five archetypes (historical data + stale cached pages) ---
   for (const a of ARCHETYPES) ev.add(`archetype_${a}`);
   for (const s of STAGES) ev.add(`stage_${s}`);
-  for (const g of GOALS) ev.add(`goal_${g}`);
+  for (const g of LEGACY_GOALS) ev.add(`goal_${g}`);
   for (const s of STYLES) ev.add(`style_${s}`);
 
-  // All 360 combinations are enumerable, so they can be allowlisted outright.
   for (const a of ARCHETYPES)
     for (const s of STAGES)
-      for (const g of GOALS)
+      for (const g of LEGACY_GOALS)
         for (const st of STYLES) ev.add(`combo_${a}_${s}_${g}_${st}`);
 
   // Legacy keys from earlier page versions, kept so old cached pages don't 403.

@@ -3,204 +3,286 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LEGION — Your Battle-Tested Card</title>
+<title>Which One Are You? — The Three Roles</title>
+<meta name="description" content="Every business owner is three people: the Artist, the Operator, and the Entrepreneur. Find out which one runs your day — and what it's costing you.">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --black:#000000; --ink:#0a0a0a; --coal:#141414; --obsidian:#0c0e16;
-    --panel:#12141f; --panel2:#191c2b; --plate:#1e2233;
-    --purple:#9933FF; --purple2:#8A2BE2; --purple3:#C084FC; --deep:#3b0a75;
-    --metal:#E0E0E0; --metal2:#CCCCCC; --dust:#9aa0b5; --faint:#6b7080;
-    --line:rgba(153,51,255,.28);
-    --grad:linear-gradient(135deg,#8A2BE2,#9933FF);
-    --numgrad:linear-gradient(180deg,#fff,#C084FC 70%,#9933FF);
+    /* Restrained palette: black, bone, brass. No neon. */
+    --black:#000000; --ink:#0a0a0a; --coal:#111111; --panel:#141414; --panel2:#191919;
+    --bone:#F2EFE9; --bone2:#DAD5CB; --dust:#8E8A82; --faint:#6A665F;
+    --brass:#C9A227; --brass2:#E0BE4E; --brass-dim:rgba(201,162,39,.30);
+    --line:rgba(242,239,233,.14);
+    --line2:rgba(242,239,233,.08);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-    background:#000;color:#fff;min-height:100vh;padding:26px 14px 60px;-webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden;}
+    background:var(--black);color:var(--bone);min-height:100vh;padding:34px 16px 70px;
+    -webkit-font-smoothing:antialiased;position:relative;overflow-x:hidden;line-height:1.5;}
 
-  /* ambient purple aura + grain + scan */
-  .aura{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;filter:blur(90px);opacity:.35;}
-  .aura i{position:absolute;border-radius:50%;}
-  .aura .p{width:50vw;height:50vw;background:#8A2BE2;top:-12%;left:30%;mix-blend-mode:screen;animation:drift 34s ease-in-out infinite;}
-  .aura .q{width:40vw;height:40vw;background:#3b0a75;bottom:-14%;right:-6%;mix-blend-mode:screen;animation:drift 40s ease-in-out infinite reverse;}
-  @keyframes drift{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(4vw,-3vh) scale(1.14);}66%{transform:translate(-3vw,3vh) scale(.9);}}
-  .grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");}
-  .scan{position:fixed;left:0;right:0;height:150px;z-index:1;pointer-events:none;mix-blend-mode:screen;background:linear-gradient(to bottom,transparent,rgba(153,51,255,.05) 45%,rgba(192,132,252,.12) 60%,transparent);animation:scanmove 9s linear infinite;}
-  @keyframes scanmove{0%{top:-150px;}100%{top:113%;}}
-  .hud{position:fixed;inset:0;z-index:0;pointer-events:none;}
-  .hud i{position:absolute;width:30px;height:30px;border:2px solid rgba(153,51,255,.4);}
-  .hud .tl{top:14px;left:14px;border-right:none;border-bottom:none;}
-  .hud .tr{top:14px;right:14px;border-left:none;border-bottom:none;}
-  .hud .bl{bottom:14px;left:14px;border-right:none;border-top:none;}
-  .hud .br{bottom:14px;right:14px;border-left:none;border-top:none;}
+  .stage{position:relative;z-index:2;max-width:680px;margin:0 auto;}
 
-  .stage{position:relative;z-index:2;max-width:720px;margin:0 auto;}
+  /* --- header: no logo, no glow --- */
+  .eyebrow{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+    color:var(--brass);text-align:center;font-weight:500;margin-bottom:14px;}
+  h1{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;font-size:40px;
+    text-align:center;color:var(--bone);letter-spacing:.005em;line-height:1.04;margin-bottom:14px;}
+  .lede{text-align:center;color:var(--dust);font-size:15px;max-width:540px;margin:0 auto 10px;line-height:1.65;}
+  .lede b{color:var(--bone2);font-weight:600;}
+  .rule{width:44px;height:1px;background:var(--brass);margin:22px auto 26px;opacity:.55;}
 
-  .brand{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:6px;}
-  .brand .logo{width:56px;height:65px;filter:drop-shadow(0 0 20px rgba(153,51,255,.5)) drop-shadow(0 8px 18px rgba(139,43,226,.3));}
-  .wm{font-family:'Oswald',sans-serif;font-size:26px;letter-spacing:6px;font-weight:700;color:#fff;line-height:1;text-shadow:0 0 18px rgba(255,255,255,.15);}
-  .wm em{font-style:normal;color:transparent;background:linear-gradient(180deg,#fff,#C084FC 70%,#9933FF);-webkit-background-clip:text;background-clip:text;}
-  .wm-tag{font-family:'Oswald',sans-serif;font-size:10.5px;color:#C084FC;letter-spacing:3px;text-transform:uppercase;text-align:left;margin-top:2px;}
+  /* --- the three roles, shown up front --- */
+  .triad{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line2);
+    border:1px solid var(--line2);border-radius:4px;overflow:hidden;margin-bottom:30px;}
+  .triad div{background:var(--coal);padding:15px 12px;text-align:center;}
+  .triad .r{font-family:'Oswald',sans-serif;font-size:13.5px;font-weight:600;letter-spacing:.10em;
+    text-transform:uppercase;color:var(--bone);}
+  .triad .s{font-size:11px;color:var(--faint);margin-top:3px;letter-spacing:.04em;}
 
-  h1{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;font-size:34px;text-align:center;color:var(--metal);margin:10px 0 6px;letter-spacing:.01em;}
-  h1 .gold{color:transparent;background:linear-gradient(180deg,#fff,#C084FC 70%,#9933FF);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 24px rgba(153,51,255,.45));}
-  .lede{text-align:center;color:var(--dust);font-size:14.5px;max-width:580px;margin:0 auto 16px;line-height:1.6;}
-  .lede b{color:#fff;}
+  /* --- panel --- */
+  .panel{background:var(--coal);border:1px solid var(--line2);border-radius:4px;padding:32px 30px;}
 
-  .banner{background:linear-gradient(135deg,rgba(59,10,117,.35),rgba(10,10,10,.6));border:1px solid rgba(153,51,255,.35);color:#e6d9ff;border-radius:12px;padding:11px 14px;font-size:12.5px;line-height:1.5;margin-bottom:16px;}
-  .banner b{color:#fff;}
+  .progress{display:flex;align-items:center;gap:10px;margin-bottom:26px;}
+  .ptrack{flex:1;height:2px;background:rgba(242,239,233,.10);overflow:hidden;}
+  .pfill{height:100%;width:0%;background:var(--brass);transition:width .3s ease;}
+  .pnum{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.16em;color:var(--faint);
+    text-transform:uppercase;white-space:nowrap;}
 
-  .panel{background:linear-gradient(180deg,#12141f,#0c0e16);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 0 40px rgba(153,51,255,.18), inset 0 0 30px rgba(153,51,255,.05);position:relative;}
-  .panel::before{content:'';position:absolute;top:0;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,#9933FF,transparent);}
-  .steps{display:flex;gap:6px;justify-content:center;margin-bottom:20px;}
-  .steps .dot{width:10px;height:10px;border-radius:50%;background:#2a2d3e;transition:.2s;box-shadow:inset 0 0 0 1px rgba(153,51,255,.2);}
-  .steps .dot.on{background:#9933FF;transform:scale(1.25);box-shadow:0 0 12px rgba(153,51,255,.8);}
+  .q-num{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.20em;text-transform:uppercase;
+    color:var(--brass);margin-bottom:9px;font-weight:500;}
+  .q-label{font-family:'Oswald',sans-serif;font-size:24px;font-weight:500;color:var(--bone);
+    margin-bottom:7px;line-height:1.28;}
+  .q-sub{font-size:14px;color:var(--dust);margin-bottom:20px;line-height:1.6;}
 
-  .q-label{font-family:'Oswald',sans-serif;font-size:22px;font-weight:600;color:#fff;margin-bottom:4px;text-transform:none;letter-spacing:.01em;}
-  .q-sub{font-size:13.5px;color:var(--dust);margin-bottom:16px;line-height:1.55;}
-  textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:14px;font-size:15.5px;font-family:inherit;background:#0a0c12;color:#fff;resize:vertical;min-height:96px;box-shadow:inset 0 0 20px rgba(0,0,0,.6), inset 0 0 0 1px rgba(153,51,255,.05);}
-  textarea::placeholder{color:#5b5f70;}
-  textarea:focus{outline:none;border-color:#9933FF;box-shadow:0 0 0 3px rgba(153,51,255,.2), inset 0 0 20px rgba(0,0,0,.5);}
-  .hint{font-size:12px;color:var(--faint);margin-top:6px;line-height:1.5;}
-  .hint b{color:var(--purple3);}
+  textarea{width:100%;border:1px solid var(--line);border-radius:3px;padding:15px;font-size:15.5px;
+    font-family:inherit;background:#0b0b0b;color:var(--bone);resize:vertical;min-height:104px;line-height:1.55;}
+  textarea::placeholder{color:#565249;}
+  textarea:focus{outline:none;border-color:var(--brass-dim);background:#0d0d0c;}
+  .hint{font-size:12px;color:var(--faint);margin-top:9px;line-height:1.55;}
 
-  .optgrid{display:grid;gap:8px;}
-  .opt{position:relative;border:1px solid var(--line);border-radius:12px;padding:13px 14px 13px 44px;cursor:pointer;background:linear-gradient(180deg,#161825,#101219);color:#d6dbe8;font-size:14.5px;transition:.12s;}
-  .opt:hover{border-color:#9933FF;background:#181a28;}
-  .opt input{position:absolute;left:16px;top:50%;transform:translateY(-50%);accent-color:#9933FF;width:17px;height:17px;}
-  .opt:has(input:checked){border-color:#C084FC;background:linear-gradient(180deg,#1d1330,#150d24);box-shadow:0 0 0 3px rgba(153,51,255,.18), 0 0 20px rgba(153,51,255,.2);font-weight:600;color:#fff;}
-  .opt small{display:block;color:var(--dust);font-weight:400;font-size:12.5px;margin-top:1px;}
+  .optgrid{display:grid;gap:7px;}
+  .opt{position:relative;border:1px solid var(--line2);border-radius:3px;padding:14px 16px 14px 44px;
+    cursor:pointer;background:#0e0e0e;color:var(--bone2);font-size:14.5px;transition:border-color .12s,background .12s;
+    display:block;line-height:1.45;}
+  .opt:hover{border-color:var(--line);background:#121212;}
+  .opt input{position:absolute;left:16px;top:50%;transform:translateY(-50%);accent-color:var(--brass);
+    width:15px;height:15px;}
+  .opt:has(input:checked){border-color:var(--brass-dim);background:#131210;color:var(--bone);}
+  .opt small{display:block;color:var(--faint);font-size:12.5px;margin-top:2px;line-height:1.45;}
 
-  .btnrow{display:flex;gap:10px;margin-top:20px;}
-  .btn{flex:1;border:none;border-radius:12px;padding:15px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.02em;}
-  .btn-primary{background:linear-gradient(135deg,#8A2BE2,#9933FF);color:#fff;box-shadow:0 0 30px rgba(153,51,255,.4);}
-  .btn-primary:hover{filter:brightness(1.12);box-shadow:0 0 40px rgba(153,51,255,.6);}
-  .btn-ghost{background:#101219;color:var(--metal2);border:1px solid var(--line);}
-  .btn-ghost:hover{border-color:#9933FF;color:#fff;}
+  .btnrow{display:flex;gap:9px;margin-top:24px;}
+  .btn{flex:1;border:none;border-radius:3px;padding:15px;font-size:14px;font-weight:600;cursor:pointer;
+    font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.12em;transition:.14s;}
+  .btn-primary{background:var(--bone);color:#0a0a0a;}
+  .btn-primary:hover{background:#fff;}
+  .btn-ghost{background:transparent;color:var(--dust);border:1px solid var(--line2);flex:0 0 auto;padding:15px 22px;}
+  .btn-ghost:hover{color:var(--bone);border-color:var(--line);}
   .hidden{display:none!important;}
-  .center{text-align:center;}
 
-  /* card */
-  .bcard{background:linear-gradient(180deg,#12141f,#08090f);border:1px solid rgba(153,51,255,.35);border-radius:20px;overflow:hidden;box-shadow:0 0 50px rgba(153,51,255,.25), 0 24px 60px rgba(0,0,0,.6);position:relative;}
-  .bcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#9933FF,transparent);}
-  .bc-top{background:linear-gradient(135deg,#1a1030,#0d0a16 60%,#08090f);color:#e9e3ff;padding:24px 26px;border-bottom:1px solid rgba(153,51,255,.2);position:relative;}
-  .bc-top::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#C084FC,transparent);}
-  .bc-top .lbl{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#C084FC;font-weight:600;}
-  .bc-top .name{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;font-size:32px;color:#fff;margin:4px 0 2px;text-shadow:0 0 24px rgba(153,51,255,.4);}
-  .bc-top .name span{color:transparent;background:linear-gradient(180deg,#fff,#C084FC 70%,#9933FF);-webkit-background-clip:text;background-clip:text;}
-  .bc-style{display:inline-block;margin-top:8px;background:rgba(153,51,255,.14);border:1px solid rgba(192,132,252,.5);color:#C084FC;border-radius:20px;padding:4px 12px;font-size:11.5px;font-weight:600;font-family:'Oswald',sans-serif;letter-spacing:.04em;text-transform:uppercase;}
-  .bc-top .super{font-size:15.5px;line-height:1.5;color:#d6dbe8;margin-top:10px;font-style:italic;border-left:2px solid #9933FF;padding-left:12px;}
-  .bc-body{padding:18px 24px 6px;}
-  .sec{padding:11px 0;border-bottom:1px solid rgba(153,51,255,.14);}
+  /* --- the card --- */
+  .bcard{background:var(--coal);border:1px solid var(--line2);border-radius:4px;overflow:hidden;}
+  .bc-top{padding:32px 30px 26px;border-bottom:1px solid var(--line2);}
+  .bc-top .lbl{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--brass);font-weight:500;}
+  .bc-top .name{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;font-size:44px;
+    color:var(--bone);margin:8px 0 0;line-height:1;letter-spacing:.005em;}
+  .bc-top .alias{font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--dust);margin-top:7px;}
+  .bc-top .blend{font-size:13.5px;color:var(--dust);margin-top:14px;padding-top:14px;
+    border-top:1px solid var(--line2);line-height:1.6;}
+  .bc-top .blend b{color:var(--bone2);font-weight:600;}
+  .bc-top .super{font-size:15.5px;line-height:1.6;color:var(--bone2);margin-top:16px;
+    border-left:2px solid var(--brass);padding-left:14px;font-style:italic;}
+
+  .bc-body{padding:8px 30px 4px;}
+  .sec{padding:20px 0;border-bottom:1px solid var(--line2);}
   .sec:last-child{border-bottom:none;}
-  .sec .h{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:2.5px;text-transform:uppercase;color:#C084FC;font-weight:600;margin-bottom:5px;}
-  .sec p{font-size:14px;line-height:1.55;color:#c6ccdc;}
-  .sec p b{color:#fff;}
-  .agentbox{background:#0a0c12;color:#cfd6ff;border:1px solid rgba(153,51,255,.25);border-radius:11px;padding:13px 15px;margin-top:8px;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.55;white-space:pre-wrap;box-shadow:inset 0 0 22px rgba(0,0,0,.6);}
-  .outcome{background:linear-gradient(135deg,#8A2BE2,#9933FF);color:#fff;border-radius:11px;padding:12px 14px;font-weight:700;font-size:13.5px;line-height:1.45;margin-top:8px;box-shadow:0 0 24px rgba(153,51,255,.35);}
-  .bcard-foot{display:flex;justify-content:space-between;padding:12px 24px 16px;color:var(--faint);font-size:11px;font-family:'Oswald',sans-serif;letter-spacing:.05em;text-transform:uppercase;}
-  .bcard-foot .ctr{color:#C084FC;}
+  .sec .h{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.20em;text-transform:uppercase;
+    color:var(--brass);font-weight:500;margin-bottom:8px;}
+  .sec p{font-size:14.5px;line-height:1.65;color:var(--bone2);}
+  .sec p b{color:var(--bone);font-weight:600;}
+  .sec p + p{margin-top:10px;}
+  .agentbox{background:#090909;color:var(--bone2);border:1px solid var(--line2);border-radius:3px;
+    padding:15px 16px;margin-top:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:11.5px;line-height:1.65;white-space:pre-wrap;}
+  .thisweek{border:1px solid var(--brass-dim);border-radius:3px;padding:15px 16px;margin-top:11px;
+    font-size:14px;line-height:1.6;color:var(--bone);background:rgba(201,162,39,.045);}
+  .bcard-foot{display:flex;justify-content:space-between;gap:10px;padding:16px 30px 20px;
+    color:var(--faint);font-size:10.5px;font-family:'Oswald',sans-serif;letter-spacing:.16em;
+    text-transform:uppercase;border-top:1px solid var(--line2);}
 
-  .actbar{display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between;align-items:center;background:linear-gradient(180deg,#14161f,#0e1018);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin-top:14px;}
-  .stars{font-size:26px;line-height:1;letter-spacing:3px;cursor:pointer;color:#33364a;}
-  .stars span:hover{color:#9933FF;text-shadow:0 0 12px #9933FF;}
-  .rateask{font-size:12.5px;font-weight:700;color:#fff;margin-bottom:3px;}
-  .ratethanks{font-size:12px;color:#C084FC;margin-top:3px;}
-  .btn-sm{background:linear-gradient(135deg,#8A2BE2,#9933FF);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-weight:800;font-size:13px;cursor:pointer;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.03em;box-shadow:0 0 20px rgba(153,51,255,.35);}
-  .btn-sm:hover{filter:brightness(1.12);}
-  .btn-ghost-sm{background:#101219;color:var(--metal2);border:1px solid var(--line);box-shadow:none;}
-  .done_hint{font-size:12.5px;color:var(--dust);text-align:center;margin:14px 0 0;}
-  .tut-cta{text-align:center;margin-top:14px;padding:18px 16px;background:linear-gradient(135deg,#150d24,#0a0c12);border:1px solid rgba(153,51,255,.35);border-radius:14px;box-shadow:0 0 30px rgba(153,51,255,.15);}
-  .tut-cta .tut-q{font-family:'Oswald',sans-serif;font-weight:600;color:#fff;font-size:16px;margin-bottom:10px;text-transform:uppercase;letter-spacing:.03em;}
-  .tut-cta a{display:inline-block;background:linear-gradient(135deg,#8A2BE2,#9933FF);color:#fff;border-radius:11px;padding:12px 22px;font-weight:800;font-size:15px;text-decoration:none;box-shadow:0 0 28px rgba(153,51,255,.45);font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.03em;}
-  .tut-cta .tut-sub{font-size:11.5px;color:var(--dust);margin-top:8px;}
+  /* --- score bars --- */
+  .mix{margin-top:16px;}
+  .mixrow{display:flex;align-items:center;gap:11px;margin-top:8px;}
+  .mixrow .lb{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--dust);width:104px;flex:0 0 104px;}
+  .mixrow .bar{flex:1;height:5px;background:rgba(242,239,233,.09);overflow:hidden;}
+  .mixrow .bar i{display:block;height:100%;background:var(--dust);}
+  .mixrow.top .bar i{background:var(--brass);}
+  .mixrow.top .lb{color:var(--bone);}
+  .mixrow .pc{font-family:'Oswald',sans-serif;font-size:10.5px;color:var(--faint);width:34px;
+    flex:0 0 34px;text-align:right;}
 
-  @media(max-width:520px){.bc-top .name{font-size:26px;} .bc-top,.bc-body{padding:18px;} h1{font-size:27px;} .panel{padding:20px;}}
-  @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact;}body{background:#000;} .no-print{display:none!important;} .stage{max-width:100%;padding:0;} .bcard{box-shadow:none;} .aura,.grain,.scan,.hud{display:none;}}
+  .actbar{display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:center;
+    border:1px solid var(--line2);border-radius:4px;padding:16px 18px;margin-top:14px;background:var(--coal);}
+  .stars{font-size:23px;line-height:1;letter-spacing:4px;cursor:pointer;color:#2E2C28;user-select:none;}
+  .stars span:hover{color:var(--brass);}
+  .rateask{font-size:12.5px;font-weight:600;color:var(--bone2);margin-bottom:5px;}
+  .ratethanks{font-size:12px;color:var(--brass);margin-top:5px;}
+  .btn-sm{background:var(--bone);color:#0a0a0a;border:none;border-radius:3px;padding:12px 17px;
+    font-weight:600;font-size:12px;cursor:pointer;font-family:'Oswald',sans-serif;text-transform:uppercase;
+    letter-spacing:.12em;}
+  .btn-sm:hover{background:#fff;}
+  .btn-ghost-sm{background:transparent;color:var(--dust);border:1px solid var(--line2);}
+  .btn-ghost-sm:hover{color:var(--bone);border-color:var(--line);}
+  .done_hint{font-size:12.5px;color:var(--faint);text-align:center;margin:16px 0 0;line-height:1.6;}
+
+  .tut-cta{text-align:center;margin-top:16px;padding:26px 20px;border:1px solid var(--line2);
+    border-radius:4px;background:var(--coal);}
+  .tut-cta .tut-q{font-family:'Oswald',sans-serif;font-weight:500;color:var(--bone);font-size:17px;
+    margin-bottom:14px;letter-spacing:.02em;line-height:1.4;}
+  .tut-cta a{display:inline-block;background:var(--bone);color:#0a0a0a;border-radius:3px;
+    padding:13px 26px;font-weight:600;font-size:13px;text-decoration:none;font-family:'Oswald',sans-serif;
+    text-transform:uppercase;letter-spacing:.12em;}
+  .tut-cta a:hover{background:#fff;}
+  .tut-cta .tut-sub{font-size:11.5px;color:var(--faint);margin-top:12px;line-height:1.55;}
+
+  @media(max-width:560px){
+    h1{font-size:31px;}
+    .panel{padding:24px 20px;}
+    .bc-top,.bc-body{padding-left:20px;padding-right:20px;}
+    .bcard-foot{padding-left:20px;padding-right:20px;flex-direction:column;gap:5px;}
+    .bc-top .name{font-size:34px;}
+    .triad .r{font-size:11.5px;letter-spacing:.06em;}
+    .triad .s{font-size:10px;}
+    .triad div{padding:12px 7px;}
+    .mixrow .lb{width:84px;flex:0 0 84px;font-size:9.5px;}
+  }
+  @media print{
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    body{background:#000;padding:0;}
+    .no-print{display:none!important;}
+    .stage{max-width:100%;}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
 </style>
 </head>
 <body>
-<div class="aura"><i class="p"></i><i class="q"></i></div>
-<div class="grain"></div>
-<div class="scan"></div>
-<div class="hud"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
 
 <div class="stage">
-  <div class="brand">
-    <svg class="logo" viewBox="0 0 200 230" role="img" aria-label="LEGION shield"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C084FC"/><stop offset="1" stop-color="#8A2BE2"/></linearGradient><linearGradient id="n" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14141f"/><stop offset="1" stop-color="#080a12"/></linearGradient></defs><path d="M100 8 L166 32 V120 C166 158 138 196 100 222 C62 196 34 158 34 120 V32 Z" fill="url(#n)" stroke="url(#g)" stroke-width="5"/><path d="M70 60 V150 H128 L118 134 H90 V60 Z" fill="#0c0e16"/><path d="M90 128 L128 150 L118 166 L90 150 Z" fill="url(#g)"/></svg>
-    <div><div class="wm">LEG<em>ION</em></div><div class="wm-tag">Bring your superpower</div></div>
+  <div class="eyebrow">The Three Roles</div>
+  <h1>Which One<br>Runs Your Day?</h1>
+  <div class="lede">Every owner is three people at once. One of them is running your calendar right now — and the other two are starving. <b>Five questions. No email required.</b></div>
+  <div class="rule"></div>
+
+  <div class="triad">
+    <div><div class="r">Artist</div><div class="s">Creator</div></div>
+    <div><div class="r">Operator</div><div class="s">Technician</div></div>
+    <div><div class="r">Entrepreneur</div><div class="s">Visionary</div></div>
   </div>
-  <h1>Your <span class="gold">Battle-Tested</span> Card</h1>
-  <div class="lede">Five short steps. Tell us about your superpower, your battle, and where you're headed — we'll hand you a card that's truly yours, plus the agent to multiply it. <b>And it stays on your device.</b></div>
 
   <!-- ============ WIZARD ============ -->
   <div id="wizard" class="panel">
-    <div class="steps" id="steps"><div class="dot on" ></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    <div class="progress">
+      <div class="ptrack"><div class="pfill" id="pfill"></div></div>
+      <div class="pnum" id="pnum">Step 1 of 7</div>
+    </div>
 
-    <!-- S1 superpower -->
+    <!-- S1 — about them (free text, never transmitted) -->
     <div id="s1" class="step-pane">
-      <div class="q-label">What is your superpower?</div>
-      <div class="q-sub">The one thing you're quietly better at than almost anyone — the skill that wins you the battles nobody else can.</div>
-      <textarea id="superpower" maxlength="160" placeholder="e.g. I can turn the most skeptical homeowner into a signed contract — the one everyone else gives up on."></textarea>
-      <div class="hint">Make it vivid — this becomes the heart of your card. (No names or company names — it stays on your device.)</div>
-      <div class="btnrow"><button class="btn btn-primary" onclick="next(1)">Continue →</button></div>
+      <div class="q-num">First</div>
+      <div class="q-label">What are you best at?</div>
+      <div class="q-sub">Not your job title. The thing you do better than the people around you — the reason your business exists at all.</div>
+      <textarea id="superpower" maxlength="180" placeholder="e.g. I can walk into a room that's falling apart and have everyone calm and moving in ten minutes."></textarea>
+      <div class="hint">Write it plainly. This becomes the first line of your card, in your own words — and it never leaves this device.</div>
+      <div class="btnrow"><button class="btn btn-primary" onclick="next(1)">Begin</button></div>
     </div>
 
-    <!-- S2 battle -->
+    <!-- S2 — Q1 where the day goes -->
     <div id="s2" class="step-pane hidden">
-      <div class="q-label">Which battle are you fighting hardest right now?</div>
-      <div class="q-sub">Pick the one that's costing you the most right now — this shapes your archetype and your agent.</div>
+      <div class="q-num">Question 1 of 5</div>
+      <div class="q-label">Where did yesterday actually go?</div>
+      <div class="q-sub">Not where you meant it to go. Where it went.</div>
       <div class="optgrid">
-        <label class="opt"><input type="radio" name="battle" value="leads"><span>Getting more leads &amp; follow-ups</span><small>The pipeline is dry or going quiet.</small></label>
-        <label class="opt"><input type="radio" name="battle" value="data"><span>Turning mess into clean records</span><small>Details get lost retyping.</small></label>
-        <label class="opt"><input type="radio" name="battle" value="admin"><span>Admin &amp; onboarding</span><small>The same paperwork every time.</small></label>
-        <label class="opt"><input type="radio" name="battle" value="marketing"><span>Marketing &amp; standing out</span><small>You blend in when you shouldn't.</small></label>
-        <label class="opt"><input type="radio" name="battle" value="invoice"><span>Getting paid &amp; chasing invoices</span><small>Work is done; invoices sit unpaid.</small></label>
+        <label class="opt"><input type="radio" name="q1" value="doing"><span>Doing the work myself</span><small>Because it has to be right, and right means me.</small></label>
+        <label class="opt"><input type="radio" name="q1" value="running"><span>Keeping things running</span><small>Checking, confirming, making sure nothing slipped.</small></label>
+        <label class="opt"><input type="radio" name="q1" value="chasing"><span>Chasing what's next</span><small>The new idea, the new deal, the new direction.</small></label>
+        <label class="opt"><input type="radio" name="q1" value="fires"><span>Putting out fires I didn't start</span><small>Reacting all day to other people's problems.</small></label>
       </div>
-      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(0)">← Back</button><button class="btn btn-primary" onclick="next(2)">Continue →</button></div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(0)">Back</button><button class="btn btn-primary" onclick="next(2)">Continue</button></div>
     </div>
 
-    <!-- S3 stage -->
+    <!-- S3 — Q2 what breaks -->
     <div id="s3" class="step-pane hidden">
-      <div class="q-label">What stage is your business in?</div>
-      <div class="q-sub">This tunes how sharp your "fix now" should be.</div>
+      <div class="q-num">Question 2 of 5</div>
+      <div class="q-label">When you get slammed, what breaks first?</div>
+      <div class="q-sub">Everyone has a first casualty. Yours says a lot.</div>
       <div class="optgrid">
-        <label class="opt"><input type="radio" name="stage" value="start"><span>Just getting started</span></label>
-        <label class="opt"><input type="radio" name="stage" value="have"><span>Getting sales — want consistency</span></label>
-        <label class="opt"><input type="radio" name="stage" value="established"><span>Established — want to scale</span></label>
-        <label class="opt"><input type="radio" name="stage" value="exit"><span>Building toward a sale / exit</span></label>
+        <label class="opt"><input type="radio" name="q2" value="systems"><span>The systems</span><small>I stop tracking and start improvising.</small></label>
+        <label class="opt"><input type="radio" name="q2" value="ideas"><span>The new ideas</span><small>Everything ambitious gets shelved.</small></label>
+        <label class="opt"><input type="radio" name="q2" value="quality"><span>The quality</span><small>I rush the work I'm normally proud of.</small></label>
+        <label class="opt"><input type="radio" name="q2" value="sleep"><span>Nothing breaks — I just stop sleeping</span><small>I absorb it personally instead.</small></label>
       </div>
-      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(1)">← Back</button><button class="btn btn-primary" onclick="next(3)">Continue →</button></div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(1)">Back</button><button class="btn btn-primary" onclick="next(3)">Continue</button></div>
     </div>
 
-    <!-- S4 goal -->
+    <!-- S4 — Q3 avoidance -->
     <div id="s4" class="step-pane hidden">
-      <div class="q-label">What matters most to you this year?</div>
-      <div class="q-sub">This becomes your mission.</div>
+      <div class="q-num">Question 3 of 5</div>
+      <div class="q-label">What do you avoid?</div>
+      <div class="q-sub">Be honest. Nobody sees this but you.</div>
       <div class="optgrid">
-        <label class="opt"><input type="radio" name="goal" value="customers"><span>More customers</span></label>
-        <label class="opt"><input type="radio" name="goal" value="income"><span>Higher prices / more income</span></label>
-        <label class="opt"><input type="radio" name="goal" value="time"><span>More free time</span></label>
-        <label class="opt"><input type="radio" name="goal" value="team"><span>A bigger team</span></label>
-        <label class="opt"><input type="radio" name="goal" value="exit"><span>A sale / exit</span></label>
-        <label class="opt"><input type="radio" name="goal" value="peace"><span>Less stress / better systems</span></label>
+        <label class="opt"><input type="radio" name="q3" value="admin"><span>Paperwork and admin</span><small>The boring machinery of the business.</small></label>
+        <label class="opt"><input type="radio" name="q3" value="visible"><span>Selling and being visible</span><small>Marketing myself feels like bragging.</small></label>
+        <label class="opt"><input type="radio" name="q3" value="finishing"><span>Finishing</span><small>The last 20% is where I lose interest.</small></label>
+        <label class="opt"><input type="radio" name="q3" value="letgo"><span>Letting go</span><small>Handing my work to someone else.</small></label>
       </div>
-      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(2)">← Back</button><button class="btn btn-primary" onclick="next(4)">Continue →</button></div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(2)">Back</button><button class="btn btn-primary" onclick="next(4)">Continue</button></div>
     </div>
 
-    <!-- S5 style -->
+    <!-- S5 — Q4 month away -->
     <div id="s5" class="step-pane hidden">
-      <div class="q-label">How do you like to build?</div>
-      <div class="q-sub">This gives your card its personality — and tells your agent how to sound.</div>
+      <div class="q-num">Question 4 of 5</div>
+      <div class="q-label">It runs perfectly without you for a month. You feel:</div>
+      <div class="q-sub">Gut reaction, not the answer you're supposed to give.</div>
       <div class="optgrid">
-        <label class="opt"><input type="radio" name="style" value="direct"><span>Direct &amp; decisive</span><small>Cut to it, no fluff.</small></label>
-        <label class="opt"><input type="radio" name="style" value="coach"><span>Coach &amp; build</span><small>Teach and grow people.</small></label>
-        <label class="opt"><input type="radio" name="style" value="steady"><span>Steady &amp; systematic</span><small>Process and precision.</small></label>
+        <label class="opt"><input type="radio" name="q4" value="proud"><span>Proud</span><small>That was the entire point.</small></label>
+        <label class="opt"><input type="radio" name="q4" value="uneasy"><span>Uneasy</span><small>Nobody does it the way I do it.</small></label>
+        <label class="opt"><input type="radio" name="q4" value="relieved"><span>Relieved</span><small>I could finally think again.</small></label>
+        <label class="opt"><input type="radio" name="q4" value="restless"><span>Restless</span><small>I'd have started something new by week two.</small></label>
       </div>
-      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(3)">← Back</button><button class="btn btn-primary" onclick="build()">Build My Card ⚔️</button></div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(3)">Back</button><button class="btn btn-primary" onclick="next(5)">Continue</button></div>
+    </div>
+
+    <!-- S6 — Q5 bottleneck -->
+    <div id="s6" class="step-pane hidden">
+      <div class="q-num">Question 5 of 5</div>
+      <div class="q-label">What's the real bottleneck?</div>
+      <div class="q-sub">The one you'd admit at 11pm, not the one you'd say in a meeting.</div>
+      <div class="optgrid">
+        <label class="opt"><input type="radio" name="q5" value="me"><span>Me</span><small>Everything funnels through one person.</small></label>
+        <label class="opt"><input type="radio" name="q5" value="time"><span>Time</span><small>There simply isn't enough of it.</small></label>
+        <label class="opt"><input type="radio" name="q5" value="focus"><span>Focus</span><small>Too many directions at once.</small></label>
+        <label class="opt"><input type="radio" name="q5" value="systems"><span>Systems</span><small>We're winging far too much of it.</small></label>
+      </div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(4)">Back</button><button class="btn btn-primary" onclick="next(6)">Continue</button></div>
+    </div>
+
+    <!-- S7 — goal -->
+    <div id="s7" class="step-pane hidden">
+      <div class="q-num">Last one</div>
+      <div class="q-label">What would change everything this year?</div>
+      <div class="q-sub">This decides what we point your role at.</div>
+      <div class="optgrid">
+        <label class="opt"><input type="radio" name="goal" value="customers"><span>More of the right customers</span></label>
+        <label class="opt"><input type="radio" name="goal" value="time"><span>My time back</span></label>
+        <label class="opt"><input type="radio" name="goal" value="without"><span>A business that runs without me</span></label>
+        <label class="opt"><input type="radio" name="goal" value="prices"><span>Higher prices for the same work</span></label>
+      </div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(5)">Back</button><button class="btn btn-primary" onclick="build()">Show My Role</button></div>
     </div>
   </div>
 
@@ -209,47 +291,47 @@
     <div class="bcard" id="bcard"></div>
     <div class="actbar no-print">
       <div class="rate">
-        <div class="rateask">Was this valuable? Rate us:</div>
+        <div class="rateask">Was this accurate?</div>
         <div class="stars" id="stars"><span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span></div>
         <div class="ratethanks hidden" id="ratethanks">Thanks — anonymous, nothing collected.</div>
       </div>
       <div>
-        <button class="btn-sm" onclick="downloadCard()">⬇ Save your card</button>
-        <button class="btn-sm btn-ghost-sm" onclick="again()" style="margin-left:8px;">← New card</button>
+        <button class="btn-sm" onclick="downloadCard()">Save this</button>
+        <button class="btn-sm btn-ghost-sm" onclick="again()" style="margin-left:7px;">Start over</button>
       </div>
     </div>
-    <div class="done_hint no-print">Your card stays on this device — save it or screenshot it. It's yours.</div>
+    <div class="done_hint no-print">This stays on your device. Save it or screenshot it — it's yours.</div>
     <div class="tut-cta no-print">
-      <div class="tut-q">Next — deploy it. Take the free 4-day mini-course.</div>
-      <a href="course.html">⚡ Continue → The 4-Day Mini-Course</a>
-      <div class="tut-sub">~15 min a day · build your agent on ChatGPT · bring it to your real tools</div>
+      <div class="tut-q">Now build the machine that covers your weak side.</div>
+      <a href="course.html">The 4-Day Mini-Course</a>
+      <div class="tut-sub">~15 minutes a day · build it on ChatGPT · bring it to your real tools</div>
     </div>
   </div>
 
 </div>
 
 <script>
-/* LEGION Battle-Tested Card. Card generation is deterministic and client-side ONLY.
-   The user's typed superpower text is NEVER transmitted — it stays in this page.
+/* ------------------------------------------------------------------------------
+   THE THREE ROLES — Artist / Operator / Entrepreneur
+   Based on Michael Gerber's E-Myth trio as taught in Tony Robbins' Business
+   Mastery, with a Legion spin: your dominant role is the superpower, the
+   IMBALANCE is the problem, and an agent is how you cover the weak side.
 
-   What IS sent to the anonymous Legion counter: the pre-defined menu choices the user
-   clicked (archetype / stage / goal / style), funnel step reached, star rating, and
-   a per-browser dedupe flag. All values come from a fixed, known vocabulary defined
-   in this file. No free text, no names, no IP-linked identifiers, no cookies. */
+   Scoring and card generation are deterministic and client-side ONLY.
+   The user's typed answer is NEVER transmitted — it stays in this page.
+
+   What IS sent to the anonymous counter: the fixed menu keys the user clicked,
+   the resulting role, funnel step reached, and star rating. All values come
+   from a closed vocabulary defined in this file. No free text, no names,
+   no IP-linked identifiers, no cookies.
+------------------------------------------------------------------------------ */
 var LEGION_COUNTER = '';  // same-origin: /api/track on this Netlify site
 
 function trk(e,v){
-  // Fire-and-forget anonymous beacon. Plain no-cors fetch (proven reliable); keepalive so it
-  // still attempts on page teardown. sendBeacon was dropped by some browsers — use fetch only.
   try{ fetch(LEGION_COUNTER+'/api/track?e='+encodeURIComponent(e)+((v===undefined)?'':'&v='+encodeURIComponent(v)), {keepalive:true}); }catch(x){}
 }
 
-/* ---- Real-count integrity -------------------------------------------------
-   "Cards built" must mean distinct people, not page reloads or one person
-   clicking New Card five times. We keep a first-build flag in localStorage:
-   the first completed build on a browser counts toward card_created_unique,
-   every build still counts toward card_created (total volume). If storage is
-   unavailable (private mode), we fail open and count it as unique.          */
+/* Real-count integrity: first completed run on a browser counts as unique. */
 function firstBuildOnThisBrowser(){
   try{
     if(localStorage.getItem('legion_built')) return false;
@@ -258,54 +340,117 @@ function firstBuildOnThisBrowser(){
   }catch(x){ return true; }
 }
 
-var BATTLES = {
-  leads:{a:'The Attractor', tag:'leads & follow-ups',
-    fight:'You turn attention into momentum. Your battle is a pipeline that goes quiet — and every warm lead you never chased is a win you already earned slipping away.',
-    missionAdd:'fill your pipeline with people who already want you',
-    fix:'Text your 10 happiest customers for referrals and re-chase 10 leads you never followed up — this week.',
-    agent:'You are my referral & follow-up agent. My superpower is [SUPER]. I\'ll give you past customers and missed leads; write a short, warm, personal follow-up for each with ONE next step. Keep it human, no hard sell.'},
-  data:{a:'The Steward', tag:'clean records & data entry',
-    fight:'You handle a flood of inquiries — the battle is details lost in the retyping and records that never stay straight.',
-    missionAdd:'turn every new inquiry into clean, usable records',
-    fix:'Kill the retyping: this week, route every new inquiry to one place and let your agent turn each one into clean, consistent fields.',
-    agent:'You are my data-entry agent. My superpower is [SUPER]. Given a messy inquiry, output clean fields: name / phone / service / urgency / notes. Don\'t invent anything.'},
-  admin:{a:'The Operator', tag:'admin & onboarding',
-    fight:'You have the skills — but you\'re the only one who can run the admin, so every new client costs you the same repeated paperwork.',
-    missionAdd:'hand every new client the same great onboarding, every time',
-    fix:'Stop rebuilding onboarding: this week, write your welcome email + checklist ONCE and hand them to every new client.',
-    agent:'You are my onboarding agent. My superpower is [SUPER]. For each new client, write a warm welcome email + a 6-item onboarding checklist, in my voice.'},
-  marketing:{a:'The Differentiator', tag:'marketing & standing out',
-    fight:'You refuse to be a commodity — the battle is that too many people still don\'t see how you\'re different.',
-    missionAdd:'become the obvious choice for the people you serve',
-    fix:'Stop being invisible: this week, turn ONE past win into a week of ready-to-post content with your agent.',
-    agent:'You are my content agent. My superpower is [SUPER]. For every idea, return a hook, an 80-word caption that tells a story with a result, a story version, and a 30s video script.'},
-  invoice:{a:'The Closer', tag:'getting paid & invoices',
-    fight:'You build things that last — the battle is cash sitting in unpaid invoices and money you aren\'t chasing.',
-    missionAdd:'protect every dollar and never let an invoice go cold',
-    fix:'Stop letting invoices go cold: this week, send a reminder on every overdue invoice you\'ve been avoiding.',
-    agent:'You are my payment follow-up agent. My superpower is [SUPER]. For each invoice (client, amount, days overdue), write a reminder scaled by days — soft at 7, direct at 14, a friendly deadline at 30+. Never rude.'}
+/* ---- The three roles ---- */
+var ROLES = {
+  artist:{
+    name:'The Artist',
+    alias:'The Creator',
+    lives:'You live in the present — in the work itself.',
+    strength:'Quality is never your problem. Your standards <b>are</b> the product, and customers can feel the difference. The business exists because you are good at the thing.',
+    trap:'You are the bottleneck. It cannot grow past your own two hands, and it stops earning the week you stop working. You will resist any system that makes the work feel less like yours — which is the exact thing that would set you free.',
+    cost:'Every hour spent on work only you can do is an hour not spent on work that compounds. <b>Your ceiling is your own calendar.</b>',
+    hand:'Everything that is not the craft. Quoting, follow-up, scheduling, invoicing, the writing you dread. Protect the craft and delegate the perimeter around it.',
+    directive:'Raise the standard on <b>the business</b>, not just the work. Your standards built the product — now point them at the machine that delivers it.',
+    agent:'You are my perimeter agent. The work I am best at is [SUPER]. Your job is to protect that. Take everything around it off my plate: draft quotes, write follow-ups, prep scheduling messages, chase invoices — always in my voice, never touching the actual craft. Ask me for the details you need, one question at a time.',
+    week:{
+      customers:'List the last 5 people who paid you and send each one a short personal message asking who else needs this. You already earned the trust — you just never asked.',
+      time:'Pick the one task you do every week that is not the craft. Write down its exact steps once, then have your agent run it next time.',
+      without:'Write the instructions for the one job you believe only you can do. Not to hand it over yet — just to prove it can be written down.',
+      prices:'Raise your price on the next quote you send. Not for existing clients, just the next new one. Watch what happens.'
+    }
+  },
+  operator:{
+    name:'The Operator',
+    alias:'The Technician',
+    lives:'You live in the past — in order, precision, and what has already been proven.',
+    strength:'You are the reason it holds together. Processes exist, details do not vanish, and nothing gets dropped on your watch. You have the rare gift of making a chaotic thing repeatable.',
+    trap:'You optimise the engine and forget to ask where the car is going. You will polish a process that should have been deleted, and you will say yes to carrying more rather than building something that carries it for you.',
+    cost:'Flawless execution of the wrong priority is the most expensive thing in business. <b>Your ceiling is your own capacity.</b>',
+    hand:'The repeating loops you have already mastered. You know the steps exactly, which makes you the best person alive at handing them off. Onboarding, data cleanup, reporting, reminders.',
+    directive:'Work <b>on</b> the business, not just <b>in</b> it. You already know how to run the machine — now build the one that runs without you.',
+    agent:'You are my systems agent. What I am best at is [SUPER]. I will describe a process I currently run manually, step by step. Turn it into a repeatable checklist, tell me which steps you can execute yourself, and flag any step that exists only out of habit. Be blunt about what should be deleted.',
+    week:{
+      customers:'Take your best repeatable process and point it outward. One consistent follow-up sequence for every new enquiry, running whether or not you remember.',
+      time:'Pick the loop you run most often and hand it to an agent this week. You already know every step — that is the whole advantage.',
+      without:'Document the one process nobody else knows. That single document is the difference between a job and an asset.',
+      prices:'Audit where your time actually goes, then work out your true hourly rate. Most Operators are underpricing because they are absorbing invisible work.'
+    }
+  },
+  entrepreneur:{
+    name:'The Entrepreneur',
+    alias:'The Visionary',
+    lives:'You live in the future — in what could be.',
+    strength:'You create direction. Opportunities appear because you go looking for them, and you can pull people toward something that does not exist yet. Nobody else in the building does that.',
+    trap:'Ten things started, none finished. You mistake motion for progress, and the new idea always feels more urgent than the boring thing that is 80% done and actually printing money.',
+    cost:'An unfinished idea is worth exactly zero. <b>Your ceiling is your own follow-through.</b>',
+    hand:'Follow-through itself. Let a machine hold the checklist, chase the loose ends and turn your ideas into shipped work while you keep scouting.',
+    directive:'Momentum without execution is noise. Pick the thing closest to done and finish it this week.',
+    agent:'You are my follow-through agent. What I am best at is [SUPER]. I will dump half-finished ideas on you. For each one: tell me how close to done it actually is, what the remaining steps are, and which single step unlocks the rest. Then hold me to it and ask me about it. Do not let me start anything new until I answer.',
+    week:{
+      customers:'Stop hunting for a new channel. Take the one that already worked and run it again, deliberately, five more times.',
+      time:'Write down every unfinished project. Kill three of them today. The relief is the point.',
+      without:'Pick your one proven idea and write the instructions for someone else to run it. Vision is worthless unhanded.',
+      prices:'You are probably underpricing your best offer because you are already bored of it. Raise it and sell it again.'
+    }
+  }
 };
 
-var STAGE = {
-  start:{lab:'Just starting', sharp:'You\'re proving it works — keep the moves tiny and repeatable.', depth:'start to make your first consistent win'},
-  have:{lab:'Building consistency', sharp:'Lock it down — repeat what works before you scale it.', depth:'turn your early sales into a repeatable machine'},
-  established:{lab:'Scaling', sharp:'You have proof — now systematize and delegate.', depth:'scale what\'s proven, delegate the rest'},
-  exit:{lab:'Building to exit', sharp:'Protect the numbers and clean the operation — an exit loves tidy systems.', depth:'maximize the value of what you\'ve built'}
+/* ---- Scoring: [artist, operator, entrepreneur] ---- */
+var WEIGHTS = {
+  q1:{ doing:[3,0,0], running:[0,3,0], chasing:[0,0,3], fires:[1,2,0] },
+  q2:{ systems:[2,0,1], ideas:[1,2,0], quality:[0,1,2], sleep:[1,2,0] },
+  q3:{ admin:[2,0,2], visible:[2,1,0], finishing:[1,0,3], letgo:[3,1,0] },
+  q4:{ proud:[0,1,3], uneasy:[3,0,0], relieved:[0,3,1], restless:[0,0,3] },
+  q5:{ me:[2,2,0], time:[1,2,0], focus:[0,0,3], systems:[1,3,0] }
+};
+var ORDER = ['artist','operator','entrepreneur'];
+var GOAL_LABEL = {
+  customers:'more of the right customers',
+  time:'your time back',
+  without:'a business that runs without you',
+  prices:'higher prices for the same work'
 };
 
-var GOALS = {customers:'more customers', income:'higher prices and income', time:'your time back', team:'a stronger team', exit:'a clean sale', peace:'less stress and better systems'};
-var STYLE = {direct:{lab:'Direct & decisive', voice:'direct, blunt, zero fluff'}, coach:{lab:'Coach & build', voice:'warm, teaching, builds people up'}, steady:{lab:'Steady & systematic', voice:'calm, methodical, precise'}};
+function score(ans){
+  var s={artist:0,operator:0,entrepreneur:0};
+  ['q1','q2','q3','q4','q5'].forEach(function(q){
+    var w=WEIGHTS[q][ans[q]];
+    if(!w) return;
+    s.artist+=w[0]; s.operator+=w[1]; s.entrepreneur+=w[2];
+  });
+  return s;
+}
 
-var idx=0; var paneIds=['s1','s2','s3','s4','s5'];
-function setStep(i){ idx=i; for(var k=0;k<5;k++){ document.getElementById(paneIds[k]).classList.toggle('hidden', k!==i); }
-  document.querySelectorAll('#steps .dot').forEach(function(d,di){ d.classList.toggle('on', di<=i); });
-  document.getElementById('wizard').scrollIntoView({behavior:'smooth', block:'center'}); }
-function next(i){ setStep(i); trackStep(i); } function prev(i){ setStep(i); }
+/* Rank with a defined tie-break so results are reproducible:
+   1. higher score wins
+   2. the role that Q1 (the behavioural question) pointed at wins
+   3. fixed order: entrepreneur > artist > operator  */
+function rank(s, ans){
+  var q1w=WEIGHTS.q1[ans.q1]||[0,0,0];
+  var q1Top=null, best=-1;
+  ORDER.forEach(function(r,i){ if(q1w[i]>best){ best=q1w[i]; q1Top=r; } });
+  var prio={entrepreneur:0,artist:1,operator:2};
+  return ORDER.slice().sort(function(a,b){
+    if(s[b]!==s[a]) return s[b]-s[a];
+    if(a===q1Top) return -1;
+    if(b===q1Top) return 1;
+    return prio[a]-prio[b];
+  });
+}
+
+var idx=0, TOTAL=7, paneIds=['s1','s2','s3','s4','s5','s6','s7'];
+function setStep(i){
+  idx=i;
+  for(var k=0;k<TOTAL;k++){ document.getElementById(paneIds[k]).classList.toggle('hidden', k!==i); }
+  document.getElementById('pfill').style.width = Math.round(((i+1)/TOTAL)*100)+'%';
+  document.getElementById('pnum').textContent = 'Step '+(i+1)+' of '+TOTAL;
+  document.getElementById('wizard').scrollIntoView({behavior:'smooth', block:'center'});
+}
+function next(i){ setStep(i); trackStep(i); }
+function prev(i){ setStep(i); }
 function val(n){ var e=document.querySelector('input[name="'+n+'"]:checked'); return e? e.value : null; }
 
-/* ---- Funnel instrumentation ----
-   Records the deepest step each visitor reaches so drop-off is measurable.
-   Each step counts at most once per page load. */
+/* Funnel: records the deepest step reached, once per page load. */
 var stepSeen={};
 function trackStep(i){
   var n=i+1;
@@ -318,54 +463,100 @@ function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 
 function build(){
   var sp=(document.getElementById('superpower').value||'').trim();
-  var battle=val('battle'), stage=val('stage'), goal=val('goal'), style=val('style');
-  if(!sp){ setStep(0); return; } if(!battle){ setStep(1); return; } if(!stage){ setStep(2); return; } if(!goal){ setStep(3); return; } if(!style){ setStep(4); return; }
-  var B=BATTLES[battle], S=STAGE[stage], GO=GOALS[goal], ST=STYLE[style];
+  var ans={q1:val('q1'),q2:val('q2'),q3:val('q3'),q4:val('q4'),q5:val('q5')};
+  var goal=val('goal');
+  if(!sp){ setStep(0); return; }
+  var qs=['q1','q2','q3','q4','q5'];
+  for(var i=0;i<qs.length;i++){ if(!ans[qs[i]]){ setStep(i+1); return; } }
+  if(!goal){ setStep(6); return; }
+
+  var s=score(ans);
+  var ordered=rank(s,ans);
+  var primary=ordered[0], secondary=ordered[1];
+  var R=ROLES[primary], R2=ROLES[secondary];
+  var total=s.artist+s.operator+s.entrepreneur || 1;
+  var split=(s[primary]-s[secondary])<=2;
+
+  var blend = split
+    ? 'You are a genuine split: <b>'+R.name.replace('The ','')+'</b> and <b>'+R2.name.replace('The ','')+'</b> are running almost neck and neck. That is a real advantage and a real risk — you can cover both, so you never build anything that covers them for you.'
+    : 'Primarily <b>'+R.name.replace('The ','')+'</b>, with a <b>'+R2.name.replace('The ','')+'</b> streak underneath.';
+
   var superquote='"'+esc(sp)+'"';
-  var agentPrompt=B.agent.split('[SUPER]').join(superquote);
-  var mission='Put your superpower to work: '+B.missionAdd+' — and '+S.depth+' — so the thing you\'re best at does the heavy lifting, not for your clients but for you.';
-  var multiply='Turn this superpower toward '+GO+'. ' + ({customers:'More of your best work, in front of more of the right people.', income:'The full value of what you deliver — paid for.', time:'Your week back, with the machine running the busywork.', team:'A team that runs it while you steer.', exit:'A business worth more because it runs without you.', peace:'Less firefighting, more craft.'})[goal];
-  var fixNow=B.fix+(stage==='start'||stage==='have'?' Start small — one repeat.':' Keep tightening the loop.');
+  var agentPrompt=R.agent.split('[SUPER]').join(superquote);
+  var week=R.week[goal];
+
+  var mixrows='';
+  ORDER.forEach(function(r){
+    var pc=Math.round((s[r]/total)*100);
+    mixrows+='<div class="mixrow'+(r===primary?' top':'')+'"><div class="lb">'+ROLES[r].name.replace('The ','')+'</div>'+
+             '<div class="bar"><i style="width:'+pc+'%"></i></div><div class="pc">'+pc+'%</div></div>';
+  });
 
   var h='';
-  h+='<div class="bc-top"><div class="lbl">Your Battle-Tested Superpower</div><div class="name"><span>'+B.a+'</span></div>';
-  h+='<div class="bc-style">'+ST.lab+' · '+S.lab+' · built for '+B.tag+'</div><div class="super">'+superquote+'</div></div>';
-  h+='<div class="bc-body">';
-  h+='<div class="sec"><div class="h">Your Battle</div><p>'+B.fight+'</p></div>';
-  h+='<div class="sec"><div class="h">Your Mission · New Purpose</div><p>'+mission+'</p></div>';
-  h+='<div class="sec"><div class="h">Multiply It</div><p>'+multiply+'</p></div>';
-  h+='<div class="sec"><div class="h">Your Superpower Agent</div><p>Built to <b>multiply</b> this superpower — sound '+ST.voice+'. Copy into ChatGPT (free) as your first message:</p><div class="agentbox">'+esc(agentPrompt)+'</div></div>';
-  h+='<div class="sec"><div class="h">Fix Now · This Week</div><p>'+fixNow+'</p></div>';
-  h+='<div class="outcome"><b>What you&#39;ll own:</b> a worker that runs this superpower for you — starting this week, free, on the tool you already have. You&#39;re not scared anymore; you&#39;re armed.</div>';
+  h+='<div class="bc-top">';
+  h+='<div class="lbl">The role running your day</div>';
+  h+='<div class="name">'+R.name+'</div>';
+  h+='<div class="alias">'+R.alias+' · '+R.lives+'</div>';
+  h+='<div class="super">'+superquote+'</div>';
+  h+='<div class="blend">'+blend+'</div>';
   h+='</div>';
-  h+='<div class="bcard-foot"><div class="ctr">🛡 Battle-Tested · <span>Legion</span></div><div>Bring your superpower</div></div>';
+
+  h+='<div class="bc-body">';
+  h+='<div class="sec"><div class="h">Your mix</div><div class="mix">'+mixrows+'</div></div>';
+  h+='<div class="sec"><div class="h">Why this role wins</div><p>'+R.strength+'</p></div>';
+  h+='<div class="sec"><div class="h">The trap</div><p>'+R.trap+'</p><p>'+R.cost+'</p></div>';
+  h+='<div class="sec"><div class="h">Hand this to a machine first</div><p>'+R.hand+'</p></div>';
+  h+='<div class="sec"><div class="h">The standard to raise</div><p>'+R.directive+'</p></div>';
+  h+='<div class="sec"><div class="h">Your agent</div><p>Built to cover the side you neglect. Copy this into ChatGPT as your first message:</p><div class="agentbox">'+esc(agentPrompt)+'</div></div>';
+  h+='<div class="sec"><div class="h">This week · pointed at '+GOAL_LABEL[goal]+'</div><div class="thisweek">'+week+'</div></div>';
+  h+='</div>';
+  h+='<div class="bcard-foot"><div>The Three Roles · Legion</div><div>Artist · Operator · Entrepreneur</div></div>';
+
   document.getElementById('bcard').innerHTML=h;
   document.getElementById('wizard').classList.add('hidden');
   document.getElementById('resultView').classList.remove('hidden');
 
-  /* ---- Anonymous card analytics ----
-     Which archetype was forged, and the full anonymous combination. All values
-     are fixed menu keys defined above — never user-typed text. */
-  trk('card_created');                                  // total cards built
-  if(firstBuildOnThisBrowser()) trk('card_created_unique');  // distinct browsers
-  trk('archetype_'+battle);        // which of the 5 heroes: The Attractor, Steward, Operator, Differentiator, Closer
-  trk('stage_'+stage);             // business stage
-  trk('goal_'+goal);               // what they want this year
-  trk('style_'+style);             // how they build
-  trk('combo_'+battle+'_'+stage+'_'+goal+'_'+style);  // full anonymous combination
+  /* ---- Anonymous analytics: fixed menu keys only, never the typed text ---- */
+  trk('card_created');
+  if(firstBuildOnThisBrowser()) trk('card_created_unique');
+  trk('role_'+primary);                 // which of the three roles came out on top
+  trk('secondary_'+secondary);          // the blend underneath
+  if(split) trk('role_split');          // near-tie between the top two
+  trk('q1_'+ans.q1); trk('q2_'+ans.q2); trk('q3_'+ans.q3);
+  trk('q4_'+ans.q4); trk('q5_'+ans.q5);
+  trk('goal_'+goal);
+  trk('rolecombo_'+primary+'_'+secondary+'_'+goal);
 
   document.getElementById('resultView').scrollIntoView({behavior:'smooth'});
 }
 
 (function(){
   var sels=document.querySelectorAll('#stars span'), sbox=document.getElementById('stars');
-  sels.forEach(function(s){ s.onclick=function(){ var v=+s.getAttribute('data-v');
-    sels.forEach(function(x,i){ x.style.color=i<v?'#9933FF':'#33364a'; });
-    trk('rating', v); document.getElementById('ratethanks').classList.remove('hidden'); sbox.style.pointerEvents='none'; }; });
+  sels.forEach(function(s){
+    s.onclick=function(){
+      var v=+s.getAttribute('data-v');
+      sels.forEach(function(x,i){ x.style.color = i<v ? '#C9A227' : '#2E2C28'; });
+      trk('rating', v);
+      document.getElementById('ratethanks').classList.remove('hidden');
+      sbox.style.pointerEvents='none';
+    };
+  });
 })();
-function resetRating(){ var sels=document.querySelectorAll('#stars span'); sels.forEach(function(x){ x.style.color='#33364a'; }); document.getElementById('stars').style.pointerEvents=''; document.getElementById('ratethanks').classList.add('hidden'); }
+function resetRating(){
+  document.querySelectorAll('#stars span').forEach(function(x){ x.style.color='#2E2C28'; });
+  document.getElementById('stars').style.pointerEvents='';
+  document.getElementById('ratethanks').classList.add('hidden');
+}
 function downloadCard(){ trk('card_download'); try{window.print();}catch(x){} }
-function again(){ trk('card_again'); resetRating(); document.getElementById('resultView').classList.add('hidden'); document.getElementById('wizard').classList.remove('hidden'); setStep(0); document.getElementById('superpower').value=''; document.querySelectorAll('input[type=radio]').forEach(function(x){x.checked=false;}); stepSeen={}; window.scrollTo(0,0); }
+function again(){
+  trk('card_again'); resetRating();
+  document.getElementById('resultView').classList.add('hidden');
+  document.getElementById('wizard').classList.remove('hidden');
+  setStep(0);
+  document.getElementById('superpower').value='';
+  document.querySelectorAll('input[type=radio]').forEach(function(x){x.checked=false;});
+  stepSeen={}; window.scrollTo(0,0);
+}
 trk('card_view');
 trackStep(0);
 </script>
