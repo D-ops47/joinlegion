@@ -236,12 +236,12 @@
    clicked (archetype / stage / goal / style), funnel step reached, star rating, and
    a per-browser dedupe flag. All values come from a fixed, known vocabulary defined
    in this file. No free text, no names, no IP-linked identifiers, no cookies. */
-var LEGION_COUNTER = 'https://legion-counter-production.up.railway.app';
+var LEGION_COUNTER = '';  // same-origin: /api/track on this Netlify site
 
 function trk(e,v){
   // Fire-and-forget anonymous beacon. Plain no-cors fetch (proven reliable); keepalive so it
   // still attempts on page teardown. sendBeacon was dropped by some browsers — use fetch only.
-  try{ fetch(LEGION_COUNTER+'/track?e='+encodeURIComponent(e)+((v===undefined)?'':'&v='+encodeURIComponent(v)), {mode:'no-cors', keepalive:true}); }catch(x){}
+  try{ fetch(LEGION_COUNTER+'/api/track?e='+encodeURIComponent(e)+((v===undefined)?'':'&v='+encodeURIComponent(v)), {keepalive:true}); }catch(x){}
 }
 
 /* ---- Real-count integrity -------------------------------------------------

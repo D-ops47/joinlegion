@@ -114,8 +114,8 @@
   </div>
 
   <script>
-    var LEGION_COUNTER='https://legion-counter-production.up.railway.app';
-    function trk(e,v){ try{ fetch(LEGION_COUNTER+'/track?e='+e+(v!==undefined?'&v='+v:''), {mode:'no-cors', keepalive:true}); }catch(x){} }
+    var LEGION_COUNTER='';  // same-origin: /api/track on this Netlify site
+    function trk(e,v){ try{ fetch(LEGION_COUNTER+'/api/track?e='+e+(v!==undefined?'&v='+v:''), {keepalive:true}); }catch(x){} }
     try{ trk('card_view'); }catch(x){}
     (function(){
       var sels=document.querySelectorAll('.stars span'), sbar=document.getElementById('stars'), sbox=document.getElementById('stars');

@@ -3,6 +3,15 @@
   command = ""
 
 # ---------------------------------------------------------------------------
+# Anonymous analytics runs as same-origin Netlify Functions at /api/*.
+# Each function declares its own route via the exported `config.path`, so no
+# redirect rules are needed. Storage is Netlify Blobs — no external service.
+# ---------------------------------------------------------------------------
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# ---------------------------------------------------------------------------
 # Security headers. GitHub Pages could not set these; Netlify can.
 # ---------------------------------------------------------------------------
 [[headers]]
@@ -26,10 +35,12 @@
 
     # Content Security Policy.
     # 'unsafe-inline' is required for script-src and style-src because the site
-    # uses inline <script> and <style> blocks. connect-src is limited to the
-    # Railway analytics counter. Tighten script-src to nonces if the inline
-    # scripts are ever moved to external files.
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://legion-counter-production.up.railway.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+    # uses inline <script> and <style> blocks. Tighten script-src to nonces if
+    # those are ever moved to external files.
+    #
+    # connect-src is now just 'self': analytics moved off Railway onto
+    # same-origin Netlify Functions, so no third-party endpoint needs allowing.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
 
 # Long-cache static assets.
 [[headers]]
@@ -46,7 +57,7 @@
   status = 301
   force = true
 
-# Serve the branded 404 page.
+# Serve the branded 404 page. MUST stay last so it never shadows /api/*.
 [[redirects]]
   from = "/*"
   to = "/404.html"

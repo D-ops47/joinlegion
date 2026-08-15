@@ -229,8 +229,8 @@
 
 <script>
 /* LEGION interactive mini-course prototype — offline, no PII. */
-var LEGION_COUNTER='https://legion-counter-production.up.railway.app';
-function trk(e){ try{ fetch(LEGION_COUNTER+'/track?e=course_'+e, {mode:'no-cors', keepalive:true}); }catch(x){} }
+var LEGION_COUNTER='';  // same-origin: /api/track on this Netlify site
+function trk(e){ try{ fetch(LEGION_COUNTER+'/api/track?e=course_'+e, {keepalive:true}); }catch(x){} }
 function st(){ try{ return JSON.parse(localStorage.legion_course_v1||'{}'); }catch(x){ return {}; } }
 function sv(s){ try{ localStorage.legion_course_v1=JSON.stringify(s); }catch(x){} }
 var state = st();

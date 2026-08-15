@@ -299,12 +299,21 @@
   tick(); setInterval(tick,1000);
 
   // ---- LIVE CARD COUNT ----
+  // Same-origin /api/stats (Netlify Function + Blobs). Edge-cached for 60s, so
+  // repeat polls are served by the CDN without invoking the function.
+  //
+  // Prefer card_created_unique: that counter fires once per browser, so the
+  // public number means distinct people rather than reloads and repeat builds.
+  // Falls back to card_created for continuity with older data.
   function loadCount(){
     try{
-      fetch('https://legion-counter-production.up.railway.app/stats')
+      fetch('/api/stats')
         .then(function(r){return r.json();})
         .then(function(d){
-          var c = (d && typeof d.card_created==='number') ? d.card_created : 0;
+          if(!d) return;
+          var uniq = (typeof d.card_created_unique==='number') ? d.card_created_unique : 0;
+          var total = (typeof d.card_created==='number') ? d.card_created : 0;
+          var c = uniq > 0 ? uniq : total;
           var num = document.getElementById('liveNum');
           var lbl = document.getElementById('liveLbl');
           if(c>0){ num.textContent = c; num.classList.remove('z'); lbl.textContent = (c===1?'Battle-Tested Card Built':'Battle-Tested Cards Built'); }
@@ -312,7 +321,13 @@
         .catch(function(){});
     }catch(x){}
   }
-  loadCount(); setInterval(loadCount, 30000);
+  loadCount();
+  // Poll every 60s, and pause entirely while the tab is hidden — an idle
+  // background tab polling forever is the main invocation-cost risk.
+  setInterval(function(){ if(!document.hidden) loadCount(); }, 60000);
+  document.addEventListener('visibilitychange', function(){
+    if(!document.hidden) loadCount();
+  });
 </script>
 </body>
 </html>
