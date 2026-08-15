@@ -22,57 +22,126 @@
     --metal:#E0E0E0; --metal2:#CCCCCC; --dust:#9aa0b5; --faint:#6b7080;
     --grad:linear-gradient(135deg,#8A2BE2,#9933FF);
     --numgrad:linear-gradient(180deg,#fff,#C084FC 70%,#9933FF);
+    --barh:64px;              /* desktop pinned bar height */
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html,body{height:100%;}
+  html{scroll-behavior:smooth;}
   body{font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:#fff;background:#000;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;position:relative;}
 
-  /* ARMORED FIGURE — left column */
-  .figure{position:fixed;top:0;bottom:0;left:0;width:42vw;max-width:780px;z-index:0;pointer-events:none;
+  /* ========== PINNED TOP BAR (frozen pane) ========== */
+  .topbar{position:fixed;top:0;left:0;right:0;z-index:60;height:var(--barh);
+    display:flex;align-items:center;gap:18px;padding:0 26px;
+    background:linear-gradient(180deg,rgba(6,4,12,.94),rgba(6,4,12,.72) 70%,rgba(6,4,12,0));
+    backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
+    border-bottom:1px solid rgba(153,51,255,.22);}
+  .topbar::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(153,51,255,.85),rgba(192,132,252,.55),transparent);}
+
+  /* live card-count badge (now lives in the pinned bar) */
+  .live{display:inline-flex;align-items:center;gap:10px;background:linear-gradient(180deg,#151327,#0c0e16);
+    border:1px solid rgba(153,51,255,.45);border-radius:999px;padding:8px 16px;font-family:'Oswald',sans-serif;
+    letter-spacing:.14em;text-transform:uppercase;font-size:12.5px;color:#e6d9ff;box-shadow:0 0 24px rgba(153,51,255,.22);
+    position:relative;overflow:hidden;flex:none;}
+  .live::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--purple3),transparent);}
+  .live .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 10px #22c55e;animation:blink 1.3s steps(2,start) infinite;flex:none;}
+  @keyframes blink{50%{opacity:.25;}}
+  .live .num{font-family:'Anton',sans-serif;font-weight:400;font-size:20px;line-height:1;min-width:22px;text-align:center;
+    background:linear-gradient(180deg,#fff,#C084FC 70%,#9933FF);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 12px rgba(153,51,255,.6));font-variant-numeric:tabular-nums;}
+  .live .lbl{color:#b9a8e0;font-size:11.5px;font-weight:600;white-space:nowrap;}
+  .live .z{display:none;}
+
+  /* LEGION AI wordmark, pinned to the right of the badge */
+  .brand{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.5em;text-transform:uppercase;
+    color:var(--purple3);font-weight:600;display:flex;align-items:center;gap:14px;white-space:nowrap;
+    text-shadow:0 0 18px rgba(153,51,255,.45);}
+  .brand::before{content:'';width:38px;height:1px;background:var(--purple);display:inline-block;flex:none;}
+
+  /* ========== BACKGROUND LAYERS ========== */
+  /* ARMORED FIGURE — left column. Image is cropped to helmet only. */
+  .figure{position:fixed;top:0;bottom:0;left:0;width:38vw;max-width:640px;z-index:0;pointer-events:none;
     background:url('assets/armorfigure.png') left center/cover no-repeat;
-    -webkit-mask-image:linear-gradient(to right, rgba(0,0,0,1) 78%, transparent 100%);
-    mask-image:linear-gradient(to right, rgba(0,0,0,1) 78%, transparent 100%);}
-  .figure::after{content:'';position:absolute;inset:0;box-shadow:inset 40px 0 70px -15px rgba(0,0,0,.95), inset -20px 0 50px -20px rgba(0,0,0,.7);}
-  .aura{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;filter:blur(90px);opacity:.38;}
+    -webkit-mask-image:linear-gradient(to right, rgba(0,0,0,1) 62%, rgba(0,0,0,.35) 86%, transparent 100%);
+    mask-image:linear-gradient(to right, rgba(0,0,0,1) 62%, rgba(0,0,0,.35) 86%, transparent 100%);}
+  .figure::after{content:'';position:absolute;inset:0;box-shadow:inset 40px 0 70px -15px rgba(0,0,0,.95), inset -30px 0 60px -20px rgba(0,0,0,.85);}
+
+  .aura{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;filter:blur(90px);opacity:.34;}
   .aura i{position:absolute;border-radius:50%;}
   .aura .p{width:46vw;height:46vw;background:#8A2BE2;bottom:-14%;left:34%;mix-blend-mode:screen;animation:drift 32s ease-in-out infinite;}
   .aura .q{width:38vw;height:38vw;background:#3b0a75;top:-10%;right:-8%;mix-blend-mode:screen;animation:drift 40s ease-in-out infinite reverse;}
   @keyframes drift{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(4vw,-3vh) scale(1.15);}66%{transform:translate(-3vw,3vh) scale(.9);}}
+
   .grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");}
+
   .scan{position:fixed;left:0;right:0;height:150px;z-index:1;pointer-events:none;mix-blend-mode:screen;background:linear-gradient(to bottom,transparent,rgba(153,51,255,.05) 45%,rgba(192,132,252,.12) 60%,transparent);animation:scanmove 9s linear infinite;}
   @keyframes scanmove{0%{top:-150px;}100%{top:113%;}}
-  .hud{position:fixed;inset:0;z-index:0;pointer-events:none;}
-  .hud i{position:absolute;width:30px;height:30px;border:2px solid rgba(153,51,255,.45);}
-  .hud .tl{top:16px;left:16px;border-right:none;border-bottom:none;}
-  .hud .tr{top:16px;right:16px;border-left:none;border-bottom:none;}
+
+  /* ========== SMOKE ROLLING OFF THE SCREEN ========== */
+  /* Turbulence-textured plumes that billow up and outward. The fractal-noise
+     mask breaks each blob into wispy tendrils so it reads as smoke, not glow. */
+  .smoke{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+  .smoke span{position:absolute;border-radius:46% 54% 50% 50%;mix-blend-mode:screen;
+    filter:blur(30px);opacity:0;will-change:transform,opacity;
+    /* fractal noise mask = wispy smoke texture instead of a clean circle */
+    -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='4' seed='7'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23s)'/%3E%3C/svg%3E");
+    mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012' numOctaves='4' seed='7'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23s)'/%3E%3C/svg%3E");
+    -webkit-mask-size:cover;mask-size:cover;}
+
+  /* bottom plumes — the "coming off the screen" pass */
+  .smoke .s1{width:62vw;height:62vw;left:-8vw;bottom:-34vw;
+    background:radial-gradient(circle at 50% 55%, rgba(206,170,255,.62), rgba(150,80,245,.30) 40%, rgba(90,40,180,.10) 62%, transparent 76%);
+    animation:plume 17s ease-in-out infinite;}
+  .smoke .s2{width:50vw;height:50vw;left:24vw;bottom:-30vw;
+    background:radial-gradient(circle at 50% 55%, rgba(232,214,255,.54), rgba(168,110,250,.26) 42%, rgba(110,50,200,.09) 64%, transparent 78%);
+    animation:plume 21s ease-in-out -7s infinite;}
+  .smoke .s3{width:56vw;height:56vw;right:-10vw;bottom:-32vw;
+    background:radial-gradient(circle at 50% 55%, rgba(190,150,255,.58), rgba(138,70,235,.28) 42%, rgba(80,35,170,.09) 64%, transparent 76%);
+    animation:plume 25s ease-in-out -14s infinite;}
+  /* mid-screen wisps for depth */
+  .smoke .s4{width:38vw;height:38vw;left:8vw;bottom:2vh;
+    background:radial-gradient(circle at 50% 50%, rgba(214,186,255,.30), rgba(150,90,240,.12) 48%, transparent 72%);
+    animation:wisp 29s ease-in-out -4s infinite;}
+  .smoke .s5{width:34vw;height:34vw;right:2vw;bottom:6vh;
+    background:radial-gradient(circle at 50% 50%, rgba(186,140,255,.26), rgba(120,60,220,.10) 50%, transparent 74%);
+    animation:wisp 33s ease-in-out -18s infinite;}
+
+  /* Plumes rise but fade out well before mid-screen so body copy stays crisp. */
+  @keyframes plume{
+    0%   {transform:translate3d(0,12vh,0) scale(.62) rotate(0deg);    opacity:0;}
+    14%  {opacity:.95;}
+    44%  {opacity:.60;}
+    72%  {opacity:.22;}
+    100% {transform:translate3d(4vw,-40vh,0) scale(1.95) rotate(26deg); opacity:0;}
+  }
+  @keyframes wisp{
+    0%   {transform:translate3d(0,8vh,0) scale(.7) rotate(0deg);       opacity:0;}
+    18%  {opacity:.55;}
+    52%  {opacity:.30;}
+    100% {transform:translate3d(-6vw,-34vh,0) scale(1.7) rotate(-18deg); opacity:0;}
+  }
+
+  /* haze pinned to the very bottom edge so smoke appears to spill out */
+  .smoke-edge{position:fixed;left:0;right:0;bottom:0;height:30vh;z-index:1;pointer-events:none;
+    background:linear-gradient(to top, rgba(168,110,250,.30), rgba(130,65,225,.12) 44%, transparent 100%);
+    mix-blend-mode:screen;filter:blur(26px);animation:breathe 11s ease-in-out infinite;}
+  @keyframes breathe{0%,100%{opacity:.62;transform:translateY(0) scaleY(1);}50%{opacity:.92;transform:translateY(-2vh) scaleY(1.14);}}
+
+  .hud{position:fixed;inset:0;z-index:2;pointer-events:none;}
+  .hud i{position:absolute;width:30px;height:30px;border:2px solid rgba(153,51,255,.32);}
   .hud .bl{bottom:16px;left:16px;border-right:none;border-top:none;}
   .hud .br{bottom:16px;right:16px;border-left:none;border-top:none;}
 
-  .stage{position:relative;z-index:2;margin-left:40vw;max-width:760px;min-height:100vh;padding:64px 46px 56px;display:flex;flex-direction:column;justify-content:center;text-align:left;}
+  /* ========== CONTENT ========== */
+  .stage{position:relative;z-index:3;margin-left:38vw;max-width:760px;min-height:100vh;
+    padding:calc(var(--barh) + 46px) 46px 64px;display:flex;flex-direction:column;justify-content:center;text-align:left;}
 
-  .eyebrow{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.5em;text-transform:uppercase;color:var(--purple3);font-weight:600;display:flex;align-items:center;gap:16px;animation:rise .9s .05s ease both;}
-  .eyebrow::before{content:'';width:44px;height:1px;background:var(--purple);display:inline-block;}
-
-  /* live card-count badge */
-  .live{display:inline-flex;align-items:center;gap:10px;margin:0 0 6px;background:linear-gradient(180deg,#151327,#0c0e16);
-    border:1px solid rgba(153,51,255,.45);border-radius:999px;padding:9px 18px;font-family:'Oswald',sans-serif;
-    letter-spacing:.14em;text-transform:uppercase;font-size:13px;color:#e6d9ff;box-shadow:0 0 24px rgba(153,51,255,.22);
-    animation:rise .9s .02s ease both;position:relative;overflow:hidden;}
-  .live::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--purple3),transparent);}
-  .live .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 10px #22c55e;animation:blink 1.3s steps(2,start) infinite;flex:none;}
-  .live .num{font-family:'Anton',sans-serif;font-weight:400;font-size:22px;line-height:1;color:#fff;min-width:34px;text-align:center;
-    background:linear-gradient(180deg,#fff,#C084FC 70%,#9933FF);-webkit-background-clip:text;background-clip:text;color:transparent;
-    filter:drop-shadow(0 0 12px rgba(153,51,255,.6));font-variant-numeric:tabular-nums;}
-  .live .lbl{color:#b9a8e0;font-size:12.5px;font-weight:600;}
-  .live .z{display:none;}
-
-  h1{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(56px,8vw,118px);line-height:.94;color:var(--metal);margin:32px 0 22px;animation:rise .9s .15s ease both;}
+  h1{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(56px,8vw,118px);line-height:.94;color:var(--metal);margin:0 0 22px;animation:rise .9s .15s ease both;}
   h1 .purple{color:transparent;background:linear-gradient(180deg,#E0E0E0 0%,#fff 40%,#C084FC 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 34px rgba(153,51,255,.55));}
 
   .sub{font-size:18px;line-height:1.6;color:var(--dust);max-width:560px;margin-bottom:26px;animation:rise .9s .25s ease both;}
   .sub b{color:#fff;}
 
-  /* benefits */
   .benefits{display:flex;flex-direction:column;gap:13px;margin-bottom:6px;animation:rise .9s .35s ease both;}
   .benefit{display:flex;align-items:flex-start;gap:14px;font-size:16.5px;line-height:1.45;color:#d6dbe8;}
   .benefit .mark{font-family:'Anton',sans-serif;font-size:20px;line-height:1;min-width:22px;padding-top:2px;}
@@ -83,7 +152,6 @@
   .benefit.yes .tx em{color:#fff;}
   .benefit .who{display:block;font-size:13px;color:var(--faint);margin-top:3px;}
 
-  /* countdown */
   .status{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--purple3);margin:40px 0 16px;animation:rise .9s .45s ease both;}
   .countdown{display:flex;gap:14px;justify-content:flex-start;align-items:flex-start;flex-wrap:wrap;animation:rise .9s .52s ease both;}
   .unit{min-width:82px;position:relative;}
@@ -94,7 +162,6 @@
   .colon{font-family:'Anton',sans-serif;font-size:38px;color:var(--purple);opacity:.7;padding-top:16px;animation:pulse 1s steps(2,start) infinite;}
   @keyframes pulse{to{opacity:.15;}}
 
-  /* CTA */
   .cta{display:inline-flex;align-items:center;justify-content:center;gap:12px;margin:42px auto 0 0;background:var(--grad);color:#fff;border-radius:12px;padding:20px 32px;font-size:22px;font-weight:700;text-decoration:none;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.02em;box-shadow:0 0 44px rgba(153,51,255,.55), 0 18px 50px rgba(139,43,226,.45);position:relative;overflow:hidden;transition:.2s;animation:rise .9s .6s ease both;border:none;cursor:pointer;}
   .cta::after{content:'';position:absolute;top:0;left:-130%;height:100%;width:55%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-20deg);animation:shine 3.4s 1.2s infinite;}
   @keyframes shine{0%{left:-130%;}55%,100%{left:150%;}}
@@ -106,31 +173,75 @@
   .privacy{font-size:12.5px;color:var(--faint);margin-top:22px;line-height:1.7;animation:rise .9s .76s ease both;}
   .privacy .hl{color:transparent;background:linear-gradient(180deg,#fff,#C084FC 70%,#9933FF);-webkit-background-clip:text;background-clip:text;}
 
-  footer{position:fixed;bottom:13px;right:22px;z-index:2;color:var(--faint);font-size:11px;letter-spacing:.05em;font-family:'Oswald',sans-serif;text-transform:uppercase;opacity:.7;}
+  footer{position:fixed;bottom:13px;right:22px;z-index:3;color:var(--faint);font-size:11px;letter-spacing:.05em;font-family:'Oswald',sans-serif;text-transform:uppercase;opacity:.7;}
 
   @keyframes rise{0%{opacity:0;transform:translateY(16px);}100%{opacity:1;transform:none;}}
 
-  @media(max-width:900px){.figure{width:40vw;opacity:.45;}.stage{margin-left:34vw;padding:48px 30px;}}
+  /* ========== RESPONSIVE ========== */
+  @media(max-width:900px){
+    .figure{width:36vw;opacity:.45;}
+    .stage{margin-left:32vw;padding:calc(var(--barh) + 34px) 30px 52px;}
+    .brand{letter-spacing:.34em;font-size:12px;}
+  }
   @media(max-width:640px){
-    .figure{width:100%;height:38vh;opacity:.28;top:0;bottom:auto;-webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,.5) 62%, transparent 100%);mask-image:linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,.5) 62%, transparent 100%);}
-    .stage{margin-left:0;padding:42vh 20px 40px;min-height:100vh;}
+    :root{--barh:56px;}
+    .topbar{padding:0 14px;gap:10px;}
+    .live{padding:7px 12px;gap:8px;}
+    .live .num{font-size:18px;}
+    .live .lbl{font-size:10px;letter-spacing:.08em;}
+    .brand{font-size:10.5px;letter-spacing:.22em;}
+    .brand::before{width:20px;}
+    .figure{width:100%;height:36vh;opacity:.26;top:var(--barh);bottom:auto;
+      -webkit-mask-image:linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,.5) 62%, transparent 100%);
+      mask-image:linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,.5) 62%, transparent 100%);}
+    .stage{margin-left:0;padding:calc(var(--barh) + 34vh) 20px 44px;min-height:100vh;}
     h1{font-size:clamp(46px,15vw,72px);}
     .countdown{gap:8px;}.unit{min-width:70px;}.num{font-size:38px;}.colon{font-size:26px;padding-top:12px;}
     .benefit{font-size:15px;}.sub{font-size:16px;}
+    /* lighter smoke on mobile for battery/perf */
+    .smoke .s4,.smoke .s5{display:none;}
+    .smoke span{filter:blur(38px);}
   }
-  @media (prefers-reduced-motion: reduce){.aura i,.scan,.colon,.cta::after{animation:none;}.eyebrow,h1,.sub,.benefits,.status,.countdown,.cta,.micro,.grad-line,.privacy{animation:none;}}
+  /* very narrow phones: let the label wrap out rather than crush the wordmark */
+  @media(max-width:420px){
+    .live .lbl{display:none;}
+    .live::after{content:'BUILT';color:#b9a8e0;font-size:10px;font-weight:600;letter-spacing:.1em;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .aura i,.scan,.colon,.cta::after,.smoke span,.smoke-edge,.live .dot{animation:none;}
+    h1,.sub,.benefits,.status,.countdown,.cta,.micro,.grad-line,.privacy{animation:none;}
+    html{scroll-behavior:auto;}
+  }
 </style>
 </head>
 <body>
+
+<!-- FROZEN PANE: stays put at every scroll position -->
+<header class="topbar">
+  <div class="live" id="liveBadge">
+    <span class="dot"></span>
+    <span class="num z" id="liveNum">0</span>
+    <span class="lbl" id="liveLbl">Battle-Tested Cards Built</span>
+  </div>
+  <div class="brand">LEGION AI</div>
+</header>
+
 <div class="figure"></div>
 <div class="aura"><i class="p"></i><i class="q"></i></div>
 <div class="grain"></div>
 <div class="scan"></div>
-<div class="hud"><i class="tl"></i><i class="tr"></i><i class="bl"></i><i class="br"></i></div>
+
+<!-- smoke rolling off the screen -->
+<div class="smoke" aria-hidden="true">
+  <span class="s1"></span><span class="s2"></span><span class="s3"></span>
+  <span class="s4"></span><span class="s5"></span>
+</div>
+<div class="smoke-edge" aria-hidden="true"></div>
+
+<div class="hud"><i class="bl"></i><i class="br"></i></div>
 
 <div class="stage">
-  <div class="live" id="liveBadge"><span class="dot"></span><span class="num z" id="liveNum">0</span><span class="lbl" id="liveLbl">Battle-Tested Cards Built</span></div>
-  <div class="eyebrow">LEGION AI</div>
   <h1>This changes<br><span class="purple">everything.</span></h1>
 
   <p class="sub">The old way gives you tools and walks away. <b>Legion gives you an operator.</b></p>
