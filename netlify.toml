@@ -49,15 +49,67 @@
     Cache-Control = "public, max-age=31536000, immutable"
 
 # ---------------------------------------------------------------------------
-# Redirects: consolidate www -> apex so there is one canonical origin.
+# Redirects. ORDER MATTERS: Netlify applies the first matching rule, so the
+# 404 catch-all must stay last and must never shadow /api/*.
 # ---------------------------------------------------------------------------
+
+# 1. Consolidate www -> apex so there is one canonical origin.
 [[redirects]]
   from = "https://www.joinlegion.ai/*"
   to = "https://joinlegion.ai/:splat"
   status = 301
   force = true
 
-# Serve the branded 404 page. MUST stay last so it never shadows /api/*.
+# 2. Clean URLs.
+#
+# Netlify's Pretty URLs already RESOLVED /card as well as /card.html, which meant
+# every page existed at two addresses returning 200 at the same time — duplicate
+# content with no canonical signal. These 301s make the extensionless form the
+# single real URL and permanently retire the .html form, so existing inbound
+# links, bookmarks and previously shared links still land correctly.
+#
+# force = true is required: without it the static file at /card.html wins and
+# the redirect never fires.
+[[redirects]]
+  from = "/index.html"
+  to = "/"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/card.html"
+  to = "/card"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/course.html"
+  to = "/course"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/avenues.html"
+  to = "/avenues"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/build-it-tutorial.html"
+  to = "/build-it-tutorial"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/battle-card-example.html"
+  to = "/battle-card-example"
+  status = 301
+  force = true
+
+# /404.html is deliberately NOT redirected — the 404 rule below serves it
+# directly, and rewriting it would break the branded error page.
+
+# 3. Serve the branded 404 page. MUST stay last so it never shadows /api/*.
 [[redirects]]
   from = "/*"
   to = "/404.html"
