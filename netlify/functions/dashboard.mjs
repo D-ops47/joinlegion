@@ -18,7 +18,7 @@ import {
   json,
   pct,
   readAll,
-} from './_counter.mjs';
+} from './lib/counter.mjs';
 
 export default async () => {
   const c = await readAll();

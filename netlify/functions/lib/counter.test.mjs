@@ -5,10 +5,10 @@
  * These run under plain node with no Netlify CLI and no network. Blob-backed
  * behaviour (increment/readAll) is verified against the deployed endpoints.
  *
- *   node netlify/functions/_counter.test.mjs
+ *   node netlify/functions/lib/counter.test.mjs
  */
 
-import { EVENTS, pct, rateOk, resolveKey } from './_counter.mjs';
+import { EVENTS, pct, rateOk, resolveKey } from './counter.mjs';
 
 let pass = 0;
 let fail = 0;

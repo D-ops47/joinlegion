@@ -5,7 +5,7 @@
  * headers are needed for browser beacons from joinlegion.ai.
  */
 
-import { increment, json, rateOk, resolveKey } from './_counter.mjs';
+import { increment, json, rateOk, resolveKey } from './lib/counter.mjs';
 
 export default async (req) => {
   const url = new URL(req.url);

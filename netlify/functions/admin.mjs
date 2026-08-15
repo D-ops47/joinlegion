@@ -11,7 +11,7 @@
  *   import             body: {"key": count, ...}  seed/merge counts (migration)
  */
 
-import { EVENTS, json, store } from './_counter.mjs';
+import { EVENTS, json, store } from './lib/counter.mjs';
 
 function authed(req) {
   const token = process.env.ADMIN_TOKEN;

@@ -10,7 +10,7 @@
  * the edge without invoking the function at all.
  */
 
-import { json, readAll } from './_counter.mjs';
+import { json, readAll } from './lib/counter.mjs';
 
 export default async () => {
   try {
