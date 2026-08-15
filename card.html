@@ -230,8 +230,12 @@
 
 <script>
 /* LEGION Battle-Tested Card. Deterministic, client-side ONLY. Superpower text never transmitted.
-   Beacons send event names + star counts only. */
-function trk(e,v){ try{ fetch('/track?e='+e+((v===undefined)?'':'&v='+v), {mode:'no-cors'}); }catch(x){} }
+   Beacons send event names + star counts only, to the anonymous Legion counter (no personal data). */
+function trk(e,v){
+  // Fire-and-forget anonymous beacon. Plain no-cors fetch (proven reliable); keepalive so it
+  // still attempts on page teardown. sendBeacon was dropped by some browsers — use fetch only.
+  try{ fetch('https://legion-counter-production.up.railway.app/track?e='+e+((v===undefined)?'':'&v='+v), {mode:'no-cors', keepalive:true}); }catch(x){}
+}
 
 var BATTLES = {
   leads:{a:'The Attractor', tag:'leads & follow-ups',
