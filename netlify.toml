@@ -1,0 +1,53 @@
+[build]
+  publish = "."
+  command = ""
+
+# ---------------------------------------------------------------------------
+# Security headers. GitHub Pages could not set these; Netlify can.
+# ---------------------------------------------------------------------------
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Force HTTPS for 2 years, cover subdomains, allow preload list submission.
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+
+    # Block MIME-type sniffing.
+    X-Content-Type-Options = "nosniff"
+
+    # Block framing (clickjacking). CSP frame-ancestors below is the modern
+    # equivalent; X-Frame-Options is kept for older browsers.
+    X-Frame-Options = "DENY"
+
+    # Trim referrer leakage on outbound links.
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+    # Deny access to device APIs the site does not use.
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), accelerometer=()"
+
+    # Content Security Policy.
+    # 'unsafe-inline' is required for script-src and style-src because the site
+    # uses inline <script> and <style> blocks. connect-src is limited to the
+    # Railway analytics counter. Tighten script-src to nonces if the inline
+    # scripts are ever moved to external files.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://legion-counter-production.up.railway.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+
+# Long-cache static assets.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# ---------------------------------------------------------------------------
+# Redirects: consolidate www -> apex so there is one canonical origin.
+# ---------------------------------------------------------------------------
+[[redirects]]
+  from = "https://www.joinlegion.ai/*"
+  to = "https://joinlegion.ai/:splat"
+  status = 301
+  force = true
+
+# Serve the branded 404 page.
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
