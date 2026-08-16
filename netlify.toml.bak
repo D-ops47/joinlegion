@@ -165,40 +165,32 @@
 #      (scopes came back empty), so its PWA install and offline behaviour
 #      silently stopped working.
 #
-# THE WORKING APPROACH — NOW LIVE. app.joinlegion.ai points at Lovable via DNS
-# (A 185.158.133.1 + verification TXT) and is connected in the Lovable project.
-# Certificate verified: CN=app.joinlegion.ai, issuer Google Trust Services WE1,
-# HTTP/2 200. The app serves from its own origin, so hydration matches, its
-# headers and service worker survive, and the address stays branded.
+# THE WORKING APPROACH is a subdomain: point app.joinlegion.ai at Lovable via
+# DNS (A 185.158.133.1 + verification TXT) and connect it in the Lovable
+# project. The app then serves from its own origin, so hydration matches, its
+# headers and service worker survive, and the address stays branded. Once that
+# is live, replace the holding page below with:
 #
-# /app and everything under it now 302 to the subdomain.
+#   [[redirects]]
+#     from = "/app"
+#     to = "https://app.joinlegion.ai"
+#     status = 302
+#     force = true
 #
-# 302 (not 301) is deliberate: a permanent redirect is cached by browsers
-# indefinitely, so if the app ever has to come down for maintenance or its
-# certificate lapses, returning visitors would keep being sent to a broken
-# address with no way for us to intervene. A 302 keeps that reversible — comment
-# these two rules out and the branded holding page at app.html takes over again.
+# Until then /app serves app.html, the branded holding page. (The countdown that
+# page used to carry was removed with the sitewide clock: Legion has launched,
+# and what the page is waiting on is a certificate, not a date.)
 #
-# Deep links are mapped with :splat so /app/login lands on
-# https://app.joinlegion.ai/login rather than dumping everyone on the app root.
+# Deep links under /app land on the gate rather than the branded 404, since
+# /app/login and similar are addresses people guess and paste.
 #
-# force = true is required on the bare /app rule: without it the static file at
-# app.html would win and the redirect would never fire.
-#
-# ORDER MATTERS. The bare /app rule must come FIRST. Netlify evaluates rules top
-# down and /app/* does not match /app, but listing the wildcard first previously
-# produced a loop via the clean-URL rules below.
-[[redirects]]
-  from = "/app"
-  to = "https://app.joinlegion.ai/"
-  status = 302
-  force = true
-
+# force is deliberately OFF: with force = true this rule also captured /app
+# itself and bounced it to /app.html, which the clean-URL rule below sent
+# straight back to /app — a redirect loop on the page's own address.
 [[redirects]]
   from = "/app/*"
-  to = "https://app.joinlegion.ai/:splat"
+  to = "/app.html"
   status = 302
-  force = true
 
 # 4. Clean URLs.
 #
