@@ -125,9 +125,13 @@
 # Until the app ships, deep links under /app land on the gate rather than the
 # branded 404 — /app/login and /app/anything are addresses people guess and
 # paste. Remove or replace this when the app owns its own sub-routes.
+#
+# The target is app.html, NOT /app: a redirect whose destination is itself a
+# clean-URL alias does not resolve here, and the request falls through to the
+# 404 catch-all instead. Pointing at the real file is what makes it work.
 [[redirects]]
   from = "/app/*"
-  to = "/app"
+  to = "/app.html"
   status = 302
   force = true
 
