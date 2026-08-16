@@ -182,17 +182,16 @@
   .lifetime::before{content:'';width:6px;height:6px;border-radius:50%;
     background:var(--purple);box-shadow:0 0 10px rgba(153,51,255,.9);}
 
-  .status{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--purple3);margin:40px 0 16px;animation:rise .9s .45s ease both;}
-  .countdown{display:flex;gap:14px;justify-content:flex-start;align-items:flex-start;flex-wrap:wrap;animation:rise .9s .52s ease both;}
-  .unit{min-width:82px;position:relative;}
-  .unit .box{position:relative;background:linear-gradient(180deg,#1c1c1c,#0c0c0c);border:1px solid rgba(153,51,255,.4);border-radius:12px;padding:20px 14px 18px;box-shadow:0 0 34px rgba(153,51,255,.22), inset 0 0 26px rgba(153,51,255,.10);overflow:hidden;}
-  .unit .box::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--purple),transparent);}
-  .num{font-family:'Anton',sans-serif;font-weight:400;font-size:52px;line-height:1;background:var(--numgrad);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 22px rgba(153,51,255,.55));font-variant-numeric:tabular-nums;}
-  .label{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--faint);margin-top:12px;}
-  .colon{font-family:'Anton',sans-serif;font-size:38px;color:var(--purple);opacity:.7;padding-top:16px;animation:pulse 1s steps(2,start) infinite;}
-  @keyframes pulse{to{opacity:.15;}}
+  /* .status / .countdown / .unit / .num / .label / .colon and @keyframes pulse
+     all belonged to the launch countdown and were removed with it. .num is NOT
+     reused elsewhere on this page — the live card counter in the top bar uses
+     .live .num, which is scoped separately and still defined above. */
 
-  .cta{display:inline-flex;align-items:center;justify-content:center;gap:12px;margin:42px auto 0 0;background:var(--grad);color:#fff;border-radius:12px;padding:20px 32px;font-size:22px;font-weight:700;text-decoration:none;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.02em;box-shadow:0 0 44px rgba(153,51,255,.55), 0 18px 50px rgba(139,43,226,.45);position:relative;overflow:hidden;transition:.2s;animation:rise .9s .6s ease both;border:none;cursor:pointer;}
+  /* Top margin raised from 42px to 58px: the countdown used to sit between the
+     lifetime badge and this button, so without that compensation the CTA rides
+     up against the badge and the hero looks crowded. Delay shortened too, since
+     there are now two fewer elements ahead of it in the entrance sequence. */
+  .cta{display:inline-flex;align-items:center;justify-content:center;gap:12px;margin:58px auto 0 0;background:var(--grad);color:#fff;border-radius:12px;padding:20px 32px;font-size:22px;font-weight:700;text-decoration:none;font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.02em;box-shadow:0 0 44px rgba(153,51,255,.55), 0 18px 50px rgba(139,43,226,.45);position:relative;overflow:hidden;transition:.2s;animation:rise .9s .6s ease both;border:none;cursor:pointer;}
   .cta::after{content:'';position:absolute;top:0;left:-130%;height:100%;width:55%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-20deg);animation:shine 3.4s 1.2s infinite;}
   @keyframes shine{0%{left:-130%;}55%,100%{left:150%;}}
   .cta:hover{transform:translateY(-2px);box-shadow:0 0 60px rgba(153,51,255,.75), 0 24px 60px rgba(139,43,226,.55);}
@@ -226,8 +225,10 @@
       mask-image:linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,.5) 62%, transparent 100%);}
     .stage{margin-left:0;padding:calc(var(--barh) + 34vh) 20px 44px;min-height:100vh;}
     h1{font-size:clamp(46px,15vw,72px);}
-    .countdown{gap:8px;}.unit{min-width:70px;}.num{font-size:38px;}.colon{font-size:26px;padding-top:12px;}
     .benefit{font-size:15px;}.sub{font-size:16px;}
+    /* Countdown gone, so the hero is shorter; pull the CTA in a little on
+       phones where vertical space is the scarce resource. */
+    .cta{margin-top:38px;padding:18px 26px;font-size:20px;}
     /* The badge is the widest single line in the block; drop the tracking and
        size a touch so it never forces a horizontal scroll on small screens. */
     .lifetime{font-size:10.5px;letter-spacing:.13em;padding:8px 12px;margin-top:16px;}
@@ -242,8 +243,8 @@
   }
 
   @media (prefers-reduced-motion: reduce){
-    .aura i,.scan,.colon,.cta::after,.smoke span,.smoke-edge,.live .dot{animation:none;}
-    h1,.sub,.benefits,.lifetime,.status,.countdown,.cta,.micro,.grad-line,.privacy{animation:none;}
+    .aura i,.scan,.cta::after,.smoke span,.smoke-edge,.live .dot{animation:none;}
+    h1,.sub,.benefits,.lifetime,.cta,.micro,.grad-line,.privacy{animation:none;}
     html{scroll-behavior:auto;}
   }
 </style>
@@ -301,16 +302,10 @@
        fact about access rather than a fourth feature. -->
   <div class="lifetime">Lifetime access for Mastery members</div>
 
-  <div class="status">Legion deploys in</div>
-  <div class="countdown" id="countdown">
-    <div class="unit"><div class="box"><div class="num" id="days">00</div></div><div class="label">Days</div></div>
-    <div class="colon">:</div>
-    <div class="unit"><div class="box"><div class="num" id="hours">00</div></div><div class="label">Hours</div></div>
-    <div class="colon">:</div>
-    <div class="unit"><div class="box"><div class="num" id="mins">00</div></div><div class="label">Minutes</div></div>
-    <div class="colon">:</div>
-    <div class="unit"><div class="box"><div class="num" id="secs">00</div></div><div class="label">Seconds</div></div>
-  </div>
+  <!-- The countdown lived here. Legion has launched, so it is gone entirely:
+       markup, CSS and timer. Nothing is left hidden or collapsed — the CTA now
+       follows the lifetime badge directly, and .cta's top margin was raised to
+       carry the spacing the countdown block used to provide. -->
 
   <button class="cta" onclick="location.href='/card'"><span>⚔️</span> Unleash Your Power <span>→</span></button>
   <div class="micro"><b>Four questions.</b> Name the thing that is actually costing you — walk away with the agent built to cover it.</div>
@@ -322,20 +317,10 @@
 <footer>LEGION © 2026</footer>
 
 <script>
-  var launch = new Date('2026-08-16T09:00:00');
-  function tick(){
-    var now = new Date(); var diff = Math.max(0, launch - now);
-    var s = Math.floor(diff/1000);
-    var d = Math.floor(s/86400); s -= d*86400;
-    var h = Math.floor(s/3600);  s -= h*3600;
-    var m = Math.floor(s/60);    s -= m*60;
-    var pad = function(n){return (n<10?'0':'')+n;};
-    document.getElementById('days').textContent=pad(d);
-    document.getElementById('hours').textContent=pad(h);
-    document.getElementById('mins').textContent=pad(m);
-    document.getElementById('secs').textContent=pad(s);
-  }
-  tick(); setInterval(tick,1000);
+  // The launch countdown and its setInterval tick were removed with the markup.
+  // Worth noting what that also fixes: the timer woke this page up every second
+  // for as long as it stayed open, which on a phone is a real battery cost for
+  // a number nobody was watching.
 
   // ---- LIVE CARD COUNT ----
   // Same-origin /api/stats (Netlify Function + Blobs). Edge-cached for 60s, so

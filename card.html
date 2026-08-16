@@ -483,38 +483,19 @@
   .tut-cta a:hover{transform:translateY(-2px);box-shadow:0 0 46px rgba(153,51,255,.68);}
   .tut-cta .tut-sub{font-size:11.5px;color:var(--faint);margin-top:13px;line-height:1.55;}
 
-  /* LOCKED CTA — the course is not finished, so this deliberately does not
-     route anywhere. Styled to read as "coming", not as a broken button: no
-     gradient fill, no hover lift, default cursor. */
-  .cta-locked{position:relative;display:inline-block;border-radius:12px;
-    padding:15px 30px;font-weight:700;font-size:14px;font-family:'Oswald',sans-serif;
-    text-transform:uppercase;letter-spacing:.06em;cursor:default;user-select:none;
-    color:var(--purple3);background:rgba(153,51,255,.07);
-    border:1px solid var(--pline);box-shadow:inset 0 0 26px rgba(153,51,255,.09);}
-  .cta-locked::after{content:'\00a0\00a0\1F512';font-size:12px;opacity:.75;}
+  /* THE APP BUTTON. Inherits .tut-cta a for fill, glow and hover lift; this rule
+     only adds what a launched primary action needs beyond that.
 
-  /* COUNTDOWN on the course CTA — same treatment as the homepage clock, scaled
-     down so it supports the button instead of competing with it. */
-  .cd-status{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.24em;
-    text-transform:uppercase;color:var(--purple3);font-weight:600;margin-bottom:11px;}
-  .cd-mini{display:flex;justify-content:center;align-items:flex-start;gap:9px;margin-bottom:17px;}
-  .cd-mini .u{display:flex;flex-direction:column;align-items:center;min-width:52px;
-    border:1px solid var(--pline);border-radius:9px;padding:9px 6px 7px;
-    background:rgba(153,51,255,.05);box-shadow:inset 0 0 18px rgba(153,51,255,.07);}
-  .cd-mini .n{font-family:'Anton',sans-serif;font-weight:400;font-size:25px;line-height:1;
-    background:var(--numgrad);-webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;}
-  .cd-mini .l{font-family:'Oswald',sans-serif;font-size:8.5px;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--faint);margin-top:5px;}
-  .cd-mini .c{font-family:'Anton',sans-serif;font-size:19px;color:var(--purple3);padding-top:11px;}
-  .cd-soon{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.2em;
-    text-transform:uppercase;color:var(--purple3);font-weight:600;margin-bottom:15px;}
-  @media(max-width:420px){
-    .cd-mini{gap:5px;}
-    .cd-mini .u{min-width:44px;padding:7px 4px 6px;}
-    .cd-mini .n{font-size:20px;}
-    .cd-mini .c{font-size:15px;padding-top:9px;}
-  }
+     min-height 52px and the flex centring are the deliberate part: this is the
+     one button on the page that leaves the site, it is frequently the last thing
+     tapped on a phone, and 52px clears the 44px touch-target floor with room for
+     a thumb. */
+  .applink{display:inline-flex !important;align-items:center;justify-content:center;
+    gap:10px;min-height:52px;padding:16px 34px !important;font-size:15px !important;}
+  .applink::after{content:'\2197';font-size:15px;opacity:.9;}
+
+  /* The countdown (.cd-status / .cd-mini / .cd-soon) and locked-CTA styles were
+     removed with the markup they served. */
 
   footer{position:relative;z-index:3;text-align:center;color:var(--faint);font-size:11px;
     letter-spacing:.05em;font-family:'Oswald',sans-serif;text-transform:uppercase;opacity:.7;
@@ -719,23 +700,25 @@
       <div class="is-steps" id="isSteps"></div>
       <div class="is-alt">Prefer a copy on file? <button class="is-link" onclick="printCard()">Save as PDF</button></div>
     </div>
+    <!-- THE HANDOFF. This is the only route from the card into the product, and
+         it is deliberately the last thing on the page: the visitor has just been
+         told what their agent is and what they will own, so this button is the
+         answer to "how do I get it".
+
+         The countdown and the locked course CTA that used to sit here are gone.
+         Legion has launched, so a clock and a padlock would both now be lying.
+
+         Real <a href>, not a scripted button: middle-click, long-press, "open in
+         new tab" and copy-link all work, and it still works if JS fails.
+         Cross-origin, so rel guards the referrer leak and target opens it
+         without destroying the card they just built — people do come back to
+         screenshot it. -->
     <div class="tut-cta no-print">
       <div class="tut-q">Now build the machine that covers your weak side.</div>
-      <div class="cd-status" id="cdStatus">Agent course deploys in</div>
-      <div class="cd-mini" id="cdMini">
-        <div class="u"><span class="n" id="cdD">00</span><span class="l">Days</span></div>
-        <span class="c">:</span>
-        <div class="u"><span class="n" id="cdH">00</span><span class="l">Hrs</span></div>
-        <span class="c">:</span>
-        <div class="u"><span class="n" id="cdM">00</span><span class="l">Min</span></div>
-        <span class="c">:</span>
-        <div class="u"><span class="n" id="cdS">00</span><span class="l">Sec</span></div>
-      </div>
-      <!-- DEACTIVATED: the course is unfinished, so this must not route anywhere.
-           Rendered as a <span>, not an <a> — there is no href to hand-edit, no
-           middle-click target and nothing for a crawler to follow. -->
-      <span class="cta-locked" aria-disabled="true">Unleash the power of AI</span>
-      <div class="tut-sub">Opens when the countdown hits zero.</div>
+      <a class="applink" href="https://app.joinlegion.ai/"
+         target="_blank" rel="noopener"
+         onclick="trk('app_open_from_card');">Open Legion</a>
+      <div class="tut-sub">Your workspace. Build the agent named above, step by step.</div>
     </div>
   </div>
 
@@ -1586,37 +1569,8 @@ function again(){
   document.querySelectorAll('input[type=radio]').forEach(function(x){x.checked=false;});
   stepSeen={}; window.scrollTo(0,0);
 }
-/* ---- Countdown on the course CTA ------------------------------------------
-   Same launch target as the homepage. When it expires the block switches to a
-   live state rather than sitting at 00:00:00:00. */
-(function(){
-  var launch=new Date('2026-08-16T09:00:00');
-  var mini=document.getElementById('cdMini'), status=document.getElementById('cdStatus');
-  if(!mini||!status) return;
-  var pad=function(n){ return (n<10?'0':'')+n; };
-  function tick(){
-    var diff=launch-new Date();
-    if(diff<=0){
-      /* The course is gated, so do NOT claim it is live. Show a neutral state
-         until the CTA is deliberately re-enabled. */
-      mini.style.display='none';
-      status.className='cd-soon';
-      status.textContent='Opening soon';
-      return true;
-    }
-    var s=Math.floor(diff/1000);
-    var d=Math.floor(s/86400); s-=d*86400;
-    var h=Math.floor(s/3600);  s-=h*3600;
-    var m=Math.floor(s/60);    s-=m*60;
-    document.getElementById('cdD').textContent=pad(d);
-    document.getElementById('cdH').textContent=pad(h);
-    document.getElementById('cdM').textContent=pad(m);
-    document.getElementById('cdS').textContent=pad(s);
-    return false;
-  }
-  if(tick()) return;
-  var iv=setInterval(function(){ if(tick()) clearInterval(iv); },1000);
-})();
+/* The course-CTA countdown and its 1s interval were removed with the markup.
+   The card now hands off to the live app instead of counting down to a gate. */
 
 trk('card_view');
 trackStep(0);

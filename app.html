@@ -118,22 +118,10 @@
     max-width:520px;margin:0 auto 30px;}
   .lede b{color:var(--metal);font-weight:600;}
 
-  /* Countdown — same visual language as the homepage bar. */
-  .cd-status{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3px;
-    text-transform:uppercase;color:var(--purple3);margin-bottom:10px;font-weight:500;}
-  .cd{display:flex;gap:10px;justify-content:center;align-items:flex-end;
-    margin-bottom:34px;flex-wrap:wrap;}
-  .cd .u{min-width:66px;padding:10px 6px 8px;border-radius:12px;
-    background:rgba(153,51,255,.07);border:1px solid rgba(153,51,255,.24);}
-  .cd .n{display:block;font-family:'Anton',sans-serif;font-size:32px;line-height:1;
-    background:var(--numgrad);-webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;}
-  .cd .l{display:block;font-family:'Oswald',sans-serif;font-size:9.5px;
-    letter-spacing:2px;text-transform:uppercase;color:var(--faint);margin-top:5px;}
-  .cd .c{font-family:'Anton',sans-serif;font-size:26px;color:rgba(153,51,255,.5);
-    padding-bottom:22px;}
-
-  .actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+  /* Countdown styles removed with the countdown. The 34px bottom margin the
+     .cd block used to contribute is replaced on .actions below, otherwise the
+     buttons sit hard against the lede. */
+  .actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:34px;}
   .btn{display:inline-block;text-decoration:none;
     font-family:'Oswald',sans-serif;font-weight:600;
     font-size:15px;letter-spacing:1.5px;text-transform:uppercase;
@@ -176,16 +164,10 @@
     code</b>.
   </p>
 
-  <div class="cd-status" id="cdStatus">Legion deploys in</div>
-  <div class="cd">
-    <div class="u"><span class="n" id="cdD">00</span><span class="l">Days</span></div>
-    <span class="c">:</span>
-    <div class="u"><span class="n" id="cdH">00</span><span class="l">Hrs</span></div>
-    <span class="c">:</span>
-    <div class="u"><span class="n" id="cdM">00</span><span class="l">Min</span></div>
-    <span class="c">:</span>
-    <div class="u"><span class="n" id="cdS">00</span><span class="l">Sec</span></div>
-  </div>
+  <!-- Countdown removed with the sitewide clock. This page is only ever seen if
+       the subdomain is unhealthy, so a countdown here would be doubly wrong:
+       Legion has launched, and the thing being waited on is a certificate, not
+       a date. -->
 
   <div class="actions" id="actions">
     <!-- Swapped for a real button by script when LIVE = true. -->
@@ -212,31 +194,20 @@
    how you ship a link to nowhere.
 ========================================================================== */
 var LIVE    = false;
-var APP_URL = '';   /* e.g. 'https://app.joinlegion.ai' or '/app/dashboard' */
+var APP_URL = '';   /* e.g. 'https://app.joinlegion.ai' */
 
-/* ---- Countdown ----------------------------------------------------------
-   Same target as the homepage and the card. If you change the launch date,
-   change it in all three or the site will contradict itself.
-   Local time, deliberately: "deploys in" should read the same to the person
-   looking at it wherever they are.
----------------------------------------------------------------------------- */
-var launch = new Date('2026-08-16T09:00:00');
+/* The countdown and its 1s interval were removed. Nothing on this page ticks
+   now, which is correct: it is a fallback, not an event.
 
-function pad(n){ return (n < 10 ? '0' : '') + n; }
+   NOTE ON WHEN THIS PAGE IS SEEN AT ALL. Once netlify.toml redirects /app to
+   https://app.joinlegion.ai, this file stops being served entirely. It is kept
+   as the deliberate fallback for exactly one situation: the subdomain being
+   unreachable (expired cert, DNS change, Lovable outage). In that case comment
+   out the redirect and /app serves this again — branded, with a working route
+   into the card — instead of a browser error page.
 
-function tick(){
-  var diff = Math.max(0, launch - new Date());
-  var s = Math.floor(diff / 1000);
-  var d = Math.floor(s / 86400); s -= d * 86400;
-  var h = Math.floor(s / 3600);  s -= h * 3600;
-  var m = Math.floor(s / 60);    s -= m * 60;
-  document.getElementById('cdD').textContent = pad(d);
-  document.getElementById('cdH').textContent = pad(h);
-  document.getElementById('cdM').textContent = pad(m);
-  document.getElementById('cdS').textContent = pad(s);
-}
-tick();
-setInterval(tick, 1000);
+   The LIVE / APP_URL switch below is retained for that same scenario: if the
+   subdomain is down but you still want a manual link out, set both. */
 
 /* ---- Open the door -----------------------------------------------------
    Only ever builds a real link when BOTH flags are set, so a half-finished
@@ -255,8 +226,6 @@ if (LIVE && APP_URL) {
   }
   chip.parentNode.replaceChild(a, chip);
 
-  document.getElementById('cdStatus').textContent = 'Live now';
-  document.querySelector('.cd').style.display = 'none';
   document.getElementById('note').textContent =
     'Signed in on this device? You will go straight to your agents.';
 }

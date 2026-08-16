@@ -201,6 +201,11 @@ function buildAllowlist() {
     // blending them into one meaningless total.
     'app_waitlist_view',
     'app_open',
+    // The handoff at the end of the card. Kept distinct from `app_open` (which
+    // is a direct hit on /app) because the difference is the whole funnel
+    // question: how many people finish the card and then actually cross into
+    // the product. Blending them would hide exactly the number worth knowing.
+    'app_open_from_card',
   ]);
 
   // The builder is 5 screens (superpower + 4 questions). Kept at 7 so any

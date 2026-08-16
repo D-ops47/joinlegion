@@ -1,4 +1,5 @@
-"""Verify the declared role always wins, the prompt is gone, and the countdown runs.
+"""Verify the declared role always wins, the prompt is gone, and the card hands
+off to the live app (the countdown it used to assert on has been removed).
 
 Drives the local card.html through every role x a spread of answer paths and
 asserts the tile the person tapped is always the top bar on the card.
@@ -138,26 +139,33 @@ with sync_playwright() as p:
     chk("builds after picking", pg.is_visible("#resultView"))
     chk("warning cleared", pg.is_hidden("#rolewarn"))
 
-    # ---- countdown ---------------------------------------------------------
-    print("\n--- countdown on course CTA ---")
-    vis = pg.is_visible("#cdMini") or pg.is_visible("#cdStatus")
-    chk("countdown block present", vis)
-    if pg.is_visible("#cdMini"):
-        d = pg.inner_text("#cdD")
-        pg.wait_for_timeout(1400)
-        s1 = pg.inner_text("#cdS")
-        pg.wait_for_timeout(1200)
-        s2 = pg.inner_text("#cdS")
-        chk("countdown is ticking", s1 != s2, f"{s1} == {s2}")
-        chk("days field is numeric", d.isdigit(), d)
-    else:
-        # The launch target has now passed. The course is still GATED, so the page
-        # deliberately shows a neutral "Opening soon" instead of claiming it is
-        # live. The old assertion demanded the word "live", which would only pass
-        # if the page advertised a product that is not actually open.
-        txt = pg.inner_text("#cdStatus").lower()
-        chk("expired state shows a neutral gated message",
-            "soon" in txt or "live" in txt, txt)
+    # ---- handoff into the app ---------------------------------------------
+    # Replaces the old countdown assertions. Legion has launched, so the card no
+    # longer counts down to a gate: it hands off to the live app. The countdown
+    # must be GONE, not merely expired — a stale clock left in the DOM was the
+    # exact failure mode this section now guards against.
+    print("\n--- handoff into the app ---")
+    chk("countdown fully removed",
+        not pg.query_selector("#cdMini, #cdStatus, .cd-mini, .cd-status"))
+    chk("locked course CTA removed", not pg.query_selector(".cta-locked"))
+
+    a = pg.query_selector(".applink")
+    chk("app button present", a is not None)
+    if a:
+        href = a.get_attribute("href") or ""
+        chk("points at the app subdomain",
+            href.startswith("https://app.joinlegion.ai"), href)
+        # A real anchor, not a scripted button: middle-click, long-press and
+        # "copy link" all have to work, and it must survive a JS failure.
+        chk("is a real anchor", a.evaluate("e => e.tagName") == "A")
+        chk("opens without discarding the card",
+            a.get_attribute("target") == "_blank")
+        chk("referrer guarded", "noopener" in (a.get_attribute("rel") or ""))
+        # This is frequently the last thing tapped on a phone, so it must clear
+        # the 44px touch-target floor.
+        box = a.bounding_box()
+        chk("touch target >= 44px", box and box["height"] >= 44,
+            str(round(box["height"], 1)) if box else "no box")
 
     print("\n--- privacy / errors ---")
     chk("canary never transmitted", not leaked, str(leaked[:2]))

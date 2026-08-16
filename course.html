@@ -114,28 +114,10 @@
   .gate-note{color:var(--faint);font-size:13px;margin:10px 0;}
   .gate-note a{color:var(--cyan);cursor:pointer;text-decoration:underline;}
   @media(max-width:560px){.hero h1{font-size:30px;}.flip{grid-template-columns:1fr;}.rail b{font-size:12px;}}
-  /* COUNTDOWN on the hero, above Start Day 1. Uses this page's own cyan/violet
-     palette so it reads as native rather than transplanted. */
-  .cd-status{font-size:10px;letter-spacing:.24em;text-transform:uppercase;
-    color:var(--cyan);font-weight:700;margin:18px 0 11px;}
-  .cd-mini{display:flex;justify-content:center;align-items:flex-start;gap:9px;margin-bottom:18px;}
-  .cd-mini .u{display:flex;flex-direction:column;align-items:center;min-width:54px;
-    border:1px solid var(--hair);border-radius:10px;padding:9px 6px 7px;
-    background:rgba(19,31,51,.6);box-shadow:inset 0 0 18px rgba(34,211,238,.07);}
-  .cd-mini .n{font-size:25px;line-height:1;font-weight:800;
-    background:var(--pulse);-webkit-background-clip:text;background-clip:text;
-    -webkit-text-fill-color:transparent;}
-  .cd-mini .l{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--faint);margin-top:5px;}
-  .cd-mini .c{font-size:19px;color:var(--violet);padding-top:11px;font-weight:800;}
-  .cd-soon{font-size:12px;letter-spacing:.2em;text-transform:uppercase;
-    color:var(--cyan);font-weight:700;margin:18px 0 14px;}
-  @media(max-width:420px){
-    .cd-mini{gap:5px;}
-    .cd-mini .u{min-width:45px;padding:7px 4px 6px;}
-    .cd-mini .n{font-size:20px;}
-    .cd-mini .c{font-size:15px;padding-top:9px;}
-  }
+  /* Countdown styles removed with the countdown markup. The clock used to sit
+     between the intro line and Start Day 1 and contributed ~36px of vertical
+     rhythm, so the button gets that back explicitly. */
+  .hero .startbtn{margin-top:26px;}
 </style>
 </head>
 <body>
@@ -157,16 +139,10 @@
     <h1>Deploy your first AI agent in <span class="g">4 short lessons.</span></h1>
     <p>About 12 minutes total. No account. Nothing leaves this machine.</p>
     <div class="chip" id="bluechip" style="display:none">Your agent blueprint is loaded — Day 2 is pre-filled for you.</div>
-    <div class="cd-status" id="cdStatus">Agent course deploys in</div>
-    <div class="cd-mini" id="cdMini">
-      <div class="u"><span class="n" id="cdD">00</span><span class="l">Days</span></div>
-      <span class="c">:</span>
-      <div class="u"><span class="n" id="cdH">00</span><span class="l">Hrs</span></div>
-      <span class="c">:</span>
-      <div class="u"><span class="n" id="cdM">00</span><span class="l">Min</span></div>
-      <span class="c">:</span>
-      <div class="u"><span class="n" id="cdS">00</span><span class="l">Sec</span></div>
-    </div>
+    <!-- Countdown removed with the sitewide clock. This page is still gated at
+         the edge (/course -> /card), so it is not publicly reachable; the clock
+         is removed anyway so the file cannot contradict the launched site if the
+         gate is ever lifted. -->
     <div><button class="startbtn" onclick="go(1)">Start Day 1</button></div>
   </section>
 
@@ -336,36 +312,7 @@ function copyPrompt(id,btn){ var t=document.getElementById(id).childNodes[0].tex
   function flip(b){ b.textContent='Copied ✓'; setTimeout(function(){b.textContent='Copy';},1800); } }
 paint();
 
-/* ---- Countdown above Start Day 1 -------------------------------------------
-   Same launch target as the homepage and the battle card. When it expires the
-   clock is replaced by a live state rather than sitting on zeros. */
-(function(){
-  var launch=new Date('2026-08-16T09:00:00');
-  var mini=document.getElementById('cdMini'), status=document.getElementById('cdStatus');
-  if(!mini||!status) return;
-  var pad=function(n){ return (n<10?'0':'')+n; };
-  function tick(){
-    var diff=launch-new Date();
-    if(diff<=0){
-      /* Not yet published, so avoid claiming it is live. */
-      mini.style.display='none';
-      status.className='cd-soon';
-      status.textContent='Opening soon';
-      return true;
-    }
-    var s=Math.floor(diff/1000);
-    var d=Math.floor(s/86400); s-=d*86400;
-    var h=Math.floor(s/3600);  s-=h*3600;
-    var m=Math.floor(s/60);    s-=m*60;
-    document.getElementById('cdD').textContent=pad(d);
-    document.getElementById('cdH').textContent=pad(h);
-    document.getElementById('cdM').textContent=pad(m);
-    document.getElementById('cdS').textContent=pad(s);
-    return false;
-  }
-  if(tick()) return;
-  var iv=setInterval(function(){ if(tick()) clearInterval(iv); },1000);
-})();
+/* The hero countdown and its 1s interval were removed with the markup. */
 </script>
 </body>
 </html>
