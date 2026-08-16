@@ -48,14 +48,22 @@
 
 # Long-cache static assets.
 #
-# Scoped to /assets/* on THIS site. The proxied app's own bundles live under
-# /app/assets/* and are intentionally NOT matched here: Lovable fingerprints
-# its filenames and sets its own cache headers, and a year-long immutable cache
-# applied by us would keep serving a stale build after the user hits Publish.
+# Scoped to /assets/* on THIS site only. The app is a separate origin
+# (app.joinlegion.ai) and sets its own cache headers, so nothing here can pin a
+# stale app build.
 [[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Netlify serves .webmanifest as application/octet-stream. Chrome tolerates that
+# today, but the spec type is application/manifest+json and Safari has been
+# stricter about it historically. Set it explicitly so "Add to Home Screen"
+# does not depend on a browser being lenient.
+[[headers]]
+  for = "/site.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json; charset=utf-8"
 
 # ---------------------------------------------------------------------------
 # Redirects. ORDER MATTERS: Netlify applies the first matching rule, so the
@@ -169,7 +177,9 @@
 #     status = 302
 #     force = true
 #
-# Until then /app serves app.html, the branded holding page with a countdown.
+# Until then /app serves app.html, the branded holding page. (The countdown that
+# page used to carry was removed with the sitewide clock: Legion has launched,
+# and what the page is waiting on is a certificate, not a date.)
 #
 # Deep links under /app land on the gate rather than the branded 404, since
 # /app/login and similar are addresses people guess and paste.
@@ -204,10 +214,11 @@
   status = 301
   force = true
 
-# /app.html is the holding page that /app served before the app shipped. The
-# file is deliberately KEPT in the repo: if the app ever has to come down for
-# maintenance, commenting out the proxy above restores a branded page with a
-# countdown instead of leaving visitors on a Netlify error.
+# /app.html is the holding page that /app serves until the subdomain is healthy.
+# The file is deliberately KEPT in the repo: if the app ever has to come down for
+# maintenance, or its certificate lapses, commenting out the redirect above
+# restores a branded page with a route into the card instead of leaving visitors
+# on a browser error.
 #
 # This 301 retires its .html address the same way every other page's is
 # retired. Target is /app, which currently serves the holding page and will
