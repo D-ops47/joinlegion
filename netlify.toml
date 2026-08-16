@@ -40,7 +40,11 @@
     #
     # connect-src is now just 'self': analytics moved off Railway onto
     # same-origin Netlify Functions, so no third-party endpoint needs allowing.
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+    #
+    # media-src is stated explicitly for the agent clips. Without it they would
+    # load anyway by falling back to default-src, but relying on a fallback is
+    # fragile: any future narrowing of default-src would silently kill playback.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
 
 # Long-cache static assets.
 [[headers]]

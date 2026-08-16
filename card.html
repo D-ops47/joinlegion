@@ -692,9 +692,15 @@ function firstBuildOnThisBrowser(){
      - prefers-reduced-motion: the poster is shown and the video never plays
 ---------------------------------------------------------------------------- */
 function videoBlock(material){
-  /* DISABLED: clip ships in the next deploy. Returning nothing keeps the card
-     complete without a placeholder or a broken frame in production. */
-  return '';
+  var base='/assets/agent/agent_'+material;
+  return '<div class="vidwrap">'+
+    '<video class="agentvid" id="agentvid" muted loop playsinline preload="none" '+
+      'poster="'+base+'_poster.jpg" aria-label="An agent updating records and writing a report on its own">'+
+      '<source src="'+base+'.webm" type="video/webm">'+
+      '<source src="'+base+'.mp4" type="video/mp4">'+
+    '</video>'+
+    '<div class="vidcap">No one is touching the keyboard. That is the whole point.</div>'+
+  '</div>';
 }
 
 function armVideo(){
