@@ -252,15 +252,15 @@ export default async () => {
       share_pct: pct(c[`value_${k}`] || 0, valueTotal),
     })).sort((a, b) => b.count - a.count),
     // headline: share who said it showed them something new
-    told_them_something_new_pct: pct(c.value_yes || 0, valueTotal),
+    would_use_it_pct: pct(c.value_yes || 0, valueTotal),
     by_role: ROLES.map((r) => {
       const tot = VALUE_ANSWERS.reduce((t, k) => t + (c[`value_${k}_${r}`] || 0), 0);
       return {
         key: r,
         role: ROLE_LABELS[r],
         responses: tot,
-        new_insight_pct: pct(c[`value_yes_${r}`] || 0, tot),
-        already_knew_pct: pct(c[`value_knew_${r}`] || 0, tot),
+        would_use_pct: pct(c[`value_yes_${r}`] || 0, tot),
+        maybe_pct: pct(c[`value_knew_${r}`] || 0, tot),
         not_useful_pct: pct(c[`value_no_${r}`] || 0, tot),
       };
     }).filter((x) => x.responses > 0),

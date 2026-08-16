@@ -31,12 +31,14 @@ const STORE_NAME = 'legion-counter';
 
 export const ROLES = ['artist', 'operator', 'entrepreneur'];
 
-// Answers to the post-rating value question.
+// Answers to the post-rating intent question: "Would you actually use an agent
+// like this?". Keys are unchanged so historical data stays comparable; only the
+// meaning of the labels moved, from "was this insightful" to "would you use it".
 export const VALUE_ANSWERS = ['yes', 'knew', 'no'];
 export const VALUE_LABELS = {
-  yes: 'Showed them something new',
-  knew: 'Already knew it',
-  no: 'Not useful',
+  yes: 'Would use it — build it',
+  knew: 'Maybe — wants to be shown how',
+  no: 'Not for them',
 };
 
 // NOTE: the internal keys stay artist/operator/entrepreneur so historical data

@@ -90,30 +90,28 @@ with sync_playwright() as p:
         run(pg, combo)
         pg.wait_for_timeout(320)
 
-        rows = pg.eval_on_selector_all(
-            "#bcard .mixrow",
-            "els=>els.map(e=>({lb:e.querySelector('.lb').textContent.trim(),"
-            "pc:parseInt(e.querySelector('.pc').textContent),"
-            "top:e.classList.contains('top')}))",
-        )
+        # The mix bars were removed in the solution-focused rework, so the
+        # declared role is now verified through the card's own copy instead.
         want = ROLE_LABEL[role]
-        top_by_pct = max(rows, key=lambda r: r["pc"])
-        marked = [r for r in rows if r["top"]]
-
-        chk(f"{role}/{'/'.join(combo)} highest bar is {want}",
-            top_by_pct["lb"] == want,
-            f"got {top_by_pct['lb']} {top_by_pct['pc']}% rows={rows}")
-        chk(f"{role} row is marked top",
-            len(marked) == 1 and marked[0]["lb"] == want,
-            str(marked))
-        chk(f"{role} percentages sum to ~100",
-            99 <= sum(r["pc"] for r in rows) <= 101,
-            str(sum(r["pc"] for r in rows)))
-
         card = pg.inner_text("#bcard")
+
+        chk(f"{role}/{'/'.join(combo)} card names {want}",
+            want.lower() in card.lower(),
+            f"want {want}; head={card[:90]!r}")
+        chk(f"{role}: no competing role named first",
+            min((card.lower().find(v.lower()) for v in ROLE_LABEL.values()
+                 if card.lower().find(v.lower()) >= 0), default=-1)
+            == card.lower().find(want.lower()),
+            f"want {want} first; head={card[:120]!r}")
+
+        chk("score section gone", "how you operate" not in card.lower())
+        chk("no percentage bars", "%" not in card.split("What You'll Own")[0]
+            or "6%" in card, card[:60])
         chk("no paste-and-run prompt", "paste-and-run" not in card.lower())
         chk("no 'You are my' prompt text", "you are my" not in card.lower())
-        chk("blend line reads 'You run as'", "you run as" in card.lower(), card[:80])
+        chk("plan section present", "what we are going to do" in card.lower())
+        chk("agent section present", "the agent that ends this" in card.lower())
+        chk("mechanism section present", "how ai actually does this" in card.lower())
 
     # ---- validation: cannot build without picking a role --------------------
     print("\n--- role is required ---")

@@ -349,12 +349,23 @@
   .mech{border-left:2px solid var(--purple2);padding-left:14px;font-size:14.5px;
     line-height:1.68;color:var(--bone);}
 
+  /* The agent-at-work clip. 16:9 box reserved up front so the card never
+     reflows when the video loads. */
+  .vidwrap{margin-top:15px;}
+  .agentvid{display:block;width:100%;aspect-ratio:16/9;border-radius:11px;
+    border:1px solid var(--pline);background:#05040a;object-fit:cover;
+    box-shadow:0 14px 40px rgba(0,0,0,.5), 0 0 34px rgba(153,51,255,.10);}
+  .vidcap{margin-top:8px;font-family:'Oswald',sans-serif;font-size:10px;
+    letter-spacing:.17em;text-transform:uppercase;color:var(--faint);text-align:center;}
+  @media print{ .vidwrap{display:none;} }
+
   .actbar{display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:center;
     border:1px solid var(--pline-soft);border-radius:12px;padding:17px 19px;margin-top:16px;
     background:var(--panel);}
   .stars{font-size:24px;line-height:1;letter-spacing:5px;cursor:pointer;color:#2b2740;user-select:none;}
   .stars span:hover{color:var(--purple3);}
-  .rateask{font-size:12.5px;font-weight:600;color:#d6dbe8;margin-bottom:6px;}
+  .rateask{font-size:13px;font-weight:600;color:#eef0f6;margin-bottom:3px;line-height:1.4;}
+  .ratesub{font-size:11.5px;color:var(--dust);margin-bottom:7px;}
   .ratethanks{font-size:12px;color:var(--purple3);margin-top:6px;}
   .valueask{margin-top:13px;padding-top:12px;border-top:1px solid var(--pline-soft);}
   .valueask .vq{font-size:12.5px;color:#d6dbe8;font-weight:600;margin-bottom:8px;}
@@ -443,7 +454,6 @@
     .triad div{padding:14px 7px 12px;}
     .triad .r{font-size:11.5px;letter-spacing:.06em;}
     .triad .s{font-size:9px;letter-spacing:.14em;}
-    .mixrow .lb{width:88px;flex:0 0 88px;font-size:9.5px;}
     .q-label{font-size:21px;}
     /* lighter smoke on mobile for battery/perf, same call as the landing page */
     .smoke span{filter:blur(38px);}
@@ -591,17 +601,20 @@
     <div class="bcard" id="bcard"></div>
     <div class="actbar no-print">
       <div class="rate">
-        <div class="rateask">Was this valuable? Rate us:</div>
+        <!-- Reworded: the old copy asked people to grade us. This asks them to price
+             the outcome, which is better signal for the build queue and a softer ask. -->
+        <div class="rateask">If we built this agent for you, would it change your week?</div>
+        <div class="ratesub">Rate how valuable that would be:</div>
         <div class="stars" id="stars"><span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span></div>
-        <div class="ratethanks hidden" id="ratethanks">Thanks — anonymous, nothing collected.</div>
+        <div class="ratethanks hidden" id="ratethanks">Logged — anonymous, nothing collected.</div>
         <!-- Second question, only shown after they rate: did it change anything?
              This is the actual value signal; stars alone measure satisfaction. -->
         <div class="valueask hidden" id="valueask">
-          <div class="vq">Did this show you something you hadn't seen?</div>
+          <div class="vq">Would you actually use an agent like this?</div>
           <div class="vbtns">
-            <button class="vb" onclick="rateValue('yes')">Yes — that's useful</button>
-            <button class="vb" onclick="rateValue('knew')">I already knew it</button>
-            <button class="vb" onclick="rateValue('no')">Not really</button>
+            <button class="vb" onclick="rateValue('yes')">Yes — build it</button>
+            <button class="vb" onclick="rateValue('knew')">Maybe — show me how</button>
+            <button class="vb" onclick="rateValue('no')">Not for me</button>
           </div>
         </div>
         <div class="ratethanks hidden" id="valuethanks">Noted — thank you.</div>
@@ -665,6 +678,43 @@ function firstBuildOnThisBrowser(){
     localStorage.setItem('legion_built','1');
     return true;
   }catch(x){ return true; }
+}
+
+/* ---- The agent-at-work clip --------------------------------------------------
+   One clip per handover material, so the footage shows the viewer's own work
+   rather than generic B-roll. Built as recorded UI animation, not AI video, so
+   the on-screen text stays legible at any size.
+
+   Loading rules that matter:
+     - preload="none" plus a poster, so nothing downloads until it is scrolled to
+     - IntersectionObserver starts playback only when visible, and pauses when not
+     - muted + playsinline, or iOS refuses to autoplay
+     - prefers-reduced-motion: the poster is shown and the video never plays
+---------------------------------------------------------------------------- */
+function videoBlock(material){
+  /* DISABLED: clip ships in the next deploy. Returning nothing keeps the card
+     complete without a placeholder or a broken frame in production. */
+  return '';
+}
+
+function armVideo(){
+  var v=document.getElementById('agentvid');
+  if(!v) return;
+
+  /* Respect reduced-motion: leave the poster up and never play. */
+  var still=false;
+  try{ still=window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(x){}
+  if(still) return;
+
+  if(!('IntersectionObserver' in window)){ try{ v.play(); }catch(x){} return; }
+
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){ v.play().catch(function(){}); }
+      else{ v.pause(); }
+    });
+  },{threshold:0.35});
+  io.observe(v);
 }
 
 /* ---- The intake model -------------------------------------------------------
@@ -1081,10 +1131,11 @@ function build(){
   var AN=agentName(ans);
   var superquote='"'+esc(sp)+'"';
 
-  /* The header line now states the commitment rather than the role blend. The
-     score section it used to introduce has been removed. */
-  var blend='We are going to end <b>'+S.short+'</b> by building the one thing that '+
-            'covers it while you are busy.';
+  /* The score section is gone, but the declared role still has to appear or
+     picking a tile would have no visible effect. It now leads the commitment
+     line instead of introducing a set of bars. */
+  var blend='You run as <b>'+R.name+'</b>. We are going to end <b>'+S.short+
+            '</b> by building the one thing that covers it while you are busy.';
 
   /* The three plan steps, each composed from a different answer. */
   var P1=STEP1[ans.q2], P2=STEP2[ans.q3], P3=STEP3[ans.q4];
@@ -1133,7 +1184,7 @@ function build(){
      do not convince; showing the work does. */
   h+='<div class="sec"><div class="h">How AI Actually Does This</div>'+
      '<div class="mech">'+MECH[ans.q3]+'</div>'+
-     VIDEO_BLOCK+
+     videoBlock(ans.q3)+
      '<p style="margin-top:13px;">We teach you to build it in plain language. No code, no integrations to wire, '+
      'nothing to install. You describe the job once and it holds the job from then on.</p></div>';
 
@@ -1156,6 +1207,7 @@ function build(){
   document.getElementById('bcard').innerHTML=h;
   document.getElementById('wizard').classList.add('hidden');
   document.getElementById('resultView').classList.remove('hidden');
+  armVideo();
   lastPrimary=primary;
   lastAgent=ans.q3+'_'+ans.q2;
 
