@@ -8,10 +8,13 @@
    the person's answers at runtime and the counter is live, so caching HTML
    would serve stale numbers and stale copy after a deploy. We therefore:
      - never cache HTML or /api/* — always straight to the network
-     - cache-first only the immutable assets (icons, the agent clips, posters)
+     - cache-first only the immutable assets (icons and the agent clips)
    Everything else falls through to the network untouched. */
 
-const CACHE = 'legion-v1';
+/* Bumped to v2 when the agent clips changed from mp4/webm to animated WebP.
+   The activate handler deletes every cache whose name is not the current one,
+   so bumping this is what evicts the old video files from returning visitors. */
+const CACHE = 'legion-v2';
 
 /* Static, content-stable files. Safe to serve from cache because they change
    only when their filename changes. */
@@ -64,7 +67,8 @@ self.addEventListener('fetch', (e) => {
     caches.match(req).then((hit) => {
       if (hit) return hit;
       return fetch(req).then((res) => {
-        /* Range requests (video seeking) return 206 and cannot be cached. */
+        /* Only complete 200s are cacheable. Byte-range responses are 206 and
+           must be passed through untouched. */
         if (res && res.status === 200 && res.type === 'basic') {
           const copy = res.clone();
           caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});

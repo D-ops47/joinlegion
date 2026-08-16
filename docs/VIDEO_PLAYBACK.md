@@ -1,79 +1,96 @@
-# Why the demo does not render — root cause
+# The agent demo clip: why it is an image, not a video
 
-## Confirmed NOT the problem
+## Do not turn this back into a `<video>`
 
-| Suspect | Result |
-|---|---|
-| Files missing / 404 | All 200, correct MIME types, `accept-ranges: bytes`, 206 on range requests |
-| Codec unsupported | H.264 High profile, level 3.1, yuv420p, avc1 — plays everywhere; faststart confirmed (`moov` before `mdat`) |
-| Service worker breaking media | Tested cold + 2 warm runs with SW controlling — plays every time |
-| Safari / WebKit | Plays (readyState 4, time advancing) |
-| iPhone profile | Plays, real frame painted (10,287 unique colours) |
-| Stale edge cache | `card` returns `max-age=0, must-revalidate`; live HTML contains the video code |
-| Missing poster | Poster present and loads (200) in every case |
+The clip on the card is an **animated WebP served in an `<img>` tag**. That is a
+deliberate decision made after two failed attempts with `<video>`. If you are
+tempted to switch it back for file-size reasons, read this first.
 
-## THE ACTUAL BUG — IntersectionObserver threshold 0.35
+## Attempt 1 — `<video>` with IntersectionObserver threshold 0.35
 
-`armVideo()` uses `{threshold:0.35}`. Playback only ever starts when **35% or
-more of the video is inside the viewport at one moment.**
-
-Measured, scrolling like a human (not `scroll_into_view_if_needed`, which
-centres the element and hides the bug):
+Playback started only when 35% of the clip was inside the viewport at one
+moment. On a short viewport that is never satisfied, so it never started.
+Measured, scrolling the way a person does rather than centring the element:
 
 ```
-phone portrait  390x844   visible_ratio 0.43   t=3.39  PLAYS
-phone landscape 844x390   visible_ratio 0      t=0.58  plays late
-short viewport  390x420   visible_ratio 0      t=0     NEVER STARTS
-tiny viewport   390x300   visible_ratio 0      t=0     NEVER STARTS
+phone portrait  390x844   PLAYS
+phone landscape 844x390   plays late
+short viewport  390x420   NEVER STARTS
+tiny viewport   390x300   NEVER STARTS
 ```
 
-On a short viewport the clip **never starts at all**. The user sees a static
-poster image and concludes the demo is broken. Every one of my earlier passing
-tests used `scroll_into_view_if_needed()`, which centres the element perfectly
-and trivially satisfies the threshold — that is why this never surfaced.
+Real causes of a short viewport: landscape, a browser window that is not full
+height, a zoomed page, and in-app browsers (Instagram, LinkedIn, iMessage) whose
+chrome eats vertical space.
 
-Real-world triggers for a short effective viewport:
-- Landscape on a phone
-- Browser chrome + keyboard still open
-- Desktop window resized short
-- Zoomed in (a zoomed page shrinks the effective viewport in CSS pixels)
-- In-app browsers (Instagram, LinkedIn, iMessage preview) with heavy chrome
+Every test passed at the time, because they all used
+`scroll_into_view_if_needed()`, which centres the element and satisfies any
+threshold automatically. **That is the trap.**
 
-## Secondary bug — reduced motion has no visible explanation
+## Attempt 2 — threshold 0.01, tap-to-play, visible play badge
 
-With `prefers-reduced-motion: reduce`, `armVideo()` returns early and the clip
-**never plays, by design**. Confirmed:
+Fixed the threshold, added a timed fallback, made the frame tappable and showed
+a play badge whenever it was not running. Passed 8/8 across every viewport and
+both engines, on production.
+
+**Still static on the user's real device.** The cause was `prefers-reduced-motion`,
+which **iOS turns on automatically in Low Power Mode**. The code respected that
+preference by not autoplaying, which is normally correct — but it meant a phone
+on low battery showed a frozen frame. And because JavaScript was starting
+playback via `play()` rather than the markup carrying `autoplay`, WebKit treated
+it as a programmatic request, which Low Power Mode refuses outright.
+
+The deeper problem: **video autoplay is refusable and the refusal cannot be
+detected or overridden.** Low Power Mode, Android battery saver, Data Saver,
+per-site autoplay settings and MDM policy all block it. Any `<video>` solution is
+static for some users some of the time.
+
+## The current approach
+
+An animated WebP is an image. Browsers animate images **unconditionally**:
+
+| | `<video autoplay>` | animated `<img>` |
+|---|---|---|
+| iOS Low Power Mode | blocked | animates |
+| Android battery saver | blocked | animates |
+| Data Saver | blocked | animates |
+| Per-site autoplay setting | blocked | animates |
+| Needs JavaScript | yes | **no** |
+| Can be paused by the user | yes | no |
+| File size per clip | ~335 KB | ~535 KB |
+
+There is no JavaScript involved at all — the clip loops even if every script on
+the page fails. `loading="lazy"` keeps it off the wire until it is scrolled near,
+which is what the IntersectionObserver used to do, natively.
+
+The extra ~200 KB per clip is the price of something that cannot fail to play.
+One clip loads per card, so that is the total cost.
+
+## Reduced motion
+
+The clip deliberately **does not** honour `prefers-reduced-motion`. That looks
+wrong until you know that iOS sets it automatically in Low Power Mode, which is
+exactly the state that produced the original bug. Gating on it recreates the
+failure it was meant to fix. This was an explicit product decision: the demo must
+always loop.
+
+## Re-encoding
 
 ```
-webkit   reduced-motion REDUCE   rs=0 paused=True t=0
-chromium reduced-motion REDUCE   rs=0 paused=True t=0
+python3 scripts/agentscene/make_webp.py            # all five
+python3 scripts/agentscene/make_webp.py tracking   # one
 ```
 
-The poster does show, so it is not blank — but the user is looking at a still
-image captioned "AI demo. No one is touching the keyboard." with no way to play
-it and no indication that motion was suppressed on purpose. That reads as
-broken. iOS turns reduced-motion on automatically in **Low Power Mode**, which
-is extremely common on a phone late in the day.
+- Masters (`.mp4`, `.webm`, posters) live in `scripts/agentscene/source/`, **not**
+  in `assets/`, because they are encode inputs and must never be deployed.
+- Output is 960x540 at 12fps, quality 62. The scene is UI motion, not live
+  action, so frame rate drops a long way before it is noticeable — but the
+  report text must stay legible, so check a late frame after any change.
+- `-loop 0` is what makes it repeat forever. Do not remove it.
 
-## Third issue — no manual control at all
+## Testing
 
-There are no `controls`, no tap-to-play, and no click handler. If autoplay is
-blocked for **any** reason (Low Power Mode, Data Saver, autoplay permission
-denied, battery saver on Android, enterprise policy), there is no recovery path.
-The user cannot start it manually even though the file is sitting there ready.
-
-## Fix
-
-1. **Drop the threshold to 0.01** and add `rootMargin` so it arms slightly
-   before entering view. Any sliver visible starts playback.
-2. **Fall back to playing immediately** if the observer has not fired shortly
-   after render, so a short viewport can never strand it.
-3. **Make it tappable.** Click/tap toggles play/pause. Give it `controls` as a
-   last resort when autoplay is refused.
-4. **Show a visible play affordance** when the clip is not playing, so a static
-   frame never looks like a failure — it looks like a video waiting to be
-   played.
-5. **Reduced motion: still do not autoplay** (that is the correct behaviour) but
-   show the play badge and let the user start it deliberately.
-6. **Resume from the start** rather than mid-clip when re-entering view, so the
-   report payoff is not missed.
+`tests/test_video.py` proves animation the only way possible for an image:
+**two screenshots of the same region, seconds apart, compared pixel by pixel.**
+There is no `currentTime` or `paused` to assert on. The suite also asserts that
+no play button exists and that reduced-motion does **not** stop it.

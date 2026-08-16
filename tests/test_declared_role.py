@@ -151,8 +151,13 @@ with sync_playwright() as p:
         chk("countdown is ticking", s1 != s2, f"{s1} == {s2}")
         chk("days field is numeric", d.isdigit(), d)
     else:
-        chk("expired state shows live message",
-            "live" in pg.inner_text("#cdStatus").lower())
+        # The launch target has now passed. The course is still GATED, so the page
+        # deliberately shows a neutral "Opening soon" instead of claiming it is
+        # live. The old assertion demanded the word "live", which would only pass
+        # if the page advertised a product that is not actually open.
+        txt = pg.inner_text("#cdStatus").lower()
+        chk("expired state shows a neutral gated message",
+            "soon" in txt or "live" in txt, txt)
 
     print("\n--- privacy / errors ---")
     chk("canary never transmitted", not leaked, str(leaked[:2]))
