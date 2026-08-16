@@ -7,7 +7,7 @@
      iMessage and most scrapers ignore relative paths. ===== -->
 <meta property="og:site_name" content="LEGION AI">
 <meta property="og:title" content="The power of AI unleashed">
-<meta property="og:description" content="Artist, Operator or Entrepreneur — find out which one is running your day, and what it is costing you. Five questions. No email required.">
+<meta property="og:description" content="Creator, Technician or Visionary — find your dominant role, get your purpose statement, and see exactly what to hand an agent first.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://joinlegion.ai/card">
 <meta property="og:locale" content="en_US">
@@ -19,15 +19,15 @@
 <meta property="og:image:alt" content="The LEGION AI armored helmet with a glowing purple eye, beside the words The Power of AI Unleashed">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The power of AI unleashed">
-<meta name="twitter:description" content="Artist, Operator or Entrepreneur — find out which one is running your day, and what it is costing you. Five questions. No email required.">
+<meta name="twitter:description" content="Creator, Technician or Visionary — find your dominant role, get your purpose statement, and see exactly what to hand an agent first.">
 <meta name="twitter:image" content="https://joinlegion.ai/assets/og-legion.jpg">
 <meta name="twitter:image:alt" content="The LEGION AI armored helmet with a glowing purple eye">
 <meta name="theme-color" content="#9933FF">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png">
-<title>Unleash Your Power — The Three Roles | LEGION</title>
+<title>What's Your Superpower? — The Three Roles | LEGION</title>
 <link rel="canonical" href="https://joinlegion.ai/card">
-<meta name="description" content="Every business owner is three people: the Artist, the Operator, and the Entrepreneur. Find out which one runs your day — and what it's costing you.">
+<meta name="description" content="Creator, Technician or Visionary. Find your dominant role, get your purpose statement, and see what to hand an agent first. Nothing collected.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -138,18 +138,54 @@
     background:linear-gradient(90deg,transparent,var(--purple),transparent);opacity:.6;
     animation:rise .9s .3s ease both;}
 
-  /* the three roles, shown up front — countdown-tile treatment */
-  .triad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px;
-    animation:rise .9s .36s ease both;}
-  .triad div{position:relative;background:var(--panel);border:1px solid var(--pline);border-radius:12px;
-    padding:18px 12px 16px;text-align:center;overflow:hidden;
-    box-shadow:0 0 34px rgba(153,51,255,.18), inset 0 0 26px rgba(153,51,255,.08);}
-  .triad div::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  /* ========== THE THREE ROLES — now interactive ==========
+     These used to be static <div>s that looked exactly like buttons, so people
+     clicked them and nothing happened. They are now real buttons: tapping one
+     reveals what that role is, and offers to jump straight to that card. */
+  .triadwrap{margin-bottom:30px;animation:rise .9s .36s ease both;}
+  .triadhint{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--faint);text-align:center;margin-bottom:10px;}
+  .triad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .triad button{position:relative;background:var(--panel);border:1px solid var(--pline);border-radius:12px;
+    padding:18px 12px 16px;text-align:center;overflow:hidden;cursor:pointer;font:inherit;color:inherit;
+    box-shadow:0 0 34px rgba(153,51,255,.18), inset 0 0 26px rgba(153,51,255,.08);
+    transition:transform .18s ease, border-color .18s ease, box-shadow .18s ease;}
+  .triad button::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
     background:linear-gradient(90deg,transparent,var(--purple),transparent);}
+  .triad button:hover{transform:translateY(-3px);border-color:rgba(153,51,255,.7);
+    box-shadow:0 0 44px rgba(153,51,255,.34), inset 0 0 30px rgba(153,51,255,.14);}
+  .triad button:focus-visible{outline:2px solid var(--purple3);outline-offset:3px;}
+  .triad button.on{border-color:var(--purple);transform:translateY(-3px);
+    box-shadow:0 0 52px rgba(153,51,255,.46), inset 0 0 34px rgba(153,51,255,.2);}
   .triad .r{font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;letter-spacing:.12em;
     text-transform:uppercase;color:#fff;}
   .triad .s{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
     color:var(--faint);margin-top:5px;}
+
+  /* the panel that opens when a role tile is tapped */
+  .peek{margin-top:12px;background:var(--panel);border:1px solid var(--pline);border-radius:12px;
+    padding:20px 22px;position:relative;overflow:hidden;}
+  .peek::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--purple),transparent);}
+  .peek .pk-role{font-family:'Anton',sans-serif;font-size:24px;text-transform:uppercase;
+    background:var(--numgrad);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 18px rgba(153,51,255,.45));line-height:1.1;}
+  .peek .pk-lives{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--purple3);margin:6px 0 12px;}
+  .peek .pk-purpose{font-size:15px;color:#fff;line-height:1.6;border-left:2px solid var(--purple);
+    padding-left:14px;margin-bottom:12px;}
+  .peek .pk-line{font-size:14px;color:var(--dust);line-height:1.62;margin-bottom:14px;}
+  .peek .pk-act{display:flex;gap:9px;flex-wrap:wrap;}
+
+  /* inline validation nudge — replaces silently doing nothing */
+  .needmsg{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+    color:#ffb4b4;background:rgba(255,90,90,.09);border:1px solid rgba(255,90,90,.32);
+    border-radius:9px;padding:11px 14px;margin-bottom:14px;}
+  @media(max-width:560px){
+    .triad{grid-template-columns:1fr;}
+    .triad button{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;text-align:left;}
+    .triad .s{margin-top:0;}
+  }
 
   /* ========== PANEL ========== */
   .panel{position:relative;background:var(--panel);border:1px solid var(--pline);border-radius:14px;
@@ -239,6 +275,53 @@
   .thisweek{border:1px solid var(--pline);border-radius:10px;padding:16px 17px;margin-top:12px;
     font-size:14px;line-height:1.6;color:#fff;background:rgba(153,51,255,.07);
     box-shadow:inset 0 0 22px rgba(153,51,255,.08);}
+
+  /* PURPOSE STATEMENT — the declarative line they can claim as their own.
+     Treated as the loudest thing on the card after the role name. */
+  .purpose{font-family:'Oswald',sans-serif;font-weight:500;font-size:19.5px;line-height:1.45;
+    color:#fff;margin-top:12px;padding:18px 20px;border-radius:11px;
+    background:linear-gradient(135deg,rgba(138,43,226,.18),rgba(153,51,255,.07));
+    border:1px solid rgba(153,51,255,.42);
+    box-shadow:inset 0 0 30px rgba(153,51,255,.14);}
+  .purpose em{font-style:normal;color:transparent;background:var(--numgrad);
+    -webkit-background-clip:text;background-clip:text;
+    filter:drop-shadow(0 0 16px rgba(153,51,255,.5));}
+
+  /* MISSION — the goal-specific purpose paragraph, sitting under the short
+     declarative purpose line. Reference card used a cream panel; here it is the
+     same idea in purple so it still reads as the card's centre of gravity. */
+  .mission{font-size:15px;line-height:1.65;color:#e9eaf3;margin-top:12px;padding:16px 18px;
+    border-radius:11px;background:rgba(153,51,255,.06);border:1px solid var(--pline-soft);}
+  .mission b{color:#fff;font-weight:600;}
+  .mission em{font-style:italic;color:var(--purple3);}
+
+  /* CHIPS — the three levers under Multiply It. */
+  .chips{margin-top:13px;display:flex;flex-wrap:wrap;gap:7px;}
+  .chip{display:inline-block;font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.13em;
+    text-transform:uppercase;color:#d9c4ff;background:rgba(153,51,255,.10);
+    border:1px solid rgba(153,51,255,.38);border-radius:20px;padding:6px 13px;}
+
+  /* WHAT YOU'LL OWN — the payoff block. Reference used solid gold; the analogue
+     here is the brand gradient, which is the loudest surface on the site. */
+  .outcome{margin-top:12px;padding:17px 19px;border-radius:11px;font-size:15px;line-height:1.6;
+    color:#fff;background:linear-gradient(135deg,rgba(138,43,226,.30),rgba(153,51,255,.13));
+    border:1px solid rgba(153,51,255,.52);
+    box-shadow:inset 0 0 30px rgba(153,51,255,.16), 0 0 26px rgba(153,51,255,.10);}
+  .outcome b{color:#fff;font-weight:700;}
+
+  /* the PASTE-AND-RUN tag inside the prompt box */
+  .agentbox .tag{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--purple3);font-weight:600;margin-bottom:9px;
+    padding-bottom:8px;border-bottom:1px solid var(--pline-soft);}
+
+  /* THE MULTIPLIER — the upside. Green accent so it reads as gain, against the
+     purple used everywhere else for identity and the trap sections. */
+  .mult{border:1px solid rgba(34,197,94,.30);border-radius:11px;padding:16px 18px;margin-top:12px;
+    font-size:14.5px;line-height:1.65;color:#eafff2;background:rgba(34,197,94,.055);
+    box-shadow:inset 0 0 22px rgba(34,197,94,.07);}
+  .mult .mh{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:#4ade80;margin-bottom:8px;font-weight:600;}
+  .mult b{color:#fff;font-weight:600;}
   .bcard-foot{display:flex;justify-content:space-between;gap:10px;padding:17px 32px 21px;
     color:var(--faint);font-size:10.5px;font-family:'Oswald',sans-serif;letter-spacing:.18em;
     text-transform:uppercase;border-top:1px solid var(--pline-soft);}
@@ -262,6 +345,16 @@
   .stars span:hover{color:var(--purple3);}
   .rateask{font-size:12.5px;font-weight:600;color:#d6dbe8;margin-bottom:6px;}
   .ratethanks{font-size:12px;color:var(--purple3);margin-top:6px;}
+  .valueask{margin-top:13px;padding-top:12px;border-top:1px solid var(--pline-soft);}
+  .valueask .vq{font-size:12.5px;color:#d6dbe8;font-weight:600;margin-bottom:8px;}
+  .valueask .vbtns{display:flex;gap:7px;flex-wrap:wrap;}
+  .valueask .vb{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:#d9c4ff;background:rgba(153,51,255,.08);border:1px solid rgba(153,51,255,.34);
+    border-radius:20px;padding:8px 13px;cursor:pointer;transition:.16s;}
+  .valueask .vb:hover{background:rgba(153,51,255,.18);border-color:var(--purple);color:#fff;}
+  .avgline{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--faint);margin-top:10px;}
+  .avgline b{color:var(--purple3);font-weight:600;}
   .btn-sm{background:var(--grad);color:#fff;border:none;border-radius:10px;padding:13px 18px;
     font-weight:600;font-size:12.5px;cursor:pointer;font-family:'Oswald',sans-serif;text-transform:uppercase;
     letter-spacing:.10em;box-shadow:0 0 22px rgba(153,51,255,.36);transition:.18s;}
@@ -355,14 +448,21 @@
 
 <div class="stage">
   <div class="eyebrow">The Three Roles</div>
-  <h1>Which one<br><span class="purple">runs your day?</span></h1>
-  <div class="lede">Every owner is three people at once. One of them is running your calendar right now — and the other two are starving. <b>Five questions. No email required.</b></div>
+  <h1>What's your<br><span class="purple">superpower?</span></h1>
+  <div class="lede">Creator, Technician, Visionary. One of them is carrying your business right now — and the other two are waiting. Find yours, then build the thing that covers the gap. <b>No email required.</b></div>
   <div class="grad-line"></div>
 
-  <div class="triad">
-    <div><div class="r">Artist</div><div class="s">Creator</div></div>
-    <div><div class="r">Operator</div><div class="s">Technician</div></div>
-    <div><div class="r">Entrepreneur</div><div class="s">Visionary</div></div>
+  <div class="triadwrap">
+    <div class="triadhint">Tap a role to see what it means</div>
+    <div class="triad">
+      <button type="button" data-role="artist" onclick="peek('artist')" aria-expanded="false">
+        <div class="r">Creator</div><div class="s">The Maker</div></button>
+      <button type="button" data-role="operator" onclick="peek('operator')" aria-expanded="false">
+        <div class="r">Technician</div><div class="s">The Builder</div></button>
+      <button type="button" data-role="entrepreneur" onclick="peek('entrepreneur')" aria-expanded="false">
+        <div class="r">Visionary</div><div class="s">The Scout</div></button>
+    </div>
+    <div id="peekbox" class="peek hidden"></div>
   </div>
 
   <!-- ============ WIZARD ============ -->
@@ -375,7 +475,7 @@
     <!-- S1 — about them (free text, never transmitted) -->
     <div id="s1" class="step-pane">
       <div class="q-num">First</div>
-      <div class="q-label">What are you best at?</div>
+      <div class="q-label">What's your superpower?</div>
       <div class="q-sub">Not your job title. The thing you do better than the people around you — the reason your business exists at all.</div>
       <textarea id="superpower" maxlength="180" placeholder="e.g. I can walk into a room that's falling apart and have everyone calm and moving in ten minutes."></textarea>
       <div class="hint">Write it plainly. This becomes the first line of your card, in your own words — and it never leaves this device.</div>
@@ -456,14 +556,14 @@
     <div id="s7" class="step-pane hidden">
       <div class="q-num">Last one</div>
       <div class="q-label">What would change everything this year?</div>
-      <div class="q-sub">This decides what we point your role at.</div>
+      <div class="q-sub">This decides what we point your agent at.</div>
       <div class="optgrid">
         <label class="opt"><input type="radio" name="goal" value="customers"><span>More of the right customers</span></label>
         <label class="opt"><input type="radio" name="goal" value="time"><span>My time back</span></label>
         <label class="opt"><input type="radio" name="goal" value="without"><span>A business that runs without me</span></label>
         <label class="opt"><input type="radio" name="goal" value="prices"><span>Higher prices for the same work</span></label>
       </div>
-      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(5)">Back</button><button class="btn btn-primary" onclick="build()">Show My Role</button></div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(5)">Back</button><button class="btn btn-primary" onclick="build()">Build My Card</button></div>
     </div>
   </div>
 
@@ -472,9 +572,21 @@
     <div class="bcard" id="bcard"></div>
     <div class="actbar no-print">
       <div class="rate">
-        <div class="rateask">Was this accurate?</div>
+        <div class="rateask">Was this valuable? Rate us:</div>
         <div class="stars" id="stars"><span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span></div>
         <div class="ratethanks hidden" id="ratethanks">Thanks — anonymous, nothing collected.</div>
+        <!-- Second question, only shown after they rate: did it change anything?
+             This is the actual value signal; stars alone measure satisfaction. -->
+        <div class="valueask hidden" id="valueask">
+          <div class="vq">Did this show you something you hadn't seen?</div>
+          <div class="vbtns">
+            <button class="vb" onclick="rateValue('yes')">Yes — that's useful</button>
+            <button class="vb" onclick="rateValue('knew')">I already knew it</button>
+            <button class="vb" onclick="rateValue('no')">Not really</button>
+          </div>
+        </div>
+        <div class="ratethanks hidden" id="valuethanks">Noted — thank you.</div>
+        <div class="avgline hidden" id="avgline"></div>
       </div>
       <div>
         <button class="btn-sm" onclick="downloadCard()">Save this</button>
@@ -495,7 +607,7 @@
 
 <script>
 /* ------------------------------------------------------------------------------
-   THE THREE ROLES — Artist / Operator / Entrepreneur
+   THE THREE ROLES — Creator / Technician / Visionary
    Based on Michael Gerber's E-Myth trio as taught in Tony Robbins' Business
    Mastery, with a Legion spin: your dominant role is the superpower, the
    IMBALANCE is the problem, and an agent is how you cover the weak side.
@@ -526,9 +638,29 @@ function firstBuildOnThisBrowser(){
 /* ---- The three roles ---- */
 var ROLES = {
   artist:{
-    name:'The Artist',
-    alias:'The Creator',
+    name:'The Creator',
+    alias:'The Maker',
     lives:'You live in the present — in the work itself.',
+    mission:{
+      customers:'To become the owner whose <b>work sells itself</b> — where the standard you hold is the reason people choose you, and the perimeter around it runs whether or not you are in the room. You stop being the only one who can deliver it, and start being the reason it is worth buying.',
+      time:'To get back to <b>the only hours that ever made you money</b> — the ones inside the craft. Everything that is not the work gets handed to something that never gets tired, so your calendar stops deciding how good you are allowed to be.',
+      without:'To turn a job you own into <b>an asset that runs</b> — where the craft stays yours and everything touching it runs itself. You keep the part you love, and stop carrying the part that keeps you trapped.',
+      prices:'To be paid what the work is actually worth — where <b>the quality you already deliver</b> is presented, followed up, and priced like it matters. Nothing about the craft changes. Everything about the invoice does.'
+    },
+    chips:['Protect the craft','Delegate the perimeter','Raise the price'],
+    outcome:{
+      customers:'<b>You will own a machine that fills your calendar with the right work</b> — so the only thing you decide each morning is which piece to make next.',
+      time:'<b>You will own back the hours the perimeter was eating</b> — every one of them returned to the work only you can do.',
+      without:'<b>You will own a business that earns on the weeks you do not work</b> — with the craft still entirely yours.',
+      prices:'<b>You will own a price that matches the standard</b> — and the follow-up discipline that makes people pay it without flinching.'
+    },
+    purpose:'Your purpose is to <em>make the thing worth buying</em> — and to stop being the only one who can.',
+    mult:{
+      customers:'Your work already converts — you just deliver it to too few people. Cover the perimeter and the same craft reaches <b>three times the volume</b> without dropping a single standard.',
+      time:'Every hour returned is an hour back in the craft, which is the only hour that was ever making you money. Cover the admin and you do not work less — <b>you work on the right thing.</b>',
+      without:'You never have to hand over the craft. You hand over everything <b>touching</b> it. That alone turns a job you own into an asset that runs.',
+      prices:'The quality is already there. What is missing is the presentation, the follow-up, and the nerve to ask. Cover those and <b>your price rises without the work changing at all.</b>'
+    },
     strength:'Quality is never your problem. Your standards <b>are</b> the product, and customers can feel the difference. The business exists because you are good at the thing.',
     trap:'You are the bottleneck. It cannot grow past your own two hands, and it stops earning the week you stop working. You will resist any system that makes the work feel less like yours — which is the exact thing that would set you free.',
     cost:'Every hour spent on work only you can do is an hour not spent on work that compounds. <b>Your ceiling is your own calendar.</b>',
@@ -543,9 +675,29 @@ var ROLES = {
     }
   },
   operator:{
-    name:'The Operator',
-    alias:'The Technician',
+    name:'The Technician',
+    alias:'The Builder',
     lives:'You live in the past — in order, precision, and what has already been proven.',
+    mission:{
+      customers:'To turn the process in your head into <b>a pipeline that never forgets</b> — where every enquiry is handled the same way, on time, whether or not you remember it. You already built the machine. This points it outward.',
+      time:'To buy back <b>the cheapest hours in the business</b> — yours. You are the only one who already knows every step, which makes you the only one who can hand them over cleanly. That is an advantage, not an admission.',
+      without:'To be <b>one document away from an asset</b> — because you already are. The process you carry <em>is</em> the company; written down and automated, it keeps earning while you are somewhere else entirely.',
+      prices:'To get paid for <b>the invisible work you have been absorbing</b> — the checking, the fixing, the carrying nobody sees. Make it visible and the price corrects itself.'
+    },
+    chips:['Write it down','Automate the loop','Stop carrying it'],
+    outcome:{
+      customers:'<b>You will own a pipeline that runs on its own</b> — every lead handled to your standard, without you holding the whole thing in your head.',
+      time:'<b>You will own the loops you used to run manually</b> — handed off, documented, and executing without you.',
+      without:'<b>You will own an asset instead of a job</b> — the process out of your head and into something that cannot forget or burn out.',
+      prices:'<b>You will own a price that includes everything you actually do</b> — including the work that was invisible until now.'
+    },
+    purpose:'Your purpose is to <em>make it repeatable</em> — and then to make it run without you holding it.',
+    mult:{
+      customers:'You already have a process that works. Pointed outward and running automatically, it stops being a habit and becomes <b>a pipeline</b> — every enquiry handled the same way, whether or not you remember.',
+      time:'You are the only role that can hand work off cleanly, because you are the only one who already knows every step. That makes <b>your time the cheapest in the business to buy back.</b>',
+      without:'You are one document away from an asset. The process in your head <b>is</b> the company — written down and automated, it keeps earning while you are somewhere else.',
+      prices:'You are almost certainly underpricing, because you absorb invisible work nobody sees. <b>Make it visible and the price corrects itself.</b>'
+    },
     strength:'You are the reason it holds together. Processes exist, details do not vanish, and nothing gets dropped on your watch. You have the rare gift of making a chaotic thing repeatable.',
     trap:'You optimise the engine and forget to ask where the car is going. You will polish a process that should have been deleted, and you will say yes to carrying more rather than building something that carries it for you.',
     cost:'Flawless execution of the wrong priority is the most expensive thing in business. <b>Your ceiling is your own capacity.</b>',
@@ -556,13 +708,33 @@ var ROLES = {
       customers:'Take your best repeatable process and point it outward. One consistent follow-up sequence for every new enquiry, running whether or not you remember.',
       time:'Pick the loop you run most often and hand it to an agent this week. You already know every step — that is the whole advantage.',
       without:'Document the one process nobody else knows. That single document is the difference between a job and an asset.',
-      prices:'Audit where your time actually goes, then work out your true hourly rate. Most Operators are underpricing because they are absorbing invisible work.'
+      prices:'Audit where your time actually goes, then work out your true hourly rate. Most Technicians are underpricing because they absorb invisible work.'
     }
   },
   entrepreneur:{
-    name:'The Entrepreneur',
-    alias:'The Visionary',
+    name:'The Visionary',
+    alias:'The Scout',
     lives:'You live in the future — in what could be.',
+    mission:{
+      customers:'To stop hunting and start <b>compounding what already worked</b> — the one channel that produced, run again deliberately, five more times. You do not need a new idea. You need the last good one finished.',
+      time:'To get back <b>a clear head</b> — the only thing you actually need. Your time is not lost to work, it is lost to switching. Something else holds the open loops so you can point at what is next.',
+      without:'To become <b>the owner who hands things over</b> — because vision is worthless unhanded. The moment someone else can run your proven idea, you are free to go find the next one, which is the only job you ever wanted.',
+      prices:'To charge properly for <b>the offer you are already bored of</b> — because to the customer it is brand new. Raise it, sell it again, and stop discounting your own best work out of restlessness.'
+    },
+    chips:['Finish one thing','Hold the loops','Hand it over'],
+    outcome:{
+      customers:'<b>You will own a channel that runs without your attention</b> — repeating the thing that already worked while you go find the next one.',
+      time:'<b>You will own a machine that holds every open loop</b> — so nothing dies at 80% just because you looked away.',
+      without:'<b>You will own a proven idea someone else can run</b> — which is the only way you ever get to start the next one.',
+      prices:'<b>You will own a price that reflects the value, not your boredom</b> — on the offer you already know converts.'
+    },
+    purpose:'Your purpose is to <em>see what is coming</em> — and to finish enough of it to matter.',
+    mult:{
+      customers:'You do not need a new channel. You need the one that already worked run five more times, deliberately. Cover follow-through and <b>your best idea stops dying at 80%.</b>',
+      time:'Your time is not lost to work — it is lost to switching. A machine that holds the open loops gives back the only thing you actually need: <b>a clear head to point at the next thing.</b>',
+      without:'Vision is worthless unhanded. The moment someone else can run your proven idea, <b>you are free to go find the next one</b> — which is the only job you ever wanted.',
+      prices:'You are bored of your best offer, so you undersell it. To the customer it is brand new. <b>Raise it and sell it again.</b>'
+    },
     strength:'You create direction. Opportunities appear because you go looking for them, and you can pull people toward something that does not exist yet. Nobody else in the building does that.',
     trap:'Ten things started, none finished. You mistake motion for progress, and the new idea always feels more urgent than the boring thing that is 80% done and actually printing money.',
     cost:'An unfinished idea is worth exactly zero. <b>Your ceiling is your own follow-through.</b>',
@@ -621,17 +793,125 @@ function rank(s, ans){
   });
 }
 
+/* ---- Role tiles: tap to see what a role means ----------------------------
+   These tiles previously looked like buttons but did nothing. Now each opens a
+   short profile and offers a shortcut straight to that full card, for people who
+   already know which one they are and do not want the questionnaire. */
+var peeking=null;
+function peek(r){
+  var box=document.getElementById('peekbox');
+  var btns=document.querySelectorAll('.triad button');
+
+  if(peeking===r){                       // tapping the open one closes it
+    box.classList.add('hidden');
+    btns.forEach(function(b){ b.classList.remove('on'); b.setAttribute('aria-expanded','false'); });
+    peeking=null;
+    return;
+  }
+
+  var R=ROLES[r];
+  btns.forEach(function(b){
+    var on = b.getAttribute('data-role')===r;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-expanded', on?'true':'false');
+  });
+
+  box.innerHTML =
+    '<div class="pk-role">'+R.name+'</div>'+
+    '<div class="pk-lives">'+R.alias+' · '+R.lives+'</div>'+
+    '<div class="pk-purpose">'+R.purpose+'</div>'+
+    '<div class="pk-line">'+R.strength+'</div>'+
+    '<div class="pk-act">'+
+      '<button class="btn-sm" onclick="pickRole(\''+r+'\')">This is me — build my card</button>'+
+      '<button class="btn-sm btn-ghost-sm" onclick="toWizard()">Not sure — ask me questions</button>'+
+    '</div>';
+  box.classList.remove('hidden');
+  peeking=r;
+  trk('peek_'+r);
+}
+
+function toWizard(){
+  document.getElementById('wizard').scrollIntoView({behavior:'smooth', block:'center'});
+  document.getElementById('superpower').focus({preventScroll:true});
+}
+
+/* Shortcut path: they already know their role. We still need the superpower text
+   and the goal, so we send them to step 1 and remember the forced role. */
+var forcedRole=null;
+function pickRole(r){
+  forcedRole=r;
+  trk('role_picked_'+r);
+  var box=document.getElementById('peekbox');
+  box.innerHTML='<div class="pk-role">'+ROLES[r].name+'</div>'+
+    '<div class="pk-lives">Locked in · answer two quick things below</div>'+
+    '<div class="pk-line">Tell us your superpower and what you want this year, and we will build the '+
+    ROLES[r].name.replace('The ','')+' card. <button class="btn-sm btn-ghost-sm" style="margin-left:6px;" onclick="clearRole()">Undo</button></div>';
+  setStep(0);
+  document.getElementById('superpower').focus({preventScroll:true});
+}
+function clearRole(){
+  forcedRole=null;
+  var b=document.getElementById('peekbox');
+  b.classList.add('hidden');
+  document.querySelectorAll('.triad button').forEach(function(x){
+    x.classList.remove('on'); x.setAttribute('aria-expanded','false');
+  });
+  peeking=null;
+}
+
+/* Which role the card currently on screen resolved to. Used to attribute the
+   star rating and the value answer to a specific role. */
+var lastPrimary=null;
+
 var idx=0, TOTAL=7, paneIds=['s1','s2','s3','s4','s5','s6','s7'];
 function setStep(i){
   idx=i;
   for(var k=0;k<TOTAL;k++){ document.getElementById(paneIds[k]).classList.toggle('hidden', k!==i); }
-  document.getElementById('pfill').style.width = Math.round(((i+1)/TOTAL)*100)+'%';
-  document.getElementById('pnum').textContent = 'Step '+(i+1)+' of '+TOTAL;
+  /* On the self-declared path only 2 of 7 panes are used, so the progress
+     readout would otherwise claim 'Step 1 of 7' and then jump to the end. */
+  var shown = forcedRole ? 2 : TOTAL;
+  var pos   = forcedRole ? (i===0?1:2) : (i+1);
+  document.getElementById('pfill').style.width = Math.round((pos/shown)*100)+'%';
+  document.getElementById('pnum').textContent = 'Step '+pos+' of '+shown;
   document.getElementById('wizard').scrollIntoView({behavior:'smooth', block:'center'});
+  clearNeed();
 }
-function next(i){ setStep(i); trackStep(i); }
-function prev(i){ setStep(i); }
+
+/* Advance. On the shortcut path, step 1 jumps straight to the goal question. */
+function next(i){
+  if(forcedRole && i===1){ setStep(6); trackStep(6); return; }
+  /* Require the current answer before moving on, rather than silently allowing
+     an empty step and only complaining at the very end. */
+  if(i>=2 && i<=6){
+    var q='q'+(i-1);
+    if(!val(q)){ showNeed('Pick one to continue.'); return; }
+  }
+  if(i===1){
+    var sp=(document.getElementById('superpower').value||'').trim();
+    if(!sp){ showNeed('Tell us your superpower first.'); return; }
+  }
+  setStep(i); trackStep(i);
+}
+function prev(i){
+  if(forcedRole && i===5){ setStep(0); return; }   // back from goal -> superpower
+  setStep(i);
+}
 function val(n){ var e=document.querySelector('input[name="'+n+'"]:checked'); return e? e.value : null; }
+
+/* Inline validation message, shown in the active pane. */
+function showNeed(msg){
+  clearNeed();
+  var pane=document.getElementById(paneIds[idx]);
+  if(!pane) return;
+  var d=document.createElement('div');
+  d.className='needmsg';
+  d.textContent=msg;
+  var row=pane.querySelector('.btnrow');
+  if(row) pane.insertBefore(d,row); else pane.appendChild(d);
+}
+function clearNeed(){
+  document.querySelectorAll('.needmsg').forEach(function(x){ x.remove(); });
+}
 
 /* Funnel: records the deepest step reached, once per page load. */
 var stepSeen={};
@@ -648,25 +928,55 @@ function build(){
   var sp=(document.getElementById('superpower').value||'').trim();
   var ans={q1:val('q1'),q2:val('q2'),q3:val('q3'),q4:val('q4'),q5:val('q5')};
   var goal=val('goal');
-  if(!sp){ setStep(0); return; }
-  var qs=['q1','q2','q3','q4','q5'];
-  for(var i=0;i<qs.length;i++){ if(!ans[qs[i]]){ setStep(i+1); return; } }
-  if(!goal){ setStep(6); return; }
 
-  var s=score(ans);
-  var ordered=rank(s,ans);
-  var primary=ordered[0], secondary=ordered[1];
+  /* Superpower is always required — it is the first line of the card. */
+  if(!sp){ setStep(0); showNeed('Tell us your superpower first.'); return; }
+
+  /* On the shortcut path the role is already chosen, so the five diagnostic
+     questions are skipped; we only still need the goal. */
+  if(!forcedRole){
+    var qs=['q1','q2','q3','q4','q5'];
+    for(var i=0;i<qs.length;i++){
+      if(!ans[qs[i]]){ setStep(i+1); showNeed('Pick one to continue.'); return; }
+    }
+  }
+  if(!goal){ setStep(6); showNeed('Pick what would change everything.'); return; }
+
+  var s, ordered, primary, secondary, split;
+
+  if(forcedRole){
+    /* Self-declared: give the chosen role a clear lead so the mix bars still
+       render sensibly, and derive the secondary from the fixed order. */
+    primary=forcedRole;
+    s={artist:0,operator:0,entrepreneur:0};
+    s[primary]=9;
+    var rest=ORDER.filter(function(r){ return r!==primary; });
+    s[rest[0]]=4; s[rest[1]]=2;
+    secondary=rest[0];
+    ordered=[primary,rest[0],rest[1]];
+    split=false;
+  }else{
+    s=score(ans);
+    ordered=rank(s,ans);
+    primary=ordered[0]; secondary=ordered[1];
+    split=(s[primary]-s[secondary])<=2;
+  }
+
   var R=ROLES[primary], R2=ROLES[secondary];
   var total=s.artist+s.operator+s.entrepreneur || 1;
-  var split=(s[primary]-s[secondary])<=2;
 
-  var blend = split
-    ? 'You are a genuine split: <b>'+R.name.replace('The ','')+'</b> and <b>'+R2.name.replace('The ','')+'</b> are running almost neck and neck. That is a real advantage and a real risk — you can cover both, so you never build anything that covers them for you.'
-    : 'Primarily <b>'+R.name.replace('The ','')+'</b>, with a <b>'+R2.name.replace('The ','')+'</b> streak underneath.';
+  var blend = forcedRole
+    ? 'You told us this one yourself — <b>'+R.name.replace('The ','')+'</b>. If you want the diagnostic to check it, start over and answer the questions.'
+    : (split
+      ? 'You are a genuine split: <b>'+R.name.replace('The ','')+'</b> and <b>'+R2.name.replace('The ','')+'</b> are running almost neck and neck. That is a real advantage and a real risk — you can cover both, so you never build anything that covers them for you.'
+      : 'Primarily <b>'+R.name.replace('The ','')+'</b>, with a <b>'+R2.name.replace('The ','')+'</b> streak underneath.');
 
   var superquote='"'+esc(sp)+'"';
   var agentPrompt=R.agent.split('[SUPER]').join(superquote);
   var week=R.week[goal];
+
+  var chips='';
+  (R.chips||[]).forEach(function(c){ chips+='<span class="chip">'+c+'</span>'; });
 
   var mixrows='';
   ORDER.forEach(function(r){
@@ -677,36 +987,66 @@ function build(){
 
   var h='';
   h+='<div class="bc-top">';
-  h+='<div class="lbl">The role running your day</div>';
+  h+='<div class="lbl">Your Superpower · '+R.name.replace('The ','')+'</div>';
   h+='<div class="name">'+R.name+'</div>';
   h+='<div class="alias">'+R.alias+' · '+R.lives+'</div>';
   h+='<div class="super">'+superquote+'</div>';
   h+='<div class="blend">'+blend+'</div>';
   h+='</div>';
 
+  /* Section order mirrors the reference card:
+     Superpower -> Mission -> Multiply It -> Fix Now -> Agent -> What You'll Own.
+     The mix bars and the trap sit between Mission and Multiply, because the
+     diagnostic result is the reason the rest of the card says what it says. */
   h+='<div class="bc-body">';
-  h+='<div class="sec"><div class="h">Your mix</div><div class="mix">'+mixrows+'</div></div>';
-  h+='<div class="sec"><div class="h">Why this role wins</div><p>'+R.strength+'</p></div>';
-  h+='<div class="sec"><div class="h">The trap</div><p>'+R.trap+'</p><p>'+R.cost+'</p></div>';
-  h+='<div class="sec"><div class="h">Hand this to a machine first</div><p>'+R.hand+'</p></div>';
-  h+='<div class="sec"><div class="h">The standard to raise</div><p>'+R.directive+'</p></div>';
-  h+='<div class="sec"><div class="h">Your agent</div><p>Built to cover the side you neglect. Copy this into ChatGPT as your first message:</p><div class="agentbox">'+esc(agentPrompt)+'</div></div>';
-  h+='<div class="sec"><div class="h">This week · pointed at '+GOAL_LABEL[goal]+'</div><div class="thisweek">'+week+'</div></div>';
+
+  h+='<div class="sec"><div class="h">Your Mission · New Purpose</div>'+
+     '<div class="purpose">'+R.purpose+'</div>'+
+     '<div class="mission">'+R.mission[goal]+'</div></div>';
+
+  h+='<div class="sec"><div class="h">Your Mix</div><div class="mix">'+mixrows+'</div>'+
+     '<p style="margin-top:13px;">'+R.strength+'</p></div>';
+
+  h+='<div class="sec"><div class="h">The Trap</div><p>'+R.trap+'</p><p>'+R.cost+'</p></div>';
+
+  h+='<div class="sec"><div class="h">Multiply It</div>'+
+     '<div class="mult"><div class="mh">Pointed at '+GOAL_LABEL[goal]+'</div>'+R.mult[goal]+'</div>'+
+     '<div class="chips">'+chips+'</div></div>';
+
+  h+='<div class="sec"><div class="h">Fix Now · This Week</div><div class="thisweek">'+week+'</div></div>';
+
+  h+='<div class="sec"><div class="h">Your Agent · To Multiply It</div><p>'+R.hand+'</p>'+
+     '<div class="agentbox"><div class="tag">Paste-and-run prompt</div>'+esc(agentPrompt)+'</div>'+
+     '<p style="margin-top:11px;color:#9aa0b5;font-size:13px;">Copy that into ChatGPT as your first message. '+
+     'It is written for your role, in your words.</p></div>';
+
+  h+='<div class="sec"><div class="h">What You\'ll Own</div>'+
+     '<div class="outcome">'+R.outcome[goal]+'</div>'+
+     '<p style="margin-top:12px;">'+R.directive+'</p></div>';
+
   h+='</div>';
-  h+='<div class="bcard-foot"><div>The Three Roles · Legion</div><div>Artist · Operator · Entrepreneur</div></div>';
+  h+='<div class="bcard-foot"><div>The Three Roles · Legion</div><div>Creator · Technician · Visionary</div></div>';
 
   document.getElementById('bcard').innerHTML=h;
   document.getElementById('wizard').classList.add('hidden');
   document.getElementById('resultView').classList.remove('hidden');
+  lastPrimary=primary;
 
-  /* ---- Anonymous analytics: fixed menu keys only, never the typed text ---- */
+  /* ---- Anonymous analytics: fixed menu keys only, never the typed text ----
+     On the shortcut path q1-q5 are null, so those beacons are skipped rather
+     than sent as 'q1_null' — the server allowlist would reject them anyway. */
   trk('card_created');
   if(firstBuildOnThisBrowser()) trk('card_created_unique');
   trk('role_'+primary);                 // which of the three roles came out on top
   trk('secondary_'+secondary);          // the blend underneath
   if(split) trk('role_split');          // near-tie between the top two
-  trk('q1_'+ans.q1); trk('q2_'+ans.q2); trk('q3_'+ans.q3);
-  trk('q4_'+ans.q4); trk('q5_'+ans.q5);
+  if(forcedRole){
+    trk('path_selfdeclared');           // they picked their own role from the tiles
+  }else{
+    trk('path_diagnostic');
+    trk('q1_'+ans.q1); trk('q2_'+ans.q2); trk('q3_'+ans.q3);
+    trk('q4_'+ans.q4); trk('q5_'+ans.q5);
+  }
   trk('goal_'+goal);
   trk('rolecombo_'+primary+'_'+secondary+'_'+goal);
 
@@ -719,22 +1059,67 @@ function build(){
     s.onclick=function(){
       var v=+s.getAttribute('data-v');
       sels.forEach(function(x,i){ x.style.color = i<v ? '#C084FC' : '#2b2740'; });
-      trk('rating', v);
+
+      trk('rating', v);                        // -> rating_v1..v5
+      trk('rating_given');                     // total number of people who rated
+      /* Also record the rating against the role that was on the card, so a role
+         whose copy is landing badly can be identified rather than averaged away. */
+      if(lastPrimary) trk('rating_'+lastPrimary+'_v'+v);
+      if(v>=4) trk('rating_positive'); else if(v<=2) trk('rating_negative');
+
       document.getElementById('ratethanks').classList.remove('hidden');
       sbox.style.pointerEvents='none';
+      document.getElementById('valueask').classList.remove('hidden');
+      showAverage();
     };
   });
 })();
+
+/* The value question — the honest measure of whether the card did anything. */
+var valueAnswered=false;
+function rateValue(kind){
+  if(valueAnswered) return;
+  valueAnswered=true;
+  trk('value_'+kind);                         // value_yes | value_knew | value_no
+  if(lastPrimary) trk('value_'+kind+'_'+lastPrimary);
+  document.getElementById('valueask').classList.add('hidden');
+  document.getElementById('valuethanks').classList.remove('hidden');
+}
+
+/* Show the running average back to the user — social proof, and it makes the
+   rating feel like it goes somewhere rather than into a void. */
+function showAverage(){
+  try{
+    fetch('/api/dashboard', {cache:'no-store'})
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var n=d && d.ratings && d.ratings.responses;
+        var a=d && d.ratings && d.ratings.average;
+        if(!n || !a) return;
+        var el=document.getElementById('avgline');
+        el.innerHTML='Average so far: <b>'+a.toFixed(1)+' ★</b> from <b>'+n+'</b> '+
+                     (n===1?'owner':'owners');
+        el.classList.remove('hidden');
+      })
+      .catch(function(){});
+  }catch(x){}
+}
+
 function resetRating(){
   document.querySelectorAll('#stars span').forEach(function(x){ x.style.color='#2b2740'; });
   document.getElementById('stars').style.pointerEvents='';
   document.getElementById('ratethanks').classList.add('hidden');
+  document.getElementById('valueask').classList.add('hidden');
+  document.getElementById('valuethanks').classList.add('hidden');
+  document.getElementById('avgline').classList.add('hidden');
+  valueAnswered=false;
 }
 function downloadCard(){ trk('card_download'); try{window.print();}catch(x){} }
 function again(){
   trk('card_again'); resetRating();
   document.getElementById('resultView').classList.add('hidden');
   document.getElementById('wizard').classList.remove('hidden');
+  clearRole();                 // drop any self-declared role so the diagnostic runs
   setStep(0);
   document.getElementById('superpower').value='';
   document.querySelectorAll('input[type=radio]').forEach(function(x){x.checked=false;});

@@ -44,6 +44,31 @@ check('all 3 primary roles present',
 check('all 3 secondary roles present',
   ROLES.every((r) => EVENTS.has(`secondary_${r}`)));
 check('role_split present', EVENTS.has('role_split'));
+check('peek_* present for all 3 roles',
+  ROLES.every((r) => EVENTS.has(`peek_${r}`)));
+check('role_picked_* present for all 3 roles',
+  ROLES.every((r) => EVENTS.has(`role_picked_${r}`)));
+check('path_diagnostic present', EVENTS.has('path_diagnostic'));
+check('path_selfdeclared present', EVENTS.has('path_selfdeclared'));
+
+console.log('\n--- allowlist: ratings + value signal ---');
+check('rating_given present', EVENTS.has('rating_given'));
+check('rating_positive / rating_negative present',
+  EVENTS.has('rating_positive') && EVENTS.has('rating_negative'));
+check('per-role rating v1..v5 present for all 3 roles',
+  ROLES.every((r) => [1, 2, 3, 4, 5].every((n) => EVENTS.has(`rating_${r}_v${n}`))));
+check('value_yes / value_knew / value_no present',
+  ['yes', 'knew', 'no'].every((k) => EVENTS.has(`value_${k}`)));
+check('per-role value answers present',
+  ROLES.every((r) => ['yes', 'knew', 'no'].every((k) => EVENTS.has(`value_${k}_${r}`))));
+check('rating_artist_v5 resolves',
+  resolveKey('rating_artist_v5', null).key === 'rating_artist_v5');
+check('value_yes_operator resolves',
+  resolveKey('value_yes_operator', null).key === 'value_yes_operator');
+check('invented value answer rejected',
+  resolveKey('value_maybe', null).status === 403);
+check('per-role rating out of range rejected',
+  resolveKey('rating_artist_v9', null).status === 403);
 check('all 20 question options present',
   Object.entries(QUESTIONS)
     .every(([q, opts]) => opts.every((o) => EVENTS.has(`${q}_${o}`))),
@@ -121,6 +146,24 @@ console.log('\n--- resolveKey: the original vulnerability ---');
   const r = resolveKey('q3_wandering', null);
   check('invented question option rejected',
     r.error === 'event not allowed' && r.status === 403, JSON.stringify(r));
+}
+{
+  const r = resolveKey('peek_manager', null);
+  check('invented peek role rejected',
+    r.error === 'event not allowed' && r.status === 403, JSON.stringify(r));
+}
+{
+  const r = resolveKey('path_madeup', null);
+  check('invented path rejected',
+    r.error === 'event not allowed' && r.status === 403, JSON.stringify(r));
+}
+{
+  check('peek_artist resolves',
+    resolveKey('peek_artist', null).key === 'peek_artist');
+  check('role_picked_operator resolves',
+    resolveKey('role_picked_operator', null).key === 'role_picked_operator');
+  check('path_selfdeclared resolves',
+    resolveKey('path_selfdeclared', null).key === 'path_selfdeclared');
 }
 {
   const r = resolveKey('step_99_reached', null);

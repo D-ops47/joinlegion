@@ -31,15 +31,26 @@ const STORE_NAME = 'legion-counter';
 
 export const ROLES = ['artist', 'operator', 'entrepreneur'];
 
+// Answers to the post-rating value question.
+export const VALUE_ANSWERS = ['yes', 'knew', 'no'];
+export const VALUE_LABELS = {
+  yes: 'Showed them something new',
+  knew: 'Already knew it',
+  no: 'Not useful',
+};
+
+// NOTE: the internal keys stay artist/operator/entrepreneur so historical data
+// remains comparable and no migration is needed. Only the display labels moved
+// to Creator / Technician / Visionary.
 export const ROLE_LABELS = {
-  artist: 'The Artist',
-  operator: 'The Operator',
-  entrepreneur: 'The Entrepreneur',
+  artist: 'The Creator',
+  operator: 'The Technician',
+  entrepreneur: 'The Visionary',
 };
 export const ROLE_ALIASES = {
-  artist: 'Creator',
-  operator: 'Technician',
-  entrepreneur: 'Visionary',
+  artist: 'The Maker',
+  operator: 'The Builder',
+  entrepreneur: 'The Scout',
 };
 
 // The five diagnostic questions and their option vocabularies, mirroring
@@ -128,6 +139,32 @@ function buildAllowlist() {
     ev.add(`secondary_${r}`);
   }
   ev.add('role_split'); // primary and secondary within 2 points
+
+  // Role tiles are now interactive: peek_* records which role profile was
+  // opened, role_picked_* records a self-declared role, and path_* separates
+  // the two routes to a card so conversion can be compared.
+  for (const r of ROLES) {
+    ev.add(`peek_${r}`);
+    ev.add(`role_picked_${r}`);
+  }
+  ev.add('path_diagnostic');
+  ev.add('path_selfdeclared');
+
+  // --- ratings and value signal ---
+  // rating_given counts respondents; rating_positive/negative are quick rollups;
+  // rating_<role>_v<n> attributes a score to the role that was on the card, so a
+  // role whose copy is landing badly is visible instead of averaged away.
+  ev.add('rating_given');
+  ev.add('rating_positive');
+  ev.add('rating_negative');
+  for (const r of ROLES) {
+    for (let n = 1; n <= 5; n++) ev.add(`rating_${r}_v${n}`);
+  }
+  // The value question: did the card show them something they had not seen?
+  for (const k of VALUE_ANSWERS) {
+    ev.add(`value_${k}`);
+    for (const r of ROLES) ev.add(`value_${k}_${r}`);
+  }
 
   for (const [q, opts] of Object.entries(QUESTIONS)) {
     for (const o of opts) ev.add(`${q}_${o}`);
