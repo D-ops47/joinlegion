@@ -178,6 +178,11 @@
   .peek .pk-act{display:flex;gap:9px;flex-wrap:wrap;}
 
   /* inline validation nudge — replaces silently doing nothing */
+  /* Persistent role warning. Separate class from .needmsg so clearNeed(), which
+     removes transient step messages, can never delete it. */
+  .warnmsg{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.08em;
+    text-transform:uppercase;color:#ff8a8a;font-weight:600;margin-top:13px;
+    text-align:center;}
   .needmsg{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
     color:#ffb4b4;background:rgba(255,90,90,.09);border:1px solid rgba(255,90,90,.32);
     border-radius:9px;padding:11px 14px;margin-bottom:14px;}
@@ -269,9 +274,6 @@
   .sec p{font-size:14.5px;line-height:1.65;color:#d6dbe8;}
   .sec p b{color:#fff;font-weight:600;}
   .sec p + p{margin-top:11px;}
-  .agentbox{background:#08070e;color:#d6dbe8;border:1px solid var(--pline-soft);border-radius:10px;
-    padding:16px 17px;margin-top:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:11.5px;line-height:1.65;white-space:pre-wrap;}
   .thisweek{border:1px solid var(--pline);border-radius:10px;padding:16px 17px;margin-top:12px;
     font-size:14px;line-height:1.6;color:#fff;background:rgba(153,51,255,.07);
     box-shadow:inset 0 0 22px rgba(153,51,255,.08);}
@@ -309,10 +311,6 @@
     box-shadow:inset 0 0 30px rgba(153,51,255,.16), 0 0 26px rgba(153,51,255,.10);}
   .outcome b{color:#fff;font-weight:700;}
 
-  /* the PASTE-AND-RUN tag inside the prompt box */
-  .agentbox .tag{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.2em;
-    text-transform:uppercase;color:var(--purple3);font-weight:600;margin-bottom:9px;
-    padding-bottom:8px;border-bottom:1px solid var(--pline-soft);}
 
   /* THE MULTIPLIER — the upside. Green accent so it reads as gain, against the
      purple used everywhere else for identity and the trap sections. */
@@ -376,6 +374,29 @@
     box-shadow:0 0 34px rgba(153,51,255,.48), 0 12px 34px rgba(139,43,226,.34);transition:.18s;}
   .tut-cta a:hover{transform:translateY(-2px);box-shadow:0 0 46px rgba(153,51,255,.68);}
   .tut-cta .tut-sub{font-size:11.5px;color:var(--faint);margin-top:13px;line-height:1.55;}
+
+  /* COUNTDOWN on the course CTA — same treatment as the homepage clock, scaled
+     down so it supports the button instead of competing with it. */
+  .cd-status{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.24em;
+    text-transform:uppercase;color:var(--purple3);font-weight:600;margin-bottom:11px;}
+  .cd-mini{display:flex;justify-content:center;align-items:flex-start;gap:9px;margin-bottom:17px;}
+  .cd-mini .u{display:flex;flex-direction:column;align-items:center;min-width:52px;
+    border:1px solid var(--pline);border-radius:9px;padding:9px 6px 7px;
+    background:rgba(153,51,255,.05);box-shadow:inset 0 0 18px rgba(153,51,255,.07);}
+  .cd-mini .n{font-family:'Anton',sans-serif;font-weight:400;font-size:25px;line-height:1;
+    background:var(--numgrad);-webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;}
+  .cd-mini .l{font-family:'Oswald',sans-serif;font-size:8.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--faint);margin-top:5px;}
+  .cd-mini .c{font-family:'Anton',sans-serif;font-size:19px;color:var(--purple3);padding-top:11px;}
+  .cd-live{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.1em;
+    text-transform:uppercase;color:#4ade80;font-weight:600;margin-bottom:15px;}
+  @media(max-width:420px){
+    .cd-mini{gap:5px;}
+    .cd-mini .u{min-width:44px;padding:7px 4px 6px;}
+    .cd-mini .n{font-size:20px;}
+    .cd-mini .c{font-size:15px;padding-top:9px;}
+  }
 
   footer{position:relative;z-index:3;text-align:center;color:var(--faint);font-size:11px;
     letter-spacing:.05em;font-family:'Oswald',sans-serif;text-transform:uppercase;opacity:.7;
@@ -449,19 +470,20 @@
 <div class="stage">
     <div class="eyebrow">Build Your Battle Card</div>
   <h1>What's your<br><span class="purple">superpower?</span></h1>
-  <div class="lede">Then four questions about the thing that is actually costing you. You walk away with the agent built to cover it — named, specified, and ready to paste. <b>No email required.</b></div>
+  <div class="lede">Pick the role you run on, then answer four questions about the thing that is actually costing you. You walk away knowing exactly which agent to build. <b>No email required.</b></div>
   <div class="grad-line"></div>
   <div class="triadwrap">
-    <div class="triadhint">Every owner runs on one of these three — tap to see which</div>
+    <div class="triadhint">Pick the one you run on — required</div>
     <div class="triad">
-      <button type="button" data-role="artist" onclick="peek('artist')" aria-expanded="false">
+      <button type="button" data-role="artist" onclick="pickRole('artist')" aria-pressed="false">
         <div class="r">Creator</div><div class="s">The Maker</div></button>
-      <button type="button" data-role="operator" onclick="peek('operator')" aria-expanded="false">
+      <button type="button" data-role="operator" onclick="pickRole('operator')" aria-pressed="false">
         <div class="r">Technician</div><div class="s">The Builder</div></button>
-      <button type="button" data-role="entrepreneur" onclick="peek('entrepreneur')" aria-expanded="false">
+      <button type="button" data-role="entrepreneur" onclick="pickRole('entrepreneur')" aria-pressed="false">
         <div class="r">Visionary</div><div class="s">The Scout</div></button>
     </div>
     <div id="peekbox" class="peek hidden"></div>
+    <div id="rolewarn" class="warnmsg hidden">Pick the role you run on first.</div>
   </div>
 
   <!-- ============ WIZARD ============ -->
@@ -570,6 +592,16 @@
     <div class="done_hint no-print">This stays on your device. Save it or screenshot it — it's yours.</div>
     <div class="tut-cta no-print">
       <div class="tut-q">Now build the machine that covers your weak side.</div>
+      <div class="cd-status" id="cdStatus">Agent course deploys in</div>
+      <div class="cd-mini" id="cdMini">
+        <div class="u"><span class="n" id="cdD">00</span><span class="l">Days</span></div>
+        <span class="c">:</span>
+        <div class="u"><span class="n" id="cdH">00</span><span class="l">Hrs</span></div>
+        <span class="c">:</span>
+        <div class="u"><span class="n" id="cdM">00</span><span class="l">Min</span></div>
+        <span class="c">:</span>
+        <div class="u"><span class="n" id="cdS">00</span><span class="l">Sec</span></div>
+      </div>
       <a href="/course">The 4-Day Mini-Course</a>
       <div class="tut-sub">~15 minutes a day · build it on ChatGPT · bring it to your real tools</div>
     </div>
@@ -777,7 +809,9 @@ var STAKES = {
 /* Weights were tuned by brute-forcing all 500 answer paths so that no role
    dominates and near-ties stay uncommon. Each option keeps its intended lean;
    only the magnitudes were solved for.
-   Result: Creator 31%, Technician 36%, Visionary 33%, splits 15%. */
+   These weights no longer decide the primary role - that is declared on the
+   tiles. They now only rank the two roles underneath it, and feed the
+   selfview_matches / selfview_differs signal. */
 var ROLE_WEIGHTS = {
   q3:{ pursuit:[0,1,5], writing:[6,0,1], decisions:[1,0,5], tracking:[0,5,1], comms:[0,5,2] },
   q1:{ demand:[1,0,5], money:[6,1,0], time:[5,0,0], people:[0,6,2], visibility:[1,4,0] },
@@ -814,18 +848,6 @@ function agentName(ans){
   return 'The '+HANDOVER[ans.q3].noun+' '+WHY[ans.q2].mode+' Agent';
 }
 
-function agentPromptFor(ans, sp){
-  var W=WHY[ans.q2], H=HANDOVER[ans.q3], S=STRUGGLE[ans.q1], K=STAKES[ans.q4];
-  return 'You are my '+agentName(ans).replace('The ','')+'.\n\n'+
-    'What I am best at is "'+sp+'". Protect that \u2014 it is the reason this business '+
-    'exists, and it is not what I am handing you.\n\n'+
-    'My real struggle is '+S.short+'. It is still here because '+W.because+'.\n\n'+
-    'Your job is '+W.instruction+', specifically with '+H.material+'. '+W.detail+'\n\n'+
-    K.instruction+'\n\n'+
-    'Start by asking me the three questions you most need answered to do this well. '+
-    'Ask them one at a time, and do not give me any advice until you have all three.';
-}
-
 /* ---- The three roles: reference copy only ---------------------------------
    The role is no longer measured with its own questions \u2014 it is derived from
    what the person says they would hand over and what they name as the struggle.
@@ -857,24 +879,21 @@ var ROLES = {
   }
 };
 
-/* ---- Role tiles: tap to see what a role means ---------------------------- */
-var peeking=null;
-function peek(r){
+/* ---- Role tiles: this IS the role selection --------------------------------
+   The person declares which of the three they run on. That declaration is
+   authoritative: it becomes the dominant bar on the card. The four questions
+   then shape the agent, and only nudge the two roles underneath it. */
+var chosenRole=null;
+function pickRole(r){
   var box=document.getElementById('peekbox');
   var btns=document.querySelectorAll('.triad button');
 
-  if(peeking===r){                       // tapping the open one closes it
-    box.classList.add('hidden');
-    btns.forEach(function(b){ b.classList.remove('on'); b.setAttribute('aria-expanded','false'); });
-    peeking=null;
-    return;
-  }
-
+  chosenRole=r;
   var R=ROLES[r];
   btns.forEach(function(b){
     var on = b.getAttribute('data-role')===r;
     b.classList.toggle('on', on);
-    b.setAttribute('aria-expanded', on?'true':'false');
+    b.setAttribute('aria-pressed', on?'true':'false');
   });
 
   box.innerHTML =
@@ -882,11 +901,13 @@ function peek(r){
     '<div class="pk-lives">'+R.alias+' \u00b7 '+R.lives+'</div>'+
     '<div class="pk-line">'+R.strength+'</div>'+
     '<div class="pk-act">'+
-      '<button class="btn-sm" onclick="toWizard()">Build my battle card</button>'+
+      '<button class="btn-sm" onclick="toWizard()">This is me \u2014 continue</button>'+
     '</div>';
   box.classList.remove('hidden');
-  peeking=r;
-  trk('peek_'+r);
+  clearNeed();
+  var warn=document.getElementById('rolewarn');
+  if(warn) warn.classList.add('hidden');
+  trk('picked_'+r);
 }
 
 function toWizard(){
@@ -936,6 +957,8 @@ function showNeed(msg){
   var row=pane.querySelector('.btnrow');
   if(row) pane.insertBefore(d,row); else pane.appendChild(d);
 }
+/* Only removes the transient per-step messages. The role warning is a
+   persistent element with its own class, so it is toggled, never removed. */
 function clearNeed(){
   document.querySelectorAll('.needmsg').forEach(function(x){ x.remove(); });
 }
@@ -961,25 +984,48 @@ function build(){
   for(var i=0;i<qs.length;i++){
     if(!ans[qs[i]]){ setStep(i+1); showNeed('Pick one to continue.'); return; }
   }
+  /* The declared role is required too - it is what the card leads with. */
+  if(!chosenRole){
+    document.querySelector('.triadwrap').scrollIntoView({behavior:'smooth',block:'center'});
+    var warn=document.getElementById('rolewarn');
+    if(warn) warn.classList.remove('hidden');
+    return;
+  }
 
   var S=STRUGGLE[ans.q1], W=WHY[ans.q2], H=HANDOVER[ans.q3], K=STAKES[ans.q4];
 
-  /* Role is derived from the answers, not measured separately. */
-  var s=score(ans);
-  var ordered=rank(s,ans);
-  var primary=ordered[0], secondary=ordered[1];
-  var split=(s[primary]-s[secondary])<=1;
+  /* THE ROLE IS DECLARED, NOT GUESSED.
+     The person picked it on the tiles, so it is always the dominant bar. The four
+     answers still shape the two roles underneath, so the mix stays personal -
+     but they can never contradict the choice that was made deliberately. */
+  var raw=score(ans);
+  var primary=chosenRole;
+  var rest=ORDER.filter(function(r){ return r!==primary; })
+                .sort(function(a,b){ return raw[b]-raw[a]; });
+  var secondary=rest[0], third=rest[1];
+
+  /* Rescale so the declared role leads clearly and the other two split the
+     remainder in proportion to the answers. */
+  var restTotal=raw[secondary]+raw[third];
+  var s={};
+  s[primary]=52;
+  if(restTotal>0){
+    s[secondary]=Math.round(48*(raw[secondary]/restTotal));
+    s[third]=48-s[secondary];
+  } else {
+    s[secondary]=24; s[third]=24;
+  }
+  /* Keep the declared role visibly on top even when the answers lean hard. */
+  if(s[secondary]>=s[primary]-6){ s[secondary]=s[primary]-7; s[third]=100-s[primary]-s[secondary]; }
+
   var R=ROLES[primary], R2=ROLES[secondary];
-  var total=s.artist+s.operator+s.entrepreneur || 1;
+  var total=100;
 
   var AN=agentName(ans);
   var superquote='"'+esc(sp)+'"';
-  var prompt=agentPromptFor(ans, sp);
 
-  var blend = split
-    ? 'You read as a genuine split: <b>'+R.name.replace('The ','')+'</b> and <b>'+R2.name.replace('The ','')+
-      '</b> almost neck and neck. You can cover both, which is exactly why you have never built anything that covers them for you.'
-    : 'You read primarily as <b>'+R.name.replace('The ','')+'</b>, with a <b>'+R2.name.replace('The ','')+'</b> streak underneath.';
+  var blend='You run as <b>'+R.name.replace('The ','')+'</b>, with a <b>'+
+            R2.name.replace('The ','')+'</b> streak underneath.';
 
   var mixrows='';
   ORDER.forEach(function(r){
@@ -1023,13 +1069,11 @@ function build(){
   h+='<div class="sec"><div class="h">Fix Now \u00b7 This Week</div>'+
      '<div class="thisweek">'+H.week+'</div></div>';
 
-  /* 6. The agent - named, specified, and pasteable. */
+  /* 6. The agent - named and specified. The prompt block was removed: the card's
+     job is to name the agent and the payoff, the course is what teaches the build. */
   h+='<div class="sec"><div class="h">Your Agent \u00b7 '+AN.replace('The ','')+'</div>'+
      '<p>'+H.takes+'</p>'+
-     '<p style="margin-top:10px;">'+K.priority+'</p>'+
-     '<div class="agentbox"><div class="tag">Paste-and-run prompt</div>'+esc(prompt)+'</div>'+
-     '<p style="margin-top:11px;color:#9aa0b5;font-size:13px;">Copy that into ChatGPT, Claude or Gemini as your '+
-     'first message. It is built from your answers, in your words.</p></div>';
+     '<p style="margin-top:10px;">'+K.priority+'</p></div>';
 
   /* 7. The payoff, plus the cost of doing nothing. */
   h+='<div class="sec"><div class="h">What You\'ll Own</div>'+
@@ -1054,9 +1098,12 @@ function build(){
   trk('handover_'+ans.q3);              // what they would hand over -> material
   trk('stakes_'+ans.q4);                // what happens if nothing changes
   trk('agent_'+ans.q3+'_'+ans.q2);      // the composed agent, 25 combinations
-  trk('role_'+primary);                 // the derived role
-  trk('secondary_'+secondary);
-  if(split) trk('role_split');
+  trk('role_'+primary);                 // the role they declared
+  trk('secondary_'+secondary);          // strongest of the other two, from answers
+  /* Whether the declared role agrees with what the answers alone would have said.
+     A high mismatch rate means people see themselves differently than they work. */
+  var wouldBe=rank(raw,ans)[0];
+  trk(wouldBe===primary ? 'selfview_matches' : 'selfview_differs');
   trk('intake_'+ans.q1+'_'+ans.q2+'_'+ans.q3);
 
   document.getElementById('resultView').scrollIntoView({behavior:'smooth'});
@@ -1128,18 +1175,48 @@ function again(){
   trk('card_again'); resetRating();
   document.getElementById('resultView').classList.add('hidden');
   document.getElementById('wizard').classList.remove('hidden');
-  /* Close any open role tile so the page returns to a clean state. */
+  /* Clear the declared role so the next run starts from a clean slate. */
   var pb=document.getElementById('peekbox');
   if(pb) pb.classList.add('hidden');
   document.querySelectorAll('.triad button').forEach(function(x){
-    x.classList.remove('on'); x.setAttribute('aria-expanded','false');
+    x.classList.remove('on'); x.setAttribute('aria-pressed','false');
   });
-  peeking=null;
+  chosenRole=null;
   setStep(0);
   document.getElementById('superpower').value='';
   document.querySelectorAll('input[type=radio]').forEach(function(x){x.checked=false;});
   stepSeen={}; window.scrollTo(0,0);
 }
+/* ---- Countdown on the course CTA ------------------------------------------
+   Same launch target as the homepage. When it expires the block switches to a
+   live state rather than sitting at 00:00:00:00. */
+(function(){
+  var launch=new Date('2026-08-16T09:00:00');
+  var mini=document.getElementById('cdMini'), status=document.getElementById('cdStatus');
+  if(!mini||!status) return;
+  var pad=function(n){ return (n<10?'0':'')+n; };
+  function tick(){
+    var diff=launch-new Date();
+    if(diff<=0){
+      mini.style.display='none';
+      status.className='cd-live';
+      status.textContent='Now live \u2014 start today';
+      return true;
+    }
+    var s=Math.floor(diff/1000);
+    var d=Math.floor(s/86400); s-=d*86400;
+    var h=Math.floor(s/3600);  s-=h*3600;
+    var m=Math.floor(s/60);    s-=m*60;
+    document.getElementById('cdD').textContent=pad(d);
+    document.getElementById('cdH').textContent=pad(h);
+    document.getElementById('cdM').textContent=pad(m);
+    document.getElementById('cdS').textContent=pad(s);
+    return false;
+  }
+  if(tick()) return;
+  var iv=setInterval(function(){ if(tick()) clearInterval(iv); },1000);
+})();
+
 trk('card_view');
 trackStep(0);
 </script>

@@ -201,15 +201,22 @@ function buildAllowlist() {
   }
   ev.add('role_split'); // primary and secondary within 2 points
 
-  // Role tiles are now interactive: peek_* records which role profile was
-  // opened, role_picked_* records a self-declared role, and path_* separates
-  // the two routes to a card so conversion can be compared.
+  // The role is now DECLARED on the tiles, not inferred. picked_* records the
+  // tile that was chosen; peek_*/role_picked_*/path_* are retained from the
+  // previous version so stale cached pages do not start 403ing.
   for (const r of ROLES) {
+    ev.add(`picked_${r}`);
     ev.add(`peek_${r}`);
     ev.add(`role_picked_${r}`);
   }
   ev.add('path_diagnostic');
   ev.add('path_selfdeclared');
+
+  // Does the declared role agree with what the four answers alone would say?
+  // A high `differs` rate means people see themselves differently than they work,
+  // which is itself the most interesting thing the intake can surface.
+  ev.add('selfview_matches');
+  ev.add('selfview_differs');
 
   // --- current: the intake ---
   for (const s of STRUGGLES) ev.add(`struggle_${s}`);

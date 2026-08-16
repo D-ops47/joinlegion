@@ -54,21 +54,43 @@ export default async () => {
   const created = c.card_created || 0;
   const unique = c.card_created_unique || 0;
 
-  // --- the headline answer: which role is running these people's days -------
+  // --- which role people say they run on ------------------------------------
+  // The role is DECLARED on the tiles now, so `picked` and `primary` should
+  // agree. `picked` is the truer number: it counts every tile tap, including
+  // people who never finished the four questions.
   const roles = ROLES.map((key) => {
     const primary = c[`role_${key}`] || 0;
     const secondary = c[`secondary_${key}`] || 0;
+    const picked = c[`picked_${key}`] || 0;
     return {
       key,
       role: ROLE_LABELS[key],
       alias: ROLE_ALIASES[key],
+      declared_on_card: primary,
       primary,
       primary_share_pct: pct(primary, created),
+      tile_picked: picked,
       secondary,
       // how often this role shows up at all, primary or underneath
       appears_total: primary + secondary,
     };
   }).sort((a, b) => b.primary - a.primary);
+
+  // Does the declared role agree with what the four answers alone would say?
+  // A high `differs` share is the interesting finding: people see themselves
+  // differently than their week actually reads.
+  const svMatch = c.selfview_matches || 0;
+  const svDiff = c.selfview_differs || 0;
+  const svTotal = svMatch + svDiff;
+  const selfView = {
+    answered_consistently: svMatch,
+    answers_pointed_elsewhere: svDiff,
+    mismatch_pct: pct(svDiff, svTotal),
+    note:
+      'Compares the role the person picked against the role their four answers ' +
+      'alone would have produced. A high mismatch means self-image and working ' +
+      'reality diverge — which is the argument for the agent.',
+  };
 
   const roleTotal = roles.reduce((n, r) => n + r.primary, 0);
   const dominant = roleTotal ? roles[0] : null;
@@ -281,10 +303,9 @@ export default async () => {
         top_reason_it_persists: whys[0] && whys[0].count ? whys[0].reason : null,
         most_needed_agent: agentDemand[0] ? agentDemand[0].agent : null,
         most_needed_agent_count: agentDemand[0] ? agentDemand[0].count : 0,
-        dominant_role: dominant ? dominant.role : null,
-        dominant_role_share_pct: dominant ? dominant.primary_share_pct : null,
-        split_results: c.role_split || 0,
-        split_share_pct: pct(c.role_split || 0, created),
+        most_declared_role: dominant ? dominant.role : null,
+        most_declared_role_share_pct: dominant ? dominant.primary_share_pct : null,
+        self_view_mismatch_pct: selfView.mismatch_pct,
         /* Value headline — the two numbers worth checking first. */
         star_average: ratingAvg,
         star_responses: ratingN,
@@ -306,15 +327,11 @@ export default async () => {
       stakes_if_nothing_changes: stakes,
       top_intake_profiles: topIntakes,
 
-      /* The role is derived from the intake rather than measured with its own
-         questions, so this is a descriptive cut, not the headline. */
+      /* The role is DECLARED on the tiles by the person. `roles` is therefore a
+         count of self-identification, not a measurement. */
       roles,
-      /* Which role profiles get opened from the tiles on the way in. */
-      role_tile_engagement: ROLES.map((key) => ({
-        key,
-        role: ROLE_LABELS[key],
-        opened: c[`peek_${key}`] || 0,
-      })).sort((a, b) => b.opened - a.opened),
+      /* Whether that self-identification matches what the answers imply. */
+      self_view_vs_answers: selfView,
       funnel,
       biggest_drop_off: biggestDrop,
       ratings: {
