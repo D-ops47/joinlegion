@@ -19,7 +19,6 @@ SECTIONS = [
     "The Agent That Ends This",
     "AI agents,",   # .bigclaim, was the "How AI Actually Does This" heading
     "Why This One Fix Matters Most",
-    "Start Today",
     "What You'll Own",
 ]
 

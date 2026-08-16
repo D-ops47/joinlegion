@@ -278,9 +278,6 @@
   .sec p{font-size:14.5px;line-height:1.65;color:#d6dbe8;}
   .sec p b{color:#fff;font-weight:600;}
   .sec p + p{margin-top:11px;}
-  .thisweek{border:1px solid var(--pline);border-radius:10px;padding:16px 17px;margin-top:12px;
-    font-size:14px;line-height:1.6;color:#fff;background:rgba(153,51,255,.07);
-    box-shadow:inset 0 0 22px rgba(153,51,255,.08);}
 
   /* PURPOSE STATEMENT — the declarative line they can claim as their own.
      Treated as the loudest thing on the card after the role name. */
@@ -321,8 +318,6 @@
   .mult{border:1px solid rgba(34,197,94,.30);border-radius:11px;padding:16px 18px;margin-top:12px;
     font-size:14.5px;line-height:1.65;color:#eafff2;background:rgba(34,197,94,.055);
     box-shadow:inset 0 0 22px rgba(34,197,94,.07);}
-  .mult .mh{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;
-    color:#4ade80;margin-bottom:8px;font-weight:600;}
   .mult b{color:#fff;font-weight:600;}
   .bcard-foot{display:flex;justify-content:space-between;gap:10px;padding:17px 32px 21px;
     color:var(--faint);font-size:10.5px;font-family:'Oswald',sans-serif;letter-spacing:.18em;
@@ -835,40 +830,35 @@ var STRUGGLE = {
     short:'not enough of the right work coming in',
     name:'Demand',
     struggle:'Not enough of the right work coming in \u2014 and too much of the wrong work when it does.',
-    multiply:'Demand is the only problem that makes every other problem smaller. Fix the flow of the right customers and pricing, hiring and time all get easier by consequence.',
-    own:'a pipeline that fills without you personally chasing it'
+    multiply:'Demand is the only problem that makes every other problem smaller. Fix the flow of the right customers and pricing, hiring and time all get easier by consequence.'
   },
   money:{
     label:'the money actually working',
     short:'the money not working \u2014 pricing, margin or cash',
     name:'Money',
     struggle:'The revenue is there. What is left after it is not \u2014 pricing, margin, or cash timing is eating it.',
-    multiply:'Money problems are almost never volume problems. When price and margin are right, the same work you already do starts paying for the business instead of just feeding it.',
-    own:'a price and a margin that survive contact with a busy month'
+    multiply:'Money problems are almost never volume problems. When price and margin are right, the same work you already do starts paying for the business instead of just feeding it.'
   },
   time:{
     label:'your time back',
     short:'the week being full while nothing moves forward',
     name:'Time',
     struggle:'The business has your whole week and you are still behind. Every hour goes somewhere, and none of it goes to the work that grows anything.',
-    multiply:'Time is the only input you cannot buy more of. Free it and you get the one thing every other fix requires: room to actually do it.',
-    own:'a week with room in it \u2014 and the discipline that keeps the room there'
+    multiply:'Time is the only input you cannot buy more of. Free it and you get the one thing every other fix requires: room to actually do it.'
   },
   people:{
     label:'your people performing without you',
     short:'the work slipping the moment you stop watching',
     name:'People',
     struggle:'It works when you are watching. It slips when you are not. You are the quality control, permanently.',
-    multiply:'A team that performs without you is the difference between owning a business and being employed by one. Cover this and the business stops being a function of your attention.',
-    own:'a team that holds the standard when you are not in the room'
+    multiply:'A team that performs without you is the difference between owning a business and being employed by one. Cover this and the business stops being a function of your attention.'
   },
   visibility:{
     label:'knowing what is actually going on',
     short:'deciding on feel because the real numbers arrive too late',
     name:'Visibility',
     struggle:'You are making decisions on feel because the real numbers arrive too late, or not at all.',
-    multiply:'You cannot fix what you cannot see. Visibility is not a reporting problem \u2014 it is the thing standing between guessing and deciding.',
-    own:'a clear picture of the business, arriving before you need it'
+    multiply:'You cannot fix what you cannot see. Visibility is not a reporting problem \u2014 it is the thing standing between guessing and deciding.'
   }
 };
 
@@ -915,36 +905,31 @@ var HANDOVER = {
     noun:'Pursuit',
     material:'chasing people \u2014 leads, replies, follow-ups',
     takes:'First replies, second and third follow-ups, the re-approach to everyone who went quiet, and the nudge you keep meaning to send.',
-    role:'entrepreneur',
-    week:'Pick the five people who went quiet in the last ninety days and send each one a single line asking whether it is still on their list. Not a pitch. One line.'
+    role:'entrepreneur'
   },
   writing:{
     noun:'Writing',
     material:'the writing \u2014 emails, proposals, updates, posts',
     takes:'Emails, proposals, updates, posts, descriptions \u2014 everything where you know the substance and stall on the sentence.',
-    role:'artist',
-    week:'Take the one message you have been avoiding writing and say it out loud into your phone instead of typing it. Have the agent clean it up. Send it today.'
+    role:'artist'
   },
   decisions:{
     noun:'Decision',
     material:'the judgment calls \u2014 priorities and tradeoffs',
     takes:'Framing the options, naming the tradeoff, pressure-testing your reasoning, and telling you which call is least reversible.',
-    role:'entrepreneur',
-    week:'Write down the decision you have been carrying for more than a month. Just the decision, in one sentence. That sentence is usually the entire problem.'
+    role:'entrepreneur'
   },
   tracking:{
     noun:'Tracking',
     material:'the tracking \u2014 numbers, status, who owes what',
     takes:'Who owes what, what is open, what moved, what did not, and the report you keep meaning to build.',
-    role:'operator',
-    week:'Pick the one number you currently check by feel instead of by fact. Write down its real value today. That gap is your baseline.'
+    role:'operator'
   },
   comms:{
     noun:'Comms',
     material:'the communication \u2014 meetings, updates, check-ins',
     takes:'Agendas, recaps, the follow-up nobody sends, status updates, and the check-ins that exist only because nobody wrote anything down.',
-    role:'operator',
-    week:'Cancel the recurring meeting that could be a written update. Send the written update instead. See whether anybody notices.'
+    role:'operator'
   }
 };
 
@@ -1327,26 +1312,30 @@ function build(){
      '<p style="margin-top:14px;">We teach you to build it in plain language. No code, no integrations to wire, '+
      'nothing to install. You describe the job once and it holds the job from then on.</p></div>';
 
-  /* 6. What it does for the business - kept, because it earns the promise. */
+  /* 6. What it does for the business - kept, because it earns the promise.
+     The "Pointed at ..." label was dropped: the section heading already frames
+     this as the one fix that matters, so the label only restated it. */
   h+='<div class="sec"><div class="h">Why This One Fix Matters Most</div>'+
-     '<div class="mult"><div class="mh">Pointed at '+S.label+'</div>'+S.multiply+'</div></div>';
+     '<div class="mult">'+S.multiply+'</div></div>';
 
-  /* 7. One concrete action they can take before anything is built. */
-  h+='<div class="sec"><div class="h">Start Today</div>'+
-     '<div class="thisweek">'+H.week+'</div></div>';
-
-  /* 8. The payoff. Framed as employment terms, because that is the comparison
-     the buyer is actually making: this versus hiring a person to do it. */
+  /* 7. The payoff. What they own is the agent setup itself: built from their own
+     answers, at no cost, and entirely under their control. The employment terms
+     stay underneath because that is the comparison the reader is actually
+     running - this versus hiring a person to do the same job. */
   h+='<div class="sec"><div class="h">What You\'ll Own</div>'+
-     '<div class="outcome"><b>You will own '+S.own+'</b> \u2014 and the AI agent that holds it, '+
-     'whose only job is '+K.owns+'.</div>'+
+     '<div class="outcome"><b>Your own dedicated AI agent setup</b> \u2014 built around '+
+     'your answers, not a template. Its only job is '+K.owns+'. '+
+     '<b>We build it with you for free</b>, and it is yours: you hold the keys, '+
+     'you set the rules, you change it or switch it off whenever you want.</div>'+
      '<div class="terms">'+
-       '<div class="tm-h">What you are getting</div>'+
+       '<div class="tm-h">What that means</div>'+
+       '<div class="tm"><b>Tailored to you.</b> Built from what you just told us about '+S.short+' \u2014 not a generic assistant you have to bend into shape.</div>'+
+       '<div class="tm"><b>Built for free.</b> We are not selling you software. We are here to teach you to build it \u2014 and you keep it.</div>'+
+       '<div class="tm"><b>You are in complete control.</b> Your accounts, your data, your rules. Change it, pause it, or shut it off without asking anyone.</div>'+
        '<div class="tm"><b>On duty 24/7.</b> No shifts, no coverage gaps, nothing waiting for Monday.</div>'+
        '<div class="tm"><b>No salary, no benefits, no payroll tax.</b> A fraction of what the same role costs as a hire.</div>'+
        '<div class="tm"><b>Never sick, never late, never quits.</b> It does not have a bad week.</div>'+
        '<div class="tm"><b>Does the job right every single time.</b> No drift, no skipped steps, no variation because it got busy.</div>'+
-       '<div class="tm"><b>It wants to be there.</b> Nothing to manage, motivate, or performance-review.</div>'+
        '<div class="tm"><b>It gets better the longer it runs.</b> Every correction you give it sticks permanently.</div>'+
      '</div>'+
      '<p style="margin-top:13px;">'+K.closing+'</p></div>';
