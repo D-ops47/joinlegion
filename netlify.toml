@@ -46,36 +46,6 @@
     # keeps the policy correct if a real <video> or <audio> is ever added back.
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
 
-# ---------------------------------------------------------------------------
-# CSP for the proxied app at /app/*.
-#
-# The app is fetched from Lovable but served from OUR origin, so the site-wide
-# CSP above applies to it. That policy is deliberately tight for a static
-# marketing site and would break the app, which:
-#   - loads a webfont from https://cdn.gpteng.co
-#   - is a bundled SPA that evaluates inline and blob-backed script
-#   - stores its own icons and preview images
-#
-# Rather than loosen the site-wide policy and weaken every page for the sake of
-# one path, this header overrides CSP for /app/* only. Netlify applies the most
-# specific matching header block, so the homepage and card keep the strict
-# policy untouched.
-#
-# This is still a real policy, not an opt-out: object-src stays 'none',
-# base-uri stays 'self', and frame-ancestors stays 'none' so the app cannot be
-# framed. It is looser than the marketing pages because it has to be, and no
-# looser than that.
-#
-# NOTE: whoever owns the Lovable project can add third-party origins at any
-# time by editing the app. If something in the app silently stops working after
-# a Lovable change, check the browser console for a CSP violation here FIRST —
-# it will work on the .lovable.app URL (no CSP) and fail only under the proxy,
-# which makes it look like a proxy bug when it is a policy gap.
-[[headers]]
-  for = "/app/*"
-  [headers.values]
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data: https://cdn.gpteng.co; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' https:; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
-
 # Long-cache static assets.
 #
 # Scoped to /assets/* on THIS site. The proxied app's own bundles live under
@@ -155,42 +125,62 @@
 # the document contains no internal <a href> at all). There are therefore no
 # deep links that could escape the proxy prefix.
 #
-# ORDER AND `force` BELOW ARE BOTH DELIBERATE. Netlify normalises trailing
-# slashes when matching, so a rule written `from = "/app"` matches BOTH /app and
-# /app/. Written with force = true it therefore captures /app/ as well and
-# redirects it to /app/ — itself — which is an infinite 301 loop. That is not
-# hypothetical; it was deployed and measured (final=301 after 5 hops).
+# THE 200-PROXY WAS TRIED AND DOES NOT WORK. Kept commented, with the reason,
+# so nobody spends another afternoon rediscovering it:
 #
-# The fix is order plus the absence of force:
-#   1. the proxy is FIRST, so /app/ and everything deeper is answered with 200
-#      before the slash redirect is ever consulted
-#   2. the slash redirect has NO force, so it only fires for the bare /app that
-#      nothing above it served
+#   [[redirects]]
+#     from = "/app/*"
+#     to = "https://your-first-agent.lovable.app/:splat"
+#     status = 200
+#     force = true
 #
-# Reading this file cannot prove the loop is gone, because the rule list looks
-# correct either way. Only requesting the URLs can. Verify both /app and /app/
-# after any change here.
+# It delivers byte-identical HTML and every asset returns 200, yet the page
+# renders blank on every single load, throwing "Invariant failed" twice.
+#
+# Cause: the app is a TanStack Router SSR build. Its server-rendered HTML embeds
+# the route it was rendered for (`$_TSR ... matches:[{i:"__root__"},{i:""}]`,
+# i.e. the root path). Under the proxy the browser's location is /app/, which
+# matches nothing in that manifest, so hydration aborts and leaves an empty
+# root. Fixing it would require setting a basepath inside the Lovable project,
+# which would then break the app on its own .lovable.app URL.
+#
+# Two further problems found while testing, either of which would rule it out
+# independently:
+#
+#   1. Netlify does NOT apply [[headers]] blocks to externally proxied
+#      responses. Measured headers on the proxied path contained no CSP, no
+#      HSTS, no X-Frame-Options, no Referrer-Policy and no Permissions-Policy.
+#      The app would have been the one page on the site with no security
+#      headers at all.
+#
+#   2. The app's own service worker did not register through the proxy
+#      (scopes came back empty), so its PWA install and offline behaviour
+#      silently stopped working.
+#
+# THE WORKING APPROACH is a subdomain: point app.joinlegion.ai at Lovable via
+# DNS (A 185.158.133.1 + verification TXT) and connect it in the Lovable
+# project. The app then serves from its own origin, so hydration matches, its
+# headers and service worker survive, and the address stays branded. Once that
+# is live, replace the holding page below with:
+#
+#   [[redirects]]
+#     from = "/app"
+#     to = "https://app.joinlegion.ai"
+#     status = 302
+#     force = true
+#
+# Until then /app serves app.html, the branded holding page with a countdown.
+#
+# Deep links under /app land on the gate rather than the branded 404, since
+# /app/login and similar are addresses people guess and paste.
+#
+# force is deliberately OFF: with force = true this rule also captured /app
+# itself and bounced it to /app.html, which the clean-URL rule below sent
+# straight back to /app — a redirect loop on the page's own address.
 [[redirects]]
   from = "/app/*"
-  to = "https://your-first-agent.lovable.app/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
-  from = "/app"
-  to = "/app/"
-  status = 301
-
-# The app requests exactly one path absolutely: <script src="/~flock.js">.
-# Being absolute, under the proxy it resolves to joinlegion.ai/~flock.js, which
-# does not exist on this site and would fall through to the 404 page. This
-# forwards it to Lovable so the request succeeds instead of failing silently in
-# the console. If Lovable ever drops that file this rule becomes harmless.
-[[redirects]]
-  from = "/~flock.js"
-  to = "https://your-first-agent.lovable.app/~flock.js"
-  status = 200
-  force = true
+  to = "/app.html"
+  status = 302
 
 # 4. Clean URLs.
 #
@@ -220,11 +210,12 @@
 # countdown instead of leaving visitors on a Netlify error.
 #
 # This 301 retires its .html address the same way every other page's is
-# retired, and now lands on the proxied app rather than the holding page —
-# which is correct, since anyone reaching /app.html today wants the app.
+# retired. Target is /app, which currently serves the holding page and will
+# serve the real app once the subdomain is connected — so this rule is correct
+# in both states and needs no edit at launch.
 [[redirects]]
   from = "/app.html"
-  to = "/app/"
+  to = "/app"
   status = 301
   force = true
 

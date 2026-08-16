@@ -59,14 +59,11 @@ self.addEventListener('fetch', (e) => {
   if (url.pathname.startsWith('/api/')) return;
   if (req.mode === 'navigate' || req.destination === 'document') return;
 
-  /* /app/* is the Lovable app, proxied through this origin. It ships its own
-     service worker and its own fingerprinted bundles, and it is redeployed
-     independently of this site. Caching any of it here would let an old build
-     survive a Publish, so everything under /app/ goes straight to the network
-     and is left entirely to the app's own worker.
-
-     This matters specifically because /app/assets/* would otherwise match the
-     /assets/ test below. */
+  /* /app is the LEGION app's address. It currently serves a holding page and
+     will become a redirect to the app's own origin once that is connected.
+     Either way this worker must not cache it: the holding page carries a live
+     countdown, and a cached redirect would be very hard to dislodge from
+     someone's browser later. Straight to the network, always. */
   if (url.pathname === '/app' || url.pathname.startsWith('/app/')) return;
 
   /* Immutable media and icons: cache-first, then fill the cache on miss. */
