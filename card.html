@@ -324,17 +324,30 @@
     color:var(--faint);font-size:10.5px;font-family:'Oswald',sans-serif;letter-spacing:.18em;
     text-transform:uppercase;border-top:1px solid var(--pline-soft);}
 
-  /* score bars — numgrad fill for the winning role */
-  .mix{margin-top:16px;}
-  .mixrow{display:flex;align-items:center;gap:12px;margin-top:9px;}
-  .mixrow .lb{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
-    color:var(--dust);width:110px;flex:0 0 110px;}
-  .mixrow .bar{flex:1;height:6px;background:rgba(153,51,255,.13);border-radius:3px;overflow:hidden;}
-  .mixrow .bar i{display:block;height:100%;background:rgba(154,160,181,.5);border-radius:3px;}
-  .mixrow.top .bar i{background:var(--grad);box-shadow:0 0 14px rgba(153,51,255,.75);}
-  .mixrow.top .lb{color:#fff;}
-  .mixrow .pc{font-family:'Oswald',sans-serif;font-size:10.5px;color:var(--faint);width:36px;
-    flex:0 0 36px;text-align:right;}
+  /* THE PLAN — three numbered commitments. This is the centre of the card now,
+     so it gets the strongest treatment in the body. */
+  .plan{margin-top:4px;}
+  .pstep{display:flex;gap:14px;align-items:flex-start;padding:14px 0;
+    border-bottom:1px solid rgba(153,51,255,.14);}
+  .pstep:last-child{border-bottom:0;padding-bottom:2px;}
+  .pstep .pn{font-family:'Anton',sans-serif;font-size:20px;line-height:1;flex:0 0 auto;
+    background:var(--numgrad);-webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;min-width:34px;}
+  .pstep .pt{font-size:14.5px;line-height:1.66;color:var(--bone);}
+
+  /* The agent, named as the thing that ends it. */
+  .agentname{font-family:'Anton',sans-serif;font-size:22px;line-height:1.1;
+    letter-spacing:.01em;margin:2px 0 13px;
+    background:var(--numgrad);-webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;}
+  .takes{border:1px solid var(--pline);border-radius:11px;padding:14px 16px;
+    background:rgba(153,51,255,.05);font-size:14px;line-height:1.66;color:var(--bone);}
+  .takes .tk-h{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--purple3);margin-bottom:8px;}
+
+  /* How it actually works. */
+  .mech{border-left:2px solid var(--purple2);padding-left:14px;font-size:14.5px;
+    line-height:1.68;color:var(--bone);}
 
   .actbar{display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:center;
     border:1px solid var(--pline-soft);border-radius:12px;padding:17px 19px;margin-top:16px;
@@ -817,6 +830,37 @@ var STAKES = {
   }
 };
 
+var STEP1 = {
+  nevertime:'Take it off your plate entirely. You already know the answer, so we do not spend a minute teaching you it again — we build the thing that executes it without you.',
+  dontknow:'Get the decision made. We force the real options into the open, name the tradeoff plainly, and commit to one. Ambiguity is the whole delay.',
+  didntstick:'Build it so it survives your worst week. The last version failed because it needed you to remember it. This one holds its own state.',
+  others:'Close the open loops. We inventory every commitment sitting unanswered, whose it is, and how long it has been there.',
+  cantsee:'Make it visible first. We do not touch the fix until you can see the shape of the problem, because everything before that is guessing.'
+};
+
+var STEP2 = {
+  pursuit:'Build the agent that does the chasing. Every follow-up, every re-approach, every nudge you keep meaning to send — drafted and queued before you think of it.',
+  writing:'Build the agent that does the writing. You supply the substance in thirty seconds of talking; it returns the finished thing, in your voice.',
+  decisions:'Build the agent that frames the calls. It lays out the options, names what you are trading away, and tells you which one you cannot walk back.',
+  tracking:'Build the agent that holds the numbers. It knows what is open, who owes what, what moved, and it reports without being asked.',
+  comms:'Build the agent that runs the communication. Agendas before, recaps after, and the follow-up that currently never gets sent.'
+};
+
+var STEP3 = {
+  stall:'Tune it for momentum. Every week it moves something visible and tells you what moved, so progress stops being a feeling.',
+  burnout:'Tune it for relief. It never adds to your plate to keep itself running, and it batches everything into one message a day.',
+  losing:'Tune it for speed. Nothing sits, and anything going cold gets flagged before it does, not after.',
+  trapped:'Tune it for autonomy. It operates without checking in, and gets better without being told the same thing twice.'
+};
+
+var MECH = {
+  pursuit:'It watches a list, not a clock. When something has been quiet too long it writes the message, in your tone, and puts it in front of you to approve.',
+  writing:'You give it the point in a sentence. It has your previous writing as reference, so what comes back sounds like you on a good day.',
+  decisions:'It cannot want anything, which is the point. It holds every option side by side without ego and shows you the one you keep avoiding.',
+  tracking:'It reads the same sources you do, every day, without getting bored. Then it writes the summary you have been meaning to build for a year.',
+  comms:'It listens once, writes it down properly, and sends it. The meeting that existed because nobody took notes stops needing to exist.'
+};
+
 /* Role is derived, not asked. What someone is willing to hand over, combined
    with the struggle they name, says more than a temperament quiz does. */
 /* Weights were tuned by brute-forcing all 500 answer paths so that no role
@@ -1037,15 +1081,13 @@ function build(){
   var AN=agentName(ans);
   var superquote='"'+esc(sp)+'"';
 
-  var blend='You run as <b>'+R.name.replace('The ','')+'</b>, with a <b>'+
-            R2.name.replace('The ','')+'</b> streak underneath.';
+  /* The header line now states the commitment rather than the role blend. The
+     score section it used to introduce has been removed. */
+  var blend='We are going to end <b>'+S.short+'</b> by building the one thing that '+
+            'covers it while you are busy.';
 
-  var mixrows='';
-  ORDER.forEach(function(r){
-    var pc=Math.round((s[r]/total)*100);
-    mixrows+='<div class="mixrow'+(r===primary?' top':'')+'"><div class="lb">'+ROLES[r].name.replace('The ','')+'</div>'+
-             '<div class="bar"><i style="width:'+pc+'%"></i></div><div class="pc">'+pc+'%</div></div>';
-  });
+  /* The three plan steps, each composed from a different answer. */
+  var P1=STEP1[ans.q2], P2=STEP2[ans.q3], P3=STEP3[ans.q4];
 
   var h='';
   h+='<div class="bc-top">';
@@ -1066,33 +1108,47 @@ function build(){
   h+='<div class="sec"><div class="h">Why It Is Still Here</div>'+
      '<div class="mission">'+W.diag+'</div></div>';
 
-  /* 3. The derived role, with the trap that comes with it. */
-  h+='<div class="sec"><div class="h">How You Operate</div><div class="mix">'+mixrows+'</div>'+
-     '<p style="margin-top:13px;">'+R.strength+'</p>'+
-     '<p style="margin-top:10px;">'+R.trap+'</p></div>';
-
-  /* 4. What changes when it is covered. */
-  h+='<div class="sec"><div class="h">Multiply It</div>'+
-     '<div class="mult"><div class="mh">Pointed at '+S.label+'</div>'+S.multiply+'</div>'+
+  /* 3. THE PLAN. This is the centre of the card now: three commitments, each
+     composed from a different answer so it reads as their plan, not a template.
+     Replaces the old "How You Operate" score, which described the person and
+     offered them nothing. */
+  h+='<div class="sec"><div class="h">What We Are Going To Do</div>'+
+     '<div class="plan">'+
+       '<div class="pstep"><div class="pn">01</div><div class="pt">'+P1+'</div></div>'+
+       '<div class="pstep"><div class="pn">02</div><div class="pt">'+P2+'</div></div>'+
+       '<div class="pstep"><div class="pn">03</div><div class="pt">'+P3+'</div></div>'+
+     '</div>'+
      '<div class="chips"><span class="chip">'+W.mode+' mode</span>'+
      '<span class="chip">'+H.noun+'</span>'+
      '<span class="chip">'+K.label+'</span></div></div>';
 
-  /* 5. One concrete action, from what they would hand over. */
-  h+='<div class="sec"><div class="h">Fix Now \u00b7 This Week</div>'+
+  /* 4. The agent, framed as the thing that ends the struggle rather than a
+     feature list. */
+  h+='<div class="sec"><div class="h">The Agent That Ends This</div>'+
+     '<div class="agentname">'+AN+'</div>'+
+     '<div class="takes"><div class="tk-h">It takes this over permanently</div>'+H.takes+'</div>'+
+     '<p style="margin-top:12px;">'+K.priority+'</p></div>';
+
+  /* 5. How AI actually does it - the mechanism, plus the video. Abstract claims
+     do not convince; showing the work does. */
+  h+='<div class="sec"><div class="h">How AI Actually Does This</div>'+
+     '<div class="mech">'+MECH[ans.q3]+'</div>'+
+     VIDEO_BLOCK+
+     '<p style="margin-top:13px;">We teach you to build it in plain language. No code, no integrations to wire, '+
+     'nothing to install. You describe the job once and it holds the job from then on.</p></div>';
+
+  /* 6. What it does for the business - kept, because it earns the promise. */
+  h+='<div class="sec"><div class="h">Why This One Fix Matters Most</div>'+
+     '<div class="mult"><div class="mh">Pointed at '+S.label+'</div>'+S.multiply+'</div></div>';
+
+  /* 7. One concrete action they can take before anything is built. */
+  h+='<div class="sec"><div class="h">Start Today</div>'+
      '<div class="thisweek">'+H.week+'</div></div>';
 
-  /* 6. The agent - named and specified. The prompt block was removed: the card's
-     job is to name the agent and the payoff, the course is what teaches the build. */
-  h+='<div class="sec"><div class="h">Your Agent \u00b7 '+AN.replace('The ','')+'</div>'+
-     '<p>'+H.takes+'</p>'+
-     '<p style="margin-top:10px;">'+K.priority+'</p></div>';
-
-  /* 7. The payoff, plus the cost of doing nothing. */
+  /* 8. The payoff, plus the cost of doing nothing. */
   h+='<div class="sec"><div class="h">What You\'ll Own</div>'+
      '<div class="outcome"><b>You will own '+S.own+'</b> \u2014 and an agent whose only job is '+K.owns+'.</div>'+
-     '<p style="margin-top:12px;">'+K.closing+'</p>'+
-     '<p style="margin-top:10px;">'+R.directive+'</p></div>';
+     '<p style="margin-top:12px;">'+K.closing+'</p></div>';
 
   h+='</div>';
   h+='<div class="bcard-foot"><div>Battle Card \u00b7 Legion</div><div>'+AN.replace('The ','')+'</div></div>';
