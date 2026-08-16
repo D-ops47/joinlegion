@@ -126,14 +126,20 @@
 # branded 404 — /app/login and /app/anything are addresses people guess and
 # paste. Remove or replace this when the app owns its own sub-routes.
 #
-# The target is app.html, NOT /app: a redirect whose destination is itself a
-# clean-URL alias does not resolve here, and the request falls through to the
-# 404 catch-all instead. Pointing at the real file is what makes it work.
+# Two non-obvious details, both learned the hard way:
+#
+#   1. The target must be /app.html, not /app. A redirect pointing at a
+#      clean-URL alias does not resolve, and the request falls through to the
+#      404 catch-all instead.
+#
+#   2. force = false. With force = true this rule ALSO captured /app itself and
+#      bounced it to /app.html, which the clean-URL rule below sent straight
+#      back to /app — a redirect loop on the page's own address. Leaving force
+#      off lets the real file win for /app while sub-paths still redirect.
 [[redirects]]
   from = "/app/*"
   to = "/app.html"
   status = 302
-  force = true
 
 # 4. Clean URLs.
 #
