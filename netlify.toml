@@ -60,7 +60,36 @@
   status = 301
   force = true
 
-# 2. Clean URLs.
+# 2. COURSE GATE.
+#
+# The course is unfinished, so removing the button is not enough on its own:
+# /course stays deployed and reachable by anyone who typed it, bookmarked it,
+# or follows a cached link. These rules send every route into it back to the
+# card, so there is exactly one way in and it is currently closed.
+#
+# 302, not 301: this is temporary. A 301 would be cached by browsers and could
+# keep redirecting people even after the course is published.
+#
+# Placed ABOVE the clean-URL rules because Netlify applies the first match.
+[[redirects]]
+  from = "/course"
+  to = "/card"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/course.html"
+  to = "/card"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/course/*"
+  to = "/card"
+  status = 302
+  force = true
+
+# 3. Clean URLs.
 #
 # Netlify's Pretty URLs already RESOLVED /card as well as /card.html, which meant
 # every page existed at two addresses returning 200 at the same time — duplicate
@@ -82,11 +111,8 @@
   status = 301
   force = true
 
-[[redirects]]
-  from = "/course.html"
-  to = "/course"
-  status = 301
-  force = true
+# NOTE: /course.html is handled by the course gate above, so it has no
+# clean-URL rule here.
 
 [[redirects]]
   from = "/avenues.html"

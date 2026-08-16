@@ -128,8 +128,8 @@
   .cd-mini .l{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
     color:var(--faint);margin-top:5px;}
   .cd-mini .c{font-size:19px;color:var(--violet);padding-top:11px;font-weight:800;}
-  .cd-live{font-size:13px;letter-spacing:.1em;text-transform:uppercase;
-    color:#4ade80;font-weight:700;margin:18px 0 14px;}
+  .cd-soon{font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--cyan);font-weight:700;margin:18px 0 14px;}
   @media(max-width:420px){
     .cd-mini{gap:5px;}
     .cd-mini .u{min-width:45px;padding:7px 4px 6px;}
@@ -347,9 +347,10 @@ paint();
   function tick(){
     var diff=launch-new Date();
     if(diff<=0){
+      /* Not yet published, so avoid claiming it is live. */
       mini.style.display='none';
-      status.className='cd-live';
-      status.textContent='Now live \u2014 start today';
+      status.className='cd-soon';
+      status.textContent='Opening soon';
       return true;
     }
     var s=Math.floor(diff/1000);

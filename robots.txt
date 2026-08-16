@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
+# The course is unfinished and gated behind a redirect. Disallowed so crawlers
+# do not index or surface it before it is ready. Remove these two lines when the
+# course is published.
+Disallow: /course
+Disallow: /course.html
+
 Sitemap: https://joinlegion.ai/sitemap.xml

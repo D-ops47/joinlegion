@@ -375,6 +375,16 @@
   .tut-cta a:hover{transform:translateY(-2px);box-shadow:0 0 46px rgba(153,51,255,.68);}
   .tut-cta .tut-sub{font-size:11.5px;color:var(--faint);margin-top:13px;line-height:1.55;}
 
+  /* LOCKED CTA — the course is not finished, so this deliberately does not
+     route anywhere. Styled to read as "coming", not as a broken button: no
+     gradient fill, no hover lift, default cursor. */
+  .cta-locked{position:relative;display:inline-block;border-radius:12px;
+    padding:15px 30px;font-weight:700;font-size:14px;font-family:'Oswald',sans-serif;
+    text-transform:uppercase;letter-spacing:.06em;cursor:default;user-select:none;
+    color:var(--purple3);background:rgba(153,51,255,.07);
+    border:1px solid var(--pline);box-shadow:inset 0 0 26px rgba(153,51,255,.09);}
+  .cta-locked::after{content:'\00a0\00a0\1F512';font-size:12px;opacity:.75;}
+
   /* COUNTDOWN on the course CTA — same treatment as the homepage clock, scaled
      down so it supports the button instead of competing with it. */
   .cd-status{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.24em;
@@ -389,8 +399,8 @@
   .cd-mini .l{font-family:'Oswald',sans-serif;font-size:8.5px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--faint);margin-top:5px;}
   .cd-mini .c{font-family:'Anton',sans-serif;font-size:19px;color:var(--purple3);padding-top:11px;}
-  .cd-live{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.1em;
-    text-transform:uppercase;color:#4ade80;font-weight:600;margin-bottom:15px;}
+  .cd-soon{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--purple3);font-weight:600;margin-bottom:15px;}
   @media(max-width:420px){
     .cd-mini{gap:5px;}
     .cd-mini .u{min-width:44px;padding:7px 4px 6px;}
@@ -602,8 +612,11 @@
         <span class="c">:</span>
         <div class="u"><span class="n" id="cdS">00</span><span class="l">Sec</span></div>
       </div>
-      <a href="/course">The 4-Day Mini-Course</a>
-      <div class="tut-sub">~15 minutes a day · build it on ChatGPT · bring it to your real tools</div>
+      <!-- DEACTIVATED: the course is unfinished, so this must not route anywhere.
+           Rendered as a <span>, not an <a> — there is no href to hand-edit, no
+           middle-click target and nothing for a crawler to follow. -->
+      <span class="cta-locked" aria-disabled="true">Unleash the power of AI</span>
+      <div class="tut-sub">Opens when the countdown hits zero.</div>
     </div>
   </div>
 
@@ -1198,9 +1211,11 @@ function again(){
   function tick(){
     var diff=launch-new Date();
     if(diff<=0){
+      /* The course is gated, so do NOT claim it is live. Show a neutral state
+         until the CTA is deliberately re-enabled. */
       mini.style.display='none';
-      status.className='cd-live';
-      status.textContent='Now live \u2014 start today';
+      status.className='cd-soon';
+      status.textContent='Opening soon';
       return true;
     }
     var s=Math.floor(diff/1000);
