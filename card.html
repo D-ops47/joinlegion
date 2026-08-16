@@ -431,11 +431,31 @@
   /* The agent-at-work clip. 16:9 box reserved up front so the card never
      reflows when the video loads. */
   .vidwrap{margin-top:15px;}
+  /* The frame is the button. Tapping anywhere plays or pauses, which is the
+     recovery path whenever autoplay is refused (Low Power Mode, Data Saver). */
+  .vidbox{position:relative;display:block;width:100%;cursor:pointer;
+    border-radius:11px;outline:none;}
+  .vidbox:focus-visible{box-shadow:0 0 0 3px rgba(153,51,255,.55);}
   .agentvid{display:block;width:100%;aspect-ratio:16/9;border-radius:11px;
     border:1px solid var(--pline);background:#05040a;object-fit:cover;
     box-shadow:0 14px 40px rgba(0,0,0,.5), 0 0 34px rgba(153,51,255,.10);}
+  /* Visible play affordance. Shown whenever the clip is not running, so a still
+     frame reads as a video waiting to be played rather than a broken embed. */
+  .vidplay{position:absolute;inset:0;display:flex;align-items:center;
+    justify-content:center;pointer-events:none;border-radius:11px;
+    background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.34), rgba(0,0,0,.62));}
+  .vidplay i{width:62px;height:62px;border-radius:50%;
+    background:var(--grad);display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 30px rgba(153,51,255,.5);}
+  .vidplay i::after{content:'';display:block;
+    width:0;height:0;margin-left:5px;
+    border-left:19px solid #fff;
+    border-top:12px solid transparent;
+    border-bottom:12px solid transparent;}
+  .vidbox:hover .vidplay i{filter:brightness(1.12);}
   .vidcap{margin-top:8px;font-family:'Oswald',sans-serif;font-size:10px;
     letter-spacing:.17em;text-transform:uppercase;color:var(--faint);text-align:center;}
+  .vidhint{color:var(--purple3);}
   @media print{ .vidwrap{display:none;} }
 
   .actbar{display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:center;
@@ -774,41 +794,136 @@ function firstBuildOnThisBrowser(){
    the on-screen text stays legible at any size.
 
    Loading rules that matter:
-     - preload="none" plus a poster, so nothing downloads until it is scrolled to
-     - IntersectionObserver starts playback only when visible, and pauses when not
+     - preload="metadata" plus a poster: cheap, but the first frame is ready to
+       decode the instant play() is called
+     - IntersectionObserver starts playback when ANY sliver is visible, and
+       pauses when it leaves
      - muted + playsinline, or iOS refuses to autoplay
-     - prefers-reduced-motion: the poster is shown and the video never plays
+     - always tappable, so a blocked autoplay is never a dead end
+     - prefers-reduced-motion: no autoplay, but the play badge stays visible
 ---------------------------------------------------------------------------- */
 function videoBlock(material){
   var base='/assets/agent/agent_'+material;
+  /* The whole thing is a button, not just the video: the play badge sits on top,
+     and tapping anywhere in the frame toggles playback. preload="metadata"
+     rather than "none" so the first frame is decodable the moment it is asked
+     to play — with "none", play() on an untouched source can be refused. */
   return '<div class="vidwrap">'+
-    '<video class="agentvid" id="agentvid" muted loop playsinline preload="none" '+
-      'poster="'+base+'_poster.jpg" aria-label="An agent updating records and writing a report on its own">'+
-      '<source src="'+base+'.webm" type="video/webm">'+
-      '<source src="'+base+'.mp4" type="video/mp4">'+
-    '</video>'+
-    '<div class="vidcap">AI demo. No one is touching the keyboard.</div>'+
+    '<div class="vidbox" id="vidbox" role="button" tabindex="0" '+
+         'aria-label="Play the agent demo">'+
+      '<video class="agentvid" id="agentvid" muted loop playsinline preload="metadata" '+
+        'poster="'+base+'_poster.jpg" aria-label="An agent updating records and writing a report on its own">'+
+        '<source src="'+base+'.webm" type="video/webm">'+
+        '<source src="'+base+'.mp4" type="video/mp4">'+
+      '</video>'+
+      /* Visible affordance. Shown whenever the clip is not playing, so a static
+         frame reads as "a video waiting to be played" instead of "broken". */
+      '<div class="vidplay" id="vidplay" aria-hidden="true"><i></i></div>'+
+    '</div>'+
+    '<div class="vidcap">AI demo. No one is touching the keyboard. '+
+      '<span class="vidhint" id="vidhint">Tap to play</span></div>'+
   '</div>';
 }
 
+/* ---- Arming the clip ---------------------------------------------------------
+   WHY THIS IS MORE DEFENSIVE THAN IT LOOKS
+
+   The first version used IntersectionObserver with threshold 0.35, so playback
+   started only when 35% of the clip was on screen AT ONE MOMENT. On a short
+   viewport — phone in landscape, a resized window, a zoomed page, or an in-app
+   browser with heavy chrome — that is never satisfied, so the clip NEVER
+   started and the section looked broken. Measured: at 390x420 the visible ratio
+   peaked at 0 and playback never began.
+
+   Rules now:
+     - threshold 0.01 + rootMargin: any sliver visible arms it
+     - a timed fallback plays it regardless if the observer never fires
+     - tap/click/Enter toggles playback, so autoplay refusal is always recoverable
+     - the play badge is visible whenever it is not playing
+     - reduced motion still does NOT autoplay, but the badge invites a manual
+       start rather than leaving a mute still frame with no explanation
+       (iOS Low Power Mode turns reduced-motion on automatically, which is why
+       this case is common rather than rare)
+     - re-entering view restarts from 0 so the report payoff is never missed
+---------------------------------------------------------------------------- */
 function armVideo(){
   var v=document.getElementById('agentvid');
   if(!v) return;
+  var box=document.getElementById('vidbox');
+  var badge=document.getElementById('vidplay');
+  var hint=document.getElementById('vidhint');
 
-  /* Respect reduced-motion: leave the poster up and never play. */
   var still=false;
   try{ still=window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(x){}
-  if(still) return;
 
-  if(!('IntersectionObserver' in window)){ try{ v.play(); }catch(x){} return; }
+  function paint(){
+    var playing = !v.paused && !v.ended && v.readyState > 2;
+    if(badge) badge.style.display = playing ? 'none' : 'flex';
+    if(hint)  hint.style.display  = playing ? 'none' : 'inline';
+  }
+  v.addEventListener('playing', paint);
+  v.addEventListener('pause',   paint);
+  v.addEventListener('ended',   paint);
+  paint();
+
+  /* If the source fails outright, say so instead of showing a dead frame. */
+  v.addEventListener('error', function(){
+    if(hint){ hint.textContent='Demo unavailable'; hint.style.display='inline'; }
+    if(badge) badge.style.display='none';
+  });
+
+  function tryPlay(){
+    var pr=v.play();
+    if(pr && pr.catch) pr.catch(function(){ paint(); });
+  }
+
+  /* Manual control. This is the safety net: whatever blocks autoplay — Low
+     Power Mode, Data Saver, permission policy — a tap always works. */
+  function toggle(){
+    if(v.paused){ tryPlay(); } else { v.pause(); }
+  }
+  if(box){
+    box.addEventListener('click', toggle);
+    box.addEventListener('keydown', function(e){
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggle(); }
+    });
+  }
+
+  if(still) return;   /* honour the preference; the badge invites a manual start */
+
+  var started=false;
+  function kick(){
+    if(started) return;
+    started=true;
+    tryPlay();
+  }
+
+  if(!('IntersectionObserver' in window)){ kick(); return; }
 
   var io=new IntersectionObserver(function(es){
     es.forEach(function(e){
-      if(e.isIntersecting){ v.play().catch(function(){}); }
-      else{ v.pause(); }
+      if(e.isIntersecting){
+        /* Restart from the top so the report at the end is not missed by
+           someone who scrolled away and came back mid-clip. */
+        if(v.paused && v.currentTime > 0.4){ try{ v.currentTime=0; }catch(x){} }
+        started=true;
+        tryPlay();
+      } else if(!v.paused){
+        v.pause();
+      }
     });
-  },{threshold:0.35});
+  },{threshold:0.01, rootMargin:'0px 0px -8% 0px'});
   io.observe(v);
+
+  /* Belt and braces: if the observer has not fired within a couple of seconds
+     and the clip is already on screen, start it anyway. Covers short viewports
+     and any browser where the observer misbehaves. */
+  setTimeout(function(){
+    if(started) return;
+    var r=v.getBoundingClientRect();
+    var onScreen = r.bottom > 0 && r.top < (window.innerHeight||0);
+    if(onScreen) kick();
+  }, 2200);
 }
 
 /* ---- The intake model -------------------------------------------------------
