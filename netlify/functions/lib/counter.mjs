@@ -193,6 +193,14 @@ function buildAllowlist() {
     'course_start',
     'course_view',
     'example_view',
+    // The /app gate. `app_waitlist_view` counts people who reached the app
+    // address BEFORE it opened — demand for the app measured before launch,
+    // which is the only window in which that number can ever be collected.
+    // `app_open` replaces it automatically once the gate goes live, so the two
+    // keys separate pre-launch intent from real post-launch traffic instead of
+    // blending them into one meaningless total.
+    'app_waitlist_view',
+    'app_open',
   ]);
 
   // The builder is 5 screens (superpower + 4 questions). Kept at 7 so any

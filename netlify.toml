@@ -93,7 +93,45 @@
   status = 302
   force = true
 
-# 3. Clean URLs.
+# 3. APP GATE.
+#
+# /app is the permanent public address for the LEGION app. It exists BEFORE the
+# app does, so any link shared today keeps working on launch day and nothing
+# downstream ever needs editing.
+#
+# Right now it serves app.html — a real branded page with a countdown, not a
+# 404 and not a bounce to the card. Someone who typed /app is showing intent.
+#
+# TO GO LIVE when the app is hosted ELSEWHERE: uncomment the block below and
+# set `to` to the real address. This 302 then takes over and app.html is never
+# served. Keep it ABOVE the clean-URL rules so it matches first.
+#
+# 302, not 301: a 301 is cached by browsers effectively forever, so if the app
+# address ever changes, visitors would keep hitting the old one. Switch it to
+# 301 only once the destination is truly permanent.
+#
+# [[redirects]]
+#   from = "/app"
+#   to = "https://app.joinlegion.ai"
+#   status = 302
+#   force = true
+#
+# [[redirects]]
+#   from = "/app/*"
+#   to = "https://app.joinlegion.ai/:splat"
+#   status = 302
+#   force = true
+
+# Until the app ships, deep links under /app land on the gate rather than the
+# branded 404 — /app/login and /app/anything are addresses people guess and
+# paste. Remove or replace this when the app owns its own sub-routes.
+[[redirects]]
+  from = "/app/*"
+  to = "/app"
+  status = 302
+  force = true
+
+# 4. Clean URLs.
 #
 # Netlify's Pretty URLs already RESOLVED /card as well as /card.html, which meant
 # every page existed at two addresses returning 200 at the same time — duplicate
@@ -112,6 +150,12 @@
 [[redirects]]
   from = "/card.html"
   to = "/card"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/app.html"
+  to = "/app"
   status = 301
   force = true
 
@@ -139,7 +183,7 @@
 # /404.html is deliberately NOT redirected — the 404 rule below serves it
 # directly, and rewriting it would break the branded error page.
 
-# 3. Serve the branded 404 page. MUST stay last so it never shadows /api/*.
+# 5. Serve the branded 404 page. MUST stay last so it never shadows /api/*.
 [[redirects]]
   from = "/*"
   to = "/404.html"

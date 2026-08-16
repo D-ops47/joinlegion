@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<!-- ============================================================================
+     /app — THE LAUNCH GATE FOR THE LEGION APP
+     ============================================================================
+     WHY THIS FILE EXISTS
+     The app is not finished, but its public address needs to exist NOW so that
+     every link printed, texted, or spoken today keeps working the day it ships.
+     /app is that permanent address. Nothing downstream ever has to change.
+
+     HOW TO GO LIVE — pick ONE, both take under a minute:
+
+       OPTION A — the app lives somewhere else (its own domain, a subdomain,
+                  Vercel, TestFlight, an app store, anything with a URL).
+                  Open netlify.toml, find the block marked "APP GATE", and
+                  uncomment the redirect. Every visit to /app forwards there.
+                  Nothing in this file needs to be touched.
+
+       OPTION B — the app lives here on joinlegion.ai.
+                  Replace this file with the real app, or set LIVE = true below
+                  and fill in APP_URL to turn this page into a working door.
+
+     WHILE IT IS CLOSED
+     This page is deliberately a real page, not a 404 and not a redirect to the
+     card. Someone who typed /app is showing intent; that intent is worth
+     capturing with a countdown and a next step, not discarding with an error.
+     It is noindex so it never competes with the homepage in search while empty.
+============================================================================ -->
+
+<meta name="robots" content="noindex, follow">
+<title>LEGION App — Opening Soon</title>
+<meta name="description" content="The LEGION app is being armed. Build your battle card in the meantime.">
+
+<!-- Link preview: someone will share this address before it opens. -->
+<meta property="og:site_name" content="LEGION AI">
+<meta property="og:title" content="The LEGION app is being armed">
+<meta property="og:description" content="Your agents, in one place. Opening soon.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://joinlegion.ai/app">
+<meta property="og:image" content="https://joinlegion.ai/assets/og-legion.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The LEGION app is being armed">
+<meta name="twitter:description" content="Your agents, in one place. Opening soon.">
+<meta name="twitter:image" content="https://joinlegion.ai/assets/og-legion.jpg">
+
+<meta name="theme-color" content="#9933FF">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png">
+<link rel="canonical" href="https://joinlegion.ai/app">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#000000; --coal:#141414;
+    --purple:#9933FF; --purple2:#8A2BE2; --purple3:#C084FC; --deep:#3b0a75;
+    --metal:#E0E0E0; --dust:#9aa0b5; --faint:#6b7080;
+    --grad:linear-gradient(135deg,#8A2BE2,#9933FF);
+    --numgrad:linear-gradient(180deg,#fff,#C084FC 70%,#9933FF);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    background:
+      radial-gradient(900px 600px at 20% 10%, rgba(153,51,255,.16) 0%, transparent 60%),
+      radial-gradient(700px 500px at 85% 85%, rgba(138,43,226,.12) 0%, transparent 60%),
+      var(--black);
+    color:var(--metal);
+    min-height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    padding:48px 20px;
+    position:relative;overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* HUD corner frame — the same furniture as 404 and the card. */
+  .frame{position:fixed;inset:14px;pointer-events:none;z-index:1;}
+  .frame i{position:absolute;width:34px;height:34px;border:2px solid rgba(153,51,255,.5);}
+  .frame i:nth-child(1){top:0;left:0;border-right:none;border-bottom:none;}
+  .frame i:nth-child(2){top:0;right:0;border-left:none;border-bottom:none;}
+  .frame i:nth-child(3){bottom:0;left:0;border-right:none;border-top:none;}
+  .frame i:nth-child(4){bottom:0;right:0;border-left:none;border-top:none;}
+
+  .wrap{max-width:660px;text-align:center;position:relative;z-index:2;}
+
+  .shield{
+    width:56px;height:64px;margin:0 auto 18px;
+    background:var(--grad);
+    clip-path:polygon(50% 0%,100% 18%,100% 62%,50% 100%,0% 62%,0% 18%);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 40px rgba(153,51,255,.4);
+  }
+  .shield b{font-family:'Anton',sans-serif;color:#fff;font-size:26px;line-height:1;}
+  .brand{font-family:'Oswald',sans-serif;letter-spacing:9px;font-size:19px;
+    color:#fff;font-weight:600;margin-bottom:6px;}
+  .eyebrow{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3.5px;
+    text-transform:uppercase;color:var(--purple3);margin-bottom:30px;font-weight:500;}
+
+  h1{font-family:'Anton',sans-serif;
+    font-size:clamp(34px,7.5vw,62px);
+    text-transform:uppercase;letter-spacing:.5px;
+    color:#fff;margin-bottom:14px;line-height:1.02;}
+  h1 span{
+    background:var(--grad);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .lede{font-size:16.5px;line-height:1.68;color:var(--dust);
+    max-width:520px;margin:0 auto 30px;}
+  .lede b{color:var(--metal);font-weight:600;}
+
+  /* Countdown — same visual language as the homepage bar. */
+  .cd-status{font-family:'Oswald',sans-serif;font-size:11px;letter-spacing:3px;
+    text-transform:uppercase;color:var(--purple3);margin-bottom:10px;font-weight:500;}
+  .cd{display:flex;gap:10px;justify-content:center;align-items:flex-end;
+    margin-bottom:34px;flex-wrap:wrap;}
+  .cd .u{min-width:66px;padding:10px 6px 8px;border-radius:12px;
+    background:rgba(153,51,255,.07);border:1px solid rgba(153,51,255,.24);}
+  .cd .n{display:block;font-family:'Anton',sans-serif;font-size:32px;line-height:1;
+    background:var(--numgrad);-webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;}
+  .cd .l{display:block;font-family:'Oswald',sans-serif;font-size:9.5px;
+    letter-spacing:2px;text-transform:uppercase;color:var(--faint);margin-top:5px;}
+  .cd .c{font-family:'Anton',sans-serif;font-size:26px;color:rgba(153,51,255,.5);
+    padding-bottom:22px;}
+
+  .actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+  .btn{display:inline-block;text-decoration:none;
+    font-family:'Oswald',sans-serif;font-weight:600;
+    font-size:15px;letter-spacing:1.5px;text-transform:uppercase;
+    padding:15px 28px;border-radius:11px;transition:.16s;border:0;cursor:pointer;}
+  .btn.primary{background:var(--grad);color:#fff;box-shadow:0 10px 34px rgba(153,51,255,.34);}
+  .btn.primary:hover{filter:brightness(1.13);transform:translateY(-2px);}
+  .btn.ghost{border:1px solid rgba(153,51,255,.45);color:var(--purple3);background:transparent;}
+  .btn.ghost:hover{background:rgba(153,51,255,.1);border-color:var(--purple3);}
+
+  /* Locked state: a span, never an anchor — nothing to hand-edit or crawl. */
+  .locked{display:inline-block;
+    font-family:'Oswald',sans-serif;font-weight:600;
+    font-size:15px;letter-spacing:1.5px;text-transform:uppercase;
+    padding:15px 28px;border-radius:11px;
+    background:rgba(153,51,255,.09);color:rgba(224,224,224,.42);
+    border:1px solid rgba(153,51,255,.2);cursor:not-allowed;}
+
+  .note{margin-top:18px;font-size:13px;color:var(--faint);line-height:1.6;}
+  .foot{margin-top:44px;font-size:11px;letter-spacing:2px;text-transform:uppercase;
+    color:var(--faint);font-family:'Oswald',sans-serif;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;transition:none!important;}
+  }
+</style>
+</head>
+<body>
+<div class="frame"><i></i><i></i><i></i><i></i></div>
+
+<div class="wrap">
+  <div class="shield"><b>L</b></div>
+  <div class="brand">LEGION</div>
+  <div class="eyebrow">The app</div>
+
+  <h1>Your agents,<br><span>one place.</span></h1>
+
+  <p class="lede">
+    The app is being armed. When it opens, this is where you will deploy your
+    agents, watch them work, and change what they do — <b>without touching
+    code</b>.
+  </p>
+
+  <div class="cd-status" id="cdStatus">Legion deploys in</div>
+  <div class="cd">
+    <div class="u"><span class="n" id="cdD">00</span><span class="l">Days</span></div>
+    <span class="c">:</span>
+    <div class="u"><span class="n" id="cdH">00</span><span class="l">Hrs</span></div>
+    <span class="c">:</span>
+    <div class="u"><span class="n" id="cdM">00</span><span class="l">Min</span></div>
+    <span class="c">:</span>
+    <div class="u"><span class="n" id="cdS">00</span><span class="l">Sec</span></div>
+  </div>
+
+  <div class="actions" id="actions">
+    <!-- Swapped for a real button by script when LIVE = true. -->
+    <span class="locked" id="lockedCta" aria-disabled="true">Opening soon</span>
+    <a class="btn ghost" href="/card">Build your battle card &#8594;</a>
+  </div>
+
+  <p class="note" id="note">
+    Nothing to install yet. Build your card and you will know exactly which
+    agent to deploy first.
+  </p>
+
+  <div class="foot">LEGION &copy; 2026</div>
+</div>
+
+<script>
+/* ==========================================================================
+   THE SWITCH
+   ==========================================================================
+   Set LIVE = true and put the real address in APP_URL. The locked chip becomes
+   a working button and the copy changes to match. That is the whole change.
+
+   Leave APP_URL empty while LIVE is false — an empty href on a live button is
+   how you ship a link to nowhere.
+========================================================================== */
+var LIVE    = false;
+var APP_URL = '';   /* e.g. 'https://app.joinlegion.ai' or '/app/dashboard' */
+
+/* ---- Countdown ----------------------------------------------------------
+   Same target as the homepage and the card. If you change the launch date,
+   change it in all three or the site will contradict itself.
+   Local time, deliberately: "deploys in" should read the same to the person
+   looking at it wherever they are.
+---------------------------------------------------------------------------- */
+var launch = new Date('2026-08-16T09:00:00');
+
+function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+function tick(){
+  var diff = Math.max(0, launch - new Date());
+  var s = Math.floor(diff / 1000);
+  var d = Math.floor(s / 86400); s -= d * 86400;
+  var h = Math.floor(s / 3600);  s -= h * 3600;
+  var m = Math.floor(s / 60);    s -= m * 60;
+  document.getElementById('cdD').textContent = pad(d);
+  document.getElementById('cdH').textContent = pad(h);
+  document.getElementById('cdM').textContent = pad(m);
+  document.getElementById('cdS').textContent = pad(s);
+}
+tick();
+setInterval(tick, 1000);
+
+/* ---- Open the door -----------------------------------------------------
+   Only ever builds a real link when BOTH flags are set, so a half-finished
+   edit cannot ship a dead button.
+---------------------------------------------------------------------------- */
+if (LIVE && APP_URL) {
+  var chip = document.getElementById('lockedCta');
+  var a = document.createElement('a');
+  a.className = 'btn primary';
+  a.href = APP_URL;
+  a.textContent = 'Open the app \u2192';
+  /* External target opens in a new tab; same-origin stays in place. */
+  if (/^https?:\/\//i.test(APP_URL) && APP_URL.indexOf(location.host) === -1) {
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+  }
+  chip.parentNode.replaceChild(a, chip);
+
+  document.getElementById('cdStatus').textContent = 'Live now';
+  document.querySelector('.cd').style.display = 'none';
+  document.getElementById('note').textContent =
+    'Signed in on this device? You will go straight to your agents.';
+}
+
+/* ---- Anonymous interest signal ----------------------------------------
+   Counts that someone reached /app before it opened. No free text, no
+   identifiers — same closed vocabulary as every other event on the site.
+   Fire-and-forget: a blocked request must never affect the page.
+---------------------------------------------------------------------------- */
+try{
+  fetch('/api/track?e=' + encodeURIComponent(LIVE ? 'app_open' : 'app_waitlist_view'),
+        {keepalive:true});
+}catch(x){}
+</script>
+</body>
+</html>
