@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>agent scene</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{width:1280px;height:720px;overflow:hidden;background:#05040a;}
+  body{font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+
+  :root{
+    --purple:#9933FF; --purple2:#7B2FD4; --purple3:#C084FC;
+    --bone:#E8EAF0; --dust:#9AA0B5; --faint:#5C6178;
+    --panel:#0C0A14; --line:rgba(153,51,255,.18);
+    --ok:#4ADE80;
+  }
+
+  /* ---- desk / room ambience so it reads as a real screen in a room ---- */
+  .room{position:absolute;inset:0;background:
+      radial-gradient(120% 90% at 50% 0%, rgba(153,51,255,.10), transparent 60%),
+      radial-gradient(80% 60% at 50% 110%, rgba(123,47,212,.10), transparent 60%),
+      #05040a;}
+  .glowfloor{position:absolute;left:8%;right:8%;bottom:0;height:120px;
+    background:radial-gradient(60% 100% at 50% 100%, rgba(153,51,255,.16), transparent 70%);
+    filter:blur(24px);}
+
+  /* ---- the monitor ---- */
+  .monitor{position:absolute;left:52px;top:34px;right:52px;bottom:52px;
+    border-radius:14px;background:var(--panel);
+    border:1px solid rgba(153,51,255,.26);
+    box-shadow:0 0 0 1px rgba(0,0,0,.7), 0 40px 90px rgba(0,0,0,.75),
+               0 0 90px rgba(153,51,255,.13);
+    overflow:hidden;}
+
+  /* subtle screen texture + scan so it reads as a display, not a webpage */
+  .monitor:after{content:'';position:absolute;inset:0;pointer-events:none;z-index:60;
+    background:repeating-linear-gradient(to bottom, rgba(255,255,255,.014) 0 1px, transparent 1px 3px);}
+  .vscan{position:absolute;left:0;right:0;height:180px;z-index:59;pointer-events:none;
+    mix-blend-mode:screen;opacity:.5;
+    background:linear-gradient(to bottom,transparent,rgba(192,132,252,.07) 55%,transparent);
+    animation:vs 7s linear infinite;}
+  @keyframes vs{0%{top:-190px}100%{top:100%}}
+
+  /* ---- chrome bar ---- */
+  .bar{height:40px;display:flex;align-items:center;gap:9px;padding:0 15px;
+    border-bottom:1px solid var(--line);background:rgba(153,51,255,.05);}
+  .dot{width:9px;height:9px;border-radius:50%;background:#2b2740;}
+  .barttl{margin-left:8px;font-family:'Oswald',sans-serif;font-size:11px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--dust);}
+  .live{margin-left:auto;display:flex;align-items:center;gap:7px;
+    font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--purple3);}
+  .live i{width:7px;height:7px;border-radius:50%;background:var(--purple);
+    box-shadow:0 0 10px var(--purple);animation:bl 1.6s ease-in-out infinite;}
+  @keyframes bl{0%,100%{opacity:1}50%{opacity:.25}}
+
+  /* ---- layout ---- */
+  .wrap{display:flex;height:calc(100% - 40px);}
+  .side{width:210px;border-right:1px solid var(--line);padding:16px 14px;
+    background:rgba(153,51,255,.025);}
+  .sl{font-family:'Oswald',sans-serif;font-size:9.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--faint);margin:0 0 11px 3px;}
+  .task{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:8px;
+    font-size:12.5px;color:var(--dust);margin-bottom:3px;}
+  .task .tb{width:13px;height:13px;border-radius:4px;border:1.5px solid #35304d;
+    flex:0 0 auto;position:relative;}
+  .task.done{color:var(--bone);}
+  .task.done .tb{border-color:var(--ok);background:rgba(74,222,128,.16);}
+  .task.done .tb:after{content:'';position:absolute;left:3px;top:.5px;width:4px;height:7px;
+    border-right:1.7px solid var(--ok);border-bottom:1.7px solid var(--ok);
+    transform:rotate(40deg);}
+  .task.active{background:rgba(153,51,255,.1);color:#fff;}
+
+  .main{flex:1;padding:18px 20px;position:relative;}
+  .h1{font-family:'Anton',sans-serif;font-size:19px;letter-spacing:.01em;color:#fff;}
+  .h2{font-size:12px;color:var(--faint);margin-top:4px;}
+
+  /* ---- the table that fills itself ---- */
+  table{width:100%;border-collapse:collapse;margin-top:15px;}
+  th{font-family:'Oswald',sans-serif;font-size:9.5px;letter-spacing:.17em;
+    text-transform:uppercase;color:var(--faint);text-align:left;
+    padding:0 10px 9px;border-bottom:1px solid var(--line);}
+  td{padding:11px 10px;font-size:13px;color:var(--bone);
+    border-bottom:1px solid rgba(153,51,255,.08);}
+  td.num{font-family:'JetBrains Mono',monospace;font-size:12.5px;}
+  tr.row{opacity:0;transform:translateY(5px);}
+  tr.row.in{opacity:1;transform:none;transition:opacity .32s ease, transform .32s ease;}
+  .cell{opacity:0;}
+  .cell.in{opacity:1;transition:opacity .2s ease;}
+  .pill{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;
+    font-family:'Oswald',sans-serif;letter-spacing:.13em;text-transform:uppercase;}
+  .pill.w{background:rgba(153,51,255,.14);color:var(--purple3);}
+  .pill.d{background:rgba(74,222,128,.14);color:var(--ok);}
+
+  /* the field being typed into */
+  .fieldrow{margin-top:16px;display:flex;align-items:center;gap:11px;}
+  .fl{font-family:'Oswald',sans-serif;font-size:9.5px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--faint);}
+  .field{flex:1;height:36px;border-radius:9px;border:1px solid #262138;
+    background:rgba(255,255,255,.02);display:flex;align-items:center;padding:0 12px;
+    font-size:13px;color:var(--bone);}
+  .field.focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(153,51,255,.14);}
+  .caret{display:inline-block;width:1.5px;height:16px;background:var(--purple3);
+    margin-left:1px;opacity:0;}
+  .caret.on{animation:cb .8s step-end infinite;opacity:1;}
+  @keyframes cb{0%,100%{opacity:1}50%{opacity:0}}
+
+  /* ---- the report that lands at the end ---- */
+  .report{position:absolute;right:20px;top:300px;width:352px;
+    border:1px solid rgba(153,51,255,.4);border-radius:12px;padding:15px 17px;
+    background:linear-gradient(180deg, rgba(153,51,255,.13), rgba(12,10,20,.97));
+    box-shadow:0 20px 50px rgba(0,0,0,.6), 0 0 40px rgba(153,51,255,.18);
+    opacity:0;transform:translateY(14px) scale(.98);}
+  .report.in{opacity:1;transform:none;transition:opacity .5s ease, transform .5s cubic-bezier(.2,.7,.3,1);}
+  .rk{font-family:'Oswald',sans-serif;font-size:9.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--purple3);margin-bottom:7px;}
+  .rt{font-size:14px;color:#fff;line-height:1.5;font-weight:500;}
+  .rs{font-size:12px;color:var(--dust);margin-top:7px;line-height:1.55;}
+  .rf{display:flex;gap:7px;align-items:center;margin-top:11px;
+    font-family:'Oswald',sans-serif;font-size:9.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--ok);}
+
+  /* ---- the cursor: the thing that makes it read as agentic ---- */
+  .cursor{position:absolute;z-index:80;left:0;top:0;width:22px;height:22px;
+    pointer-events:none;filter:drop-shadow(0 3px 6px rgba(0,0,0,.7));}
+  .cursor svg{display:block;}
+  .ring{position:absolute;z-index:79;width:34px;height:34px;border-radius:50%;
+    border:2px solid var(--purple3);opacity:0;pointer-events:none;}
+  .ring.go{animation:rp .5s ease-out;}
+  @keyframes rp{0%{opacity:.9;transform:scale(.3)}100%{opacity:0;transform:scale(1.5)}}
+
+  /* agent status chip that follows the work */
+  .chip{position:absolute;z-index:78;padding:5px 11px;border-radius:20px;
+    background:rgba(153,51,255,.9);color:#fff;font-family:'Oswald',sans-serif;
+    font-size:10px;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap;
+    box-shadow:0 6px 20px rgba(0,0,0,.5);opacity:0;transform:translateY(4px);}
+  .chip.in{opacity:1;transform:none;transition:opacity .25s ease, transform .25s ease;}
+</style>
+</head>
+<body>
+<div class="room"></div>
+<div class="glowfloor"></div>
+
+<div class="monitor">
+  <div class="vscan"></div>
+
+  <div class="bar">
+    <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    <div class="barttl">Drafting Desk</div>
+    <div class="live"><i></i> Agent working</div>
+  </div>
+
+  <div class="wrap">
+    <div class="side">
+      <div class="sl">Queue</div>
+      <div class="task" id="t1"><div class="tb"></div>Read the thread</div>
+      <div class="task" id="t2"><div class="tb"></div>Pull the key points</div>
+      <div class="task" id="t3"><div class="tb"></div>Match your tone</div>
+      <div class="task" id="t4"><div class="tb"></div>Draft it for approval</div>
+    </div>
+
+    <div class="main" id="main">
+      <div class="h1">Drafting Desk</div>
+      <div class="h2">You give the point, it writes the thing</div>
+
+      <table>
+        <thead>
+          <tr><th style="width:34%">Piece</th><th style="width:22%">For</th>
+              <th style="width:22%">Length</th><th>Status</th></tr>
+        </thead>
+        <tbody id="tb"></tbody>
+      </table>
+
+      <div class="fieldrow" style="max-width:640px;">
+        <div class="fl">Draft</div>
+        <div class="field" id="fld"><span id="ftxt"></span><span class="caret" id="car"></span></div>
+      </div>
+
+      <div class="report" id="rep">
+        <div class="rk">Report ready &middot; 6:41 am</div>
+        <div class="rt">Three drafts ready. All in your voice.</div>
+        <div class="rs">The price increase note is the one you have been avoiding for five weeks. It is 90 words. Read it and hit send.</div>
+        <div class="rf">&#10003; Sent to you</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chip" id="chip"></div>
+  <div class="ring" id="ring"></div>
+  <div class="cursor" id="cur">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M3 2 L3 16.5 L7.1 12.7 L9.8 19 L12.6 17.8 L9.9 11.6 L15.4 11.2 Z"
+            fill="#ffffff" stroke="#0b0912" stroke-width="1.1"/>
+    </svg>
+  </div>
+</div>
+
+<script>
+/* ---------------------------------------------------------------------------
+   Scripted agent run. Everything is time-driven so the recording is
+   deterministic: the same frames come out every time.
+--------------------------------------------------------------------------- */
+var ROWS = [
+  ['Proposal &mdash; Hartley', 'Client', '2 pages', 'd', 'Ready'],
+  ['Price increase note', '34 clients', '1 para', 'w', 'Drafting'],
+  ['Monthly update', 'Team', '400 words', 'd', 'Ready']
+];
+
+var cur=document.getElementById('cur'), ring=document.getElementById('ring'),
+    chip=document.getElementById('chip'), tb=document.getElementById('tb'),
+    mon=document.querySelector('.monitor');
+
+function moveTo(x,y,ms){
+  cur.style.transition='transform '+ms+'ms cubic-bezier(.33,.02,.28,1)';
+  cur.style.transform='translate('+x+'px,'+y+'px)';
+}
+function clickAt(x,y){
+  ring.style.left=(x-6)+'px'; ring.style.top=(y-6)+'px';
+  ring.classList.remove('go'); void ring.offsetWidth; ring.classList.add('go');
+}
+function say(txt,x,y){
+  chip.textContent=txt; chip.style.left=x+'px'; chip.style.top=y+'px';
+  chip.classList.add('in');
+}
+function hush(){ chip.classList.remove('in'); }
+
+/* build the empty rows up front so layout never jumps */
+ROWS.forEach(function(r,i){
+  var tr=document.createElement('tr'); tr.className='row'; tr.id='r'+i;
+  tr.innerHTML='<td><span class="cell">'+r[0]+'</span></td>'+
+               '<td class="num"><span class="cell">'+r[1]+'</span></td>'+
+               '<td class="num"><span class="cell">'+r[2]+'</span></td>'+
+               '<td><span class="cell"><span class="pill '+r[3]+'">'+r[4]+'</span></span></td>';
+  tb.appendChild(tr);
+});
+
+function cells(i){ return document.querySelectorAll('#r'+i+' .cell'); }
+
+var T=[];               // timeline
+function at(ms,fn){ T.push(setTimeout(fn,ms)); }
+
+/* ---- the run ------------------------------------------------------------ */
+cur.style.transform='translate(250px,600px)';
+
+/* 1. cursor arrives, opens the queue */
+at(300,  function(){ moveTo(150,150,900); });
+at(1000, function(){ say('Reading the thread', 186, 158); });
+at(1250, function(){ clickAt(150,150); document.getElementById('t1').classList.add('active'); });
+at(1900, function(){ document.getElementById('t1').classList.remove('active');
+                     document.getElementById('t1').classList.add('done'); hush(); });
+
+/* 2. moves to the table and fills it row by row, cell by cell */
+at(2000, function(){ moveTo(520,300,700); document.getElementById('t2').classList.add('active'); });
+at(2400, function(){ say('Pulling the points', 556, 308); });
+
+var t=2700;
+ROWS.forEach(function(r,i){
+  at(t,     function(){ document.getElementById('r'+i).classList.add('in'); });
+  at(t+120, function(){ cells(i)[0].classList.add('in'); clickAt(300,320+i*44); });
+  at(t+400, function(){ cells(i)[1].classList.add('in'); });
+  at(t+660, function(){ cells(i)[2].classList.add('in'); });
+  at(t+900, function(){ cells(i)[3].classList.add('in'); });
+  t+=1150;
+});
+
+at(t,      function(){ hush(); document.getElementById('t2').classList.remove('active');
+                       document.getElementById('t2').classList.add('done'); });
+
+/* 3. flags what slipped */
+at(t+150,  function(){ moveTo(700,364,600); document.getElementById('t3').classList.add('active'); });
+at(t+500,  function(){ say('Matching your tone', 736, 372); clickAt(700,364); });
+at(t+1300, function(){ hush(); document.getElementById('t3').classList.remove('active');
+                       document.getElementById('t3').classList.add('done'); });
+
+/* 4. types the note itself */
+var TYPE='Rates move 6% on the 1st. Same crew, same turnaround.';
+at(t+1450, function(){ moveTo(560,505,600); });
+at(t+1900, function(){ clickAt(560,505);
+                       document.getElementById('fld').classList.add('focus');
+                       document.getElementById('car').classList.add('on');
+                       document.getElementById('t4').classList.add('active');
+                       say('Writing the draft', 596, 513); });
+var ts=t+2150;
+for(var i=0;i<TYPE.length;i++){
+  (function(n){ at(ts+n*34, function(){
+    document.getElementById('ftxt').textContent=TYPE.slice(0,n+1);
+  }); })(i);
+}
+var typeEnd=ts+TYPE.length*34;
+
+/* 5. the report lands */
+at(typeEnd+250, function(){ document.getElementById('car').classList.remove('on');
+                            document.getElementById('fld').classList.remove('focus');
+                            hush(); });
+at(typeEnd+400, function(){ document.getElementById('t4').classList.remove('active');
+                            document.getElementById('t4').classList.add('done');
+                            document.getElementById('rep').classList.add('in');
+                            moveTo(900,600,700); });
+
+/* expose the total so the recorder knows how long to capture */
+window.SCENE_MS = typeEnd + 1900;
+window.SCENE_READY = true;
+</script>
+</body>
+</html>
