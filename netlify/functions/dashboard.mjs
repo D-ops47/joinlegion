@@ -1,32 +1,50 @@
 /**
  * GET /api/dashboard
  *
- * Human-readable rollup for the three-role diagnostic: which role dominates,
- * the blends underneath, how people answered each question, funnel retention
- * across the 7 steps, rating average, and top role combinations.
+ * Human-readable rollup for the intake model. The questions people answer now
+ * map directly onto commercial facts, so this reports:
  *
- * Legacy five-archetype counts are reported separately so historical data stays
- * visible instead of silently disappearing when the model changed.
+ *   - which STRUGGLE owners actually name (demand / money / time / people /
+ *     visibility) — the market signal
+ *   - WHY it persists, which is the agent's mode and the most actionable field
+ *   - WHAT they would hand over, which is the material
+ *   - the composed AGENT (material x mode, 25 of them) ranked by demand — this
+ *     is the build queue, in priority order
+ *   - the derived role, funnel retention, ratings, and the value signal
+ *
+ * Legacy counts from the previous two models are reported separately so
+ * historical data stays visible instead of vanishing when the model changed.
  */
-
 import {
   ARCHETYPES,
   ARCHETYPE_LABELS,
   EVENTS,
   GOALS,
   GOAL_LABELS,
+  HANDOVERS,
+  HANDOVER_LABELS,
   QUESTIONS,
   QUESTION_LABELS,
   ROLES,
   ROLE_ALIASES,
   ROLE_LABELS,
+  STAKES,
+  STAKES_LABELS,
+  STRUGGLES,
+  STRUGGLE_LABELS,
   VALUE_ANSWERS,
   VALUE_LABELS,
+  WHYS,
+  WHY_LABELS,
+  WHY_MODES,
+  agentLabel,
   json,
   pct,
   readAll,
 } from './lib/counter.mjs';
 
+// The builder is 5 screens. Reported to 7 so any lingering cached copy of the
+// previous version still shows up rather than being silently truncated.
 const STEPS = 7;
 
 export default async () => {
@@ -78,6 +96,74 @@ export default async () => {
     count: c[`goal_${k}`] || 0,
     share_pct: pct(c[`goal_${k}`] || 0, created),
   })).sort((a, b) => b.count - a.count);
+
+  // --- the intake: the four fields that decide what to build ----------------
+  const struggles = STRUGGLES.map((k) => ({
+    key: k,
+    struggle: STRUGGLE_LABELS[k],
+    count: c[`struggle_${k}`] || 0,
+    share_pct: pct(c[`struggle_${k}`] || 0, created),
+  })).sort((a, b) => b.count - a.count);
+
+  // Why it persists is the most actionable field: it says what KIND of help is
+  // needed, which is what the agent's mode encodes.
+  const whys = WHYS.map((k) => ({
+    key: k,
+    reason: WHY_LABELS[k],
+    agent_mode: WHY_MODES[k],
+    count: c[`why_${k}`] || 0,
+    share_pct: pct(c[`why_${k}`] || 0, created),
+  })).sort((a, b) => b.count - a.count);
+
+  const handovers = HANDOVERS.map((k) => ({
+    key: k,
+    would_hand_over: HANDOVER_LABELS[k],
+    count: c[`handover_${k}`] || 0,
+    share_pct: pct(c[`handover_${k}`] || 0, created),
+  })).sort((a, b) => b.count - a.count);
+
+  const stakes = STAKES.map((k) => ({
+    key: k,
+    if_nothing_changes: STAKES_LABELS[k],
+    count: c[`stakes_${k}`] || 0,
+    share_pct: pct(c[`stakes_${k}`] || 0, created),
+  })).sort((a, b) => b.count - a.count);
+
+  // --- the build queue: which composed agents people actually need ----------
+  // 25 combinations of material x mode. Ranked, this is a product roadmap
+  // ordered by real demand rather than guesswork.
+  const agentDemand = [];
+  for (const h of HANDOVERS) {
+    for (const w of WHYS) {
+      const n = c[`agent_${h}_${w}`] || 0;
+      if (n > 0) {
+        agentDemand.push({
+          agent: agentLabel(h, w),
+          material: HANDOVER_LABELS[h],
+          mode: WHY_MODES[w],
+          count: n,
+          share_pct: pct(n, created),
+        });
+      }
+    }
+  }
+  agentDemand.sort((a, b) => b.count - a.count);
+
+  // Full intake shapes, so the most common complete profile is visible.
+  const topIntakes = Object.entries(c)
+    .filter(([k, v]) => k.startsWith('intake_') && v > 0)
+    .map(([k, v]) => {
+      const [s, w, h] = k.slice('intake_'.length).split('_');
+      return {
+        struggle: STRUGGLE_LABELS[s] || s,
+        because: WHY_LABELS[w] || w,
+        hand_over: HANDOVER_LABELS[h] || h,
+        agent: HANDOVER_LABELS[h] && WHY_MODES[w] ? agentLabel(h, w) : null,
+        count: v,
+      };
+    })
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 15);
 
   // --- funnel across the 7 steps -------------------------------------------
   const funnel = [];
@@ -190,6 +276,11 @@ export default async () => {
         view_to_card_pct: pct(created, views),
         repeat_builds: c.card_again || 0,
         downloads: c.card_download || 0,
+        /* The three commercial facts, in the order they matter. */
+        top_struggle: struggles[0] && struggles[0].count ? struggles[0].struggle : null,
+        top_reason_it_persists: whys[0] && whys[0].count ? whys[0].reason : null,
+        most_needed_agent: agentDemand[0] ? agentDemand[0].agent : null,
+        most_needed_agent_count: agentDemand[0] ? agentDemand[0].count : 0,
         dominant_role: dominant ? dominant.role : null,
         dominant_role_share_pct: dominant ? dominant.primary_share_pct : null,
         split_results: c.role_split || 0,
@@ -202,29 +293,28 @@ export default async () => {
           VALUE_ANSWERS.reduce((t, k) => t + (c[`value_${k}`] || 0), 0)
         ),
       },
+      /* THE BUILD QUEUE — 25 composed agents ranked by how many people
+         actually described needing one. Read top-down. */
+      agent_demand: agentDemand,
+
+      /* The four intake fields. `why_it_persists` is the one to read first:
+         it is the difference between someone who needs work done and someone
+         who needs it maintained. */
+      struggle: struggles,
+      why_it_persists: whys,
+      would_hand_over: handovers,
+      stakes_if_nothing_changes: stakes,
+      top_intake_profiles: topIntakes,
+
+      /* The role is derived from the intake rather than measured with its own
+         questions, so this is a descriptive cut, not the headline. */
       roles,
-      /* How people arrive at a card: the diagnostic, or self-declaring from the
-         role tiles. Worth watching — if self-declared dominates, the five
-         questions may be friction rather than value. */
-      path_taken: {
-        diagnostic: c.path_diagnostic || 0,
-        self_declared: c.path_selfdeclared || 0,
-        self_declared_share_pct: pct(
-          c.path_selfdeclared || 0,
-          (c.path_diagnostic || 0) + (c.path_selfdeclared || 0)
-        ),
-      },
-      /* Which role profiles get opened from the tiles, and how often opening
-         one converts into declaring it. */
+      /* Which role profiles get opened from the tiles on the way in. */
       role_tile_engagement: ROLES.map((key) => ({
         key,
         role: ROLE_LABELS[key],
         opened: c[`peek_${key}`] || 0,
-        picked: c[`role_picked_${key}`] || 0,
-        open_to_pick_pct: pct(c[`role_picked_${key}`] || 0, c[`peek_${key}`] || 0),
       })).sort((a, b) => b.opened - a.opened),
-      goal_this_year: goals,
-      answers,
       funnel,
       biggest_drop_off: biggestDrop,
       ratings: {
@@ -240,11 +330,21 @@ export default async () => {
         by_role: ratingByRole,
       },
       value_signal: valueSignal,
-      top_role_combinations: topCombos,
-      legacy_five_archetype_model: legacyHeroes,
+      legacy: {
+        note: 'Counts from earlier versions of the builder, kept so history stays visible.',
+        five_archetype_model: legacyHeroes,
+        three_role_diagnostic_answers: answers,
+        goal_question: goals,
+        role_combinations: topCombos,
+        path_taken: {
+          diagnostic: c.path_diagnostic || 0,
+          self_declared: c.path_selfdeclared || 0,
+        },
+      },
       meta: {
-        model: 'three-roles — Creator / Technician / Visionary',
-        internal_keys: 'artist=Creator, operator=Technician, entrepreneur=Visionary',
+        model: 'intake — struggle x why x handover x stakes -> composed agent',
+        agent_naming: 'The {material} {mode} Agent — 25 combinations',
+        derived_role: 'artist=Creator, operator=Technician, entrepreneur=Visionary',
         tracked_keys: Object.keys(c).length,
         allowlist_size: EVENTS.size,
         backend: 'netlify-functions+blobs',

@@ -7,7 +7,7 @@
      iMessage and most scrapers ignore relative paths. ===== -->
 <meta property="og:site_name" content="LEGION AI">
 <meta property="og:title" content="The power of AI unleashed">
-<meta property="og:description" content="Creator, Technician or Visionary — find your dominant role, get your purpose statement, and see exactly what to hand an agent first.">
+<meta property="og:description" content="Four questions. One battle card. The agent built for the thing that is actually costing you.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://joinlegion.ai/card">
 <meta property="og:locale" content="en_US">
@@ -19,15 +19,15 @@
 <meta property="og:image:alt" content="The LEGION AI armored helmet with a glowing purple eye, beside the words The Power of AI Unleashed">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The power of AI unleashed">
-<meta name="twitter:description" content="Creator, Technician or Visionary — find your dominant role, get your purpose statement, and see exactly what to hand an agent first.">
+<meta name="twitter:description" content="Four questions. One battle card. The agent built for the thing that is actually costing you.">
 <meta name="twitter:image" content="https://joinlegion.ai/assets/og-legion.jpg">
 <meta name="twitter:image:alt" content="The LEGION AI armored helmet with a glowing purple eye">
 <meta name="theme-color" content="#9933FF">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png">
-<title>What's Your Superpower? — The Three Roles | LEGION</title>
+<title>Build Your Battle Card | LEGION</title>
 <link rel="canonical" href="https://joinlegion.ai/card">
-<meta name="description" content="Creator, Technician or Visionary. Find your dominant role, get your purpose statement, and see what to hand an agent first. Nothing collected.">
+<meta name="description" content="Answer four questions about what is actually costing you and get a battle card with the AI agent built to cover it. Free, no email, nothing stored.">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -407,7 +407,7 @@
   /* very narrow phones: shorten the badge label rather than crush the wordmark */
   @media(max-width:420px){
     .live .lbl{display:none;}
-    .live::after{content:'3 ROLES';color:#b9a8e0;font-size:10px;font-weight:600;letter-spacing:.1em;}
+    .live::after{content:'CARD';color:#b9a8e0;font-size:10px;font-weight:600;letter-spacing:.1em;}
   }
 
   @media print{
@@ -430,7 +430,7 @@
 <header class="topbar">
   <a class="live" href="/" title="Back to LEGION">
     <span class="dot"></span>
-    <span class="lbl">The Three Roles</span>
+    <span class="lbl">Battle Card</span>
   </a>
   <a class="brand" href="/">LEGION AI</a>
 </header>
@@ -447,13 +447,12 @@
 <div class="hud"><i class="bl"></i><i class="br"></i></div>
 
 <div class="stage">
-  <div class="eyebrow">The Three Roles</div>
+    <div class="eyebrow">Build Your Battle Card</div>
   <h1>What's your<br><span class="purple">superpower?</span></h1>
-  <div class="lede">Creator, Technician, Visionary. One of them is carrying your business right now — and the other two are waiting. Find yours, then build the thing that covers the gap. <b>No email required.</b></div>
+  <div class="lede">Then four questions about the thing that is actually costing you. You walk away with the agent built to cover it — named, specified, and ready to paste. <b>No email required.</b></div>
   <div class="grad-line"></div>
-
   <div class="triadwrap">
-    <div class="triadhint">Tap a role to see what it means</div>
+    <div class="triadhint">Every owner runs on one of these three — tap to see which</div>
     <div class="triad">
       <button type="button" data-role="artist" onclick="peek('artist')" aria-expanded="false">
         <div class="r">Creator</div><div class="s">The Maker</div></button>
@@ -469,7 +468,7 @@
   <div id="wizard" class="panel">
     <div class="progress">
       <div class="ptrack"><div class="pfill" id="pfill"></div></div>
-      <div class="pnum" id="pnum">Step 1 of 7</div>
+      <div class="pnum" id="pnum">Step 1 of 5</div>
     </div>
 
     <!-- S1 — about them (free text, never transmitted) -->
@@ -482,88 +481,63 @@
       <div class="btnrow"><button class="btn btn-primary" onclick="next(1)">Begin</button></div>
     </div>
 
-    <!-- S2 — Q1 where the day goes -->
+    <!-- S2 — Q1 the struggle. Five universal domains, no industry vocabulary. -->
     <div id="s2" class="step-pane hidden">
-      <div class="q-num">Question 1 of 5</div>
-      <div class="q-label">Where did yesterday actually go?</div>
-      <div class="q-sub">Not where you meant it to go. Where it went.</div>
+      <div class="q-num">Question 1 of 4</div>
+      <div class="q-label">What's the one thing that, if it were handled, would change everything?</div>
+      <div class="q-sub">Not the whole list. The one that's actually costing you.</div>
       <div class="optgrid">
-        <label class="opt"><input type="radio" name="q1" value="doing"><span>Doing the work myself</span><small>Because it has to be right, and right means me.</small></label>
-        <label class="opt"><input type="radio" name="q1" value="running"><span>Keeping things running</span><small>Checking, confirming, making sure nothing slipped.</small></label>
-        <label class="opt"><input type="radio" name="q1" value="chasing"><span>Chasing what's next</span><small>The new idea, the new deal, the new direction.</small></label>
-        <label class="opt"><input type="radio" name="q1" value="fires"><span>Putting out fires I didn't start</span><small>Reacting all day to other people's problems.</small></label>
+        <label class="opt"><input type="radio" name="q1" value="demand"><span>Getting more of the right customers</span><small>Not more leads. The right ones.</small></label>
+        <label class="opt"><input type="radio" name="q1" value="money"><span>Making the money work</span><small>Pricing, margin, or cash that never quite adds up.</small></label>
+        <label class="opt"><input type="radio" name="q1" value="time"><span>Getting my time back</span><small>The week is full and nothing moved forward.</small></label>
+        <label class="opt"><input type="radio" name="q1" value="people"><span>Getting my people to perform without me</span><small>It works when I'm watching. It slips when I'm not.</small></label>
+        <label class="opt"><input type="radio" name="q1" value="visibility"><span>Knowing what's actually going on</span><small>I'm deciding on feel, not on facts.</small></label>
       </div>
       <div class="btnrow"><button class="btn btn-ghost" onclick="prev(0)">Back</button><button class="btn btn-primary" onclick="next(2)">Continue</button></div>
     </div>
 
-    <!-- S3 — Q2 what breaks -->
+    <!-- S3 — Q2 why it persists. This determines the agent's MODE. -->
     <div id="s3" class="step-pane hidden">
-      <div class="q-num">Question 2 of 5</div>
-      <div class="q-label">When you get slammed, what breaks first?</div>
-      <div class="q-sub">Everyone has a first casualty. Yours says a lot.</div>
+      <div class="q-num">Question 2 of 4</div>
+      <div class="q-label">Why hasn't it been fixed yet?</div>
+      <div class="q-sub">This is the question that decides what you actually need built.</div>
       <div class="optgrid">
-        <label class="opt"><input type="radio" name="q2" value="systems"><span>The systems</span><small>I stop tracking and start improvising.</small></label>
-        <label class="opt"><input type="radio" name="q2" value="ideas"><span>The new ideas</span><small>Everything ambitious gets shelved.</small></label>
-        <label class="opt"><input type="radio" name="q2" value="quality"><span>The quality</span><small>I rush the work I'm normally proud of.</small></label>
-        <label class="opt"><input type="radio" name="q2" value="sleep"><span>Nothing breaks — I just stop sleeping</span><small>I absorb it personally instead.</small></label>
+        <label class="opt"><input type="radio" name="q2" value="nevertime"><span>I know what to do, I just never get to it</span><small>It's on the list. It's been on the list.</small></label>
+        <label class="opt"><input type="radio" name="q2" value="dontknow"><span>I don't actually know what the right move is</span><small>Every option has a reason not to.</small></label>
+        <label class="opt"><input type="radio" name="q2" value="didntstick"><span>I've tried — it didn't stick</span><small>It worked for a month, then quietly died.</small></label>
+        <label class="opt"><input type="radio" name="q2" value="others"><span>It depends on other people doing their part</span><small>And nothing closes unless I chase it.</small></label>
+        <label class="opt"><input type="radio" name="q2" value="cantsee"><span>I can't see it clearly enough to fix it</span><small>I know something's wrong. I can't name it.</small></label>
       </div>
       <div class="btnrow"><button class="btn btn-ghost" onclick="prev(1)">Back</button><button class="btn btn-primary" onclick="next(3)">Continue</button></div>
     </div>
 
-    <!-- S4 — Q3 avoidance -->
+    <!-- S4 — Q3 what they'd hand over. This determines the agent's MATERIAL. -->
     <div id="s4" class="step-pane hidden">
-      <div class="q-num">Question 3 of 5</div>
-      <div class="q-label">What do you avoid?</div>
-      <div class="q-sub">Be honest. Nobody sees this but you.</div>
+      <div class="q-num">Question 3 of 4</div>
+      <div class="q-label">Which of these would you hand over tomorrow if you could?</div>
+      <div class="q-sub">Not what takes the longest. What you'd genuinely let go of.</div>
       <div class="optgrid">
-        <label class="opt"><input type="radio" name="q3" value="admin"><span>Paperwork and admin</span><small>The boring machinery of the business.</small></label>
-        <label class="opt"><input type="radio" name="q3" value="visible"><span>Selling and being visible</span><small>Marketing myself feels like bragging.</small></label>
-        <label class="opt"><input type="radio" name="q3" value="finishing"><span>Finishing</span><small>The last 20% is where I lose interest.</small></label>
-        <label class="opt"><input type="radio" name="q3" value="letgo"><span>Letting go</span><small>Handing my work to someone else.</small></label>
+        <label class="opt"><input type="radio" name="q3" value="pursuit"><span>Chasing people</span><small>Leads, replies, follow-ups, the nudge I never send.</small></label>
+        <label class="opt"><input type="radio" name="q3" value="writing"><span>Writing things</span><small>Emails, proposals, posts, updates.</small></label>
+        <label class="opt"><input type="radio" name="q3" value="decisions"><span>Deciding things</span><small>Priorities, tradeoffs, judgment calls.</small></label>
+        <label class="opt"><input type="radio" name="q3" value="tracking"><span>Tracking things</span><small>Numbers, status, who owes what.</small></label>
+        <label class="opt"><input type="radio" name="q3" value="comms"><span>Talking to people</span><small>Meetings, updates, check-ins.</small></label>
       </div>
       <div class="btnrow"><button class="btn btn-ghost" onclick="prev(2)">Back</button><button class="btn btn-primary" onclick="next(4)">Continue</button></div>
     </div>
 
-    <!-- S5 — Q4 month away -->
+    <!-- S5 — Q4 the stakes. Sets the agent's priority and closes the card. -->
     <div id="s5" class="step-pane hidden">
-      <div class="q-num">Question 4 of 5</div>
-      <div class="q-label">It runs perfectly without you for a month. You feel:</div>
-      <div class="q-sub">Gut reaction, not the answer you're supposed to give.</div>
-      <div class="optgrid">
-        <label class="opt"><input type="radio" name="q4" value="proud"><span>Proud</span><small>That was the entire point.</small></label>
-        <label class="opt"><input type="radio" name="q4" value="uneasy"><span>Uneasy</span><small>Nobody does it the way I do it.</small></label>
-        <label class="opt"><input type="radio" name="q4" value="relieved"><span>Relieved</span><small>I could finally think again.</small></label>
-        <label class="opt"><input type="radio" name="q4" value="restless"><span>Restless</span><small>I'd have started something new by week two.</small></label>
-      </div>
-      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(3)">Back</button><button class="btn btn-primary" onclick="next(5)">Continue</button></div>
-    </div>
-
-    <!-- S6 — Q5 bottleneck -->
-    <div id="s6" class="step-pane hidden">
-      <div class="q-num">Question 5 of 5</div>
-      <div class="q-label">What's the real bottleneck?</div>
-      <div class="q-sub">The one you'd admit at 11pm, not the one you'd say in a meeting.</div>
-      <div class="optgrid">
-        <label class="opt"><input type="radio" name="q5" value="me"><span>Me</span><small>Everything funnels through one person.</small></label>
-        <label class="opt"><input type="radio" name="q5" value="time"><span>Time</span><small>There simply isn't enough of it.</small></label>
-        <label class="opt"><input type="radio" name="q5" value="focus"><span>Focus</span><small>Too many directions at once.</small></label>
-        <label class="opt"><input type="radio" name="q5" value="systems"><span>Systems</span><small>We're winging far too much of it.</small></label>
-      </div>
-      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(4)">Back</button><button class="btn btn-primary" onclick="next(6)">Continue</button></div>
-    </div>
-
-    <!-- S7 — goal -->
-    <div id="s7" class="step-pane hidden">
       <div class="q-num">Last one</div>
-      <div class="q-label">What would change everything this year?</div>
-      <div class="q-sub">This decides what we point your agent at.</div>
+      <div class="q-label">If nothing changes in twelve months, what happens?</div>
+      <div class="q-sub">Answer the way you'd answer at 11pm, not in a meeting.</div>
       <div class="optgrid">
-        <label class="opt"><input type="radio" name="goal" value="customers"><span>More of the right customers</span></label>
-        <label class="opt"><input type="radio" name="goal" value="time"><span>My time back</span></label>
-        <label class="opt"><input type="radio" name="goal" value="without"><span>A business that runs without me</span></label>
-        <label class="opt"><input type="radio" name="goal" value="prices"><span>Higher prices for the same work</span></label>
+        <label class="opt"><input type="radio" name="q4" value="stall"><span>We stall — same size, same problems</span></label>
+        <label class="opt"><input type="radio" name="q4" value="burnout"><span>I burn out</span></label>
+        <label class="opt"><input type="radio" name="q4" value="losing"><span>We lose ground to competitors</span></label>
+        <label class="opt"><input type="radio" name="q4" value="trapped"><span>I stay trapped in it forever</span></label>
       </div>
-      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(5)">Back</button><button class="btn btn-primary" onclick="build()">Build My Card</button></div>
+      <div class="btnrow"><button class="btn btn-ghost" onclick="prev(3)">Back</button><button class="btn btn-primary" onclick="build()">Build My Battle Card</button></div>
     </div>
   </div>
 
@@ -635,168 +609,255 @@ function firstBuildOnThisBrowser(){
   }catch(x){ return true; }
 }
 
-/* ---- The three roles ---- */
-var ROLES = {
-  artist:{
-    name:'The Creator',
-    alias:'The Maker',
-    lives:'You live in the present — in the work itself.',
-    mission:{
-      customers:'To become the owner whose <b>work sells itself</b> — where the standard you hold is the reason people choose you, and the perimeter around it runs whether or not you are in the room. You stop being the only one who can deliver it, and start being the reason it is worth buying.',
-      time:'To get back to <b>the only hours that ever made you money</b> — the ones inside the craft. Everything that is not the work gets handed to something that never gets tired, so your calendar stops deciding how good you are allowed to be.',
-      without:'To turn a job you own into <b>an asset that runs</b> — where the craft stays yours and everything touching it runs itself. You keep the part you love, and stop carrying the part that keeps you trapped.',
-      prices:'To be paid what the work is actually worth — where <b>the quality you already deliver</b> is presented, followed up, and priced like it matters. Nothing about the craft changes. Everything about the invoice does.'
-    },
-    chips:['Protect the craft','Delegate the perimeter','Raise the price'],
-    outcome:{
-      customers:'<b>You will own a machine that fills your calendar with the right work</b> — so the only thing you decide each morning is which piece to make next.',
-      time:'<b>You will own back the hours the perimeter was eating</b> — every one of them returned to the work only you can do.',
-      without:'<b>You will own a business that earns on the weeks you do not work</b> — with the craft still entirely yours.',
-      prices:'<b>You will own a price that matches the standard</b> — and the follow-up discipline that makes people pay it without flinching.'
-    },
-    purpose:'Your purpose is to <em>make the thing worth buying</em> — and to stop being the only one who can.',
-    mult:{
-      customers:'Your work already converts — you just deliver it to too few people. Cover the perimeter and the same craft reaches <b>three times the volume</b> without dropping a single standard.',
-      time:'Every hour returned is an hour back in the craft, which is the only hour that was ever making you money. Cover the admin and you do not work less — <b>you work on the right thing.</b>',
-      without:'You never have to hand over the craft. You hand over everything <b>touching</b> it. That alone turns a job you own into an asset that runs.',
-      prices:'The quality is already there. What is missing is the presentation, the follow-up, and the nerve to ask. Cover those and <b>your price rises without the work changing at all.</b>'
-    },
-    strength:'Quality is never your problem. Your standards <b>are</b> the product, and customers can feel the difference. The business exists because you are good at the thing.',
-    trap:'You are the bottleneck. It cannot grow past your own two hands, and it stops earning the week you stop working. You will resist any system that makes the work feel less like yours — which is the exact thing that would set you free.',
-    cost:'Every hour spent on work only you can do is an hour not spent on work that compounds. <b>Your ceiling is your own calendar.</b>',
-    hand:'Everything that is not the craft. Quoting, follow-up, scheduling, invoicing, the writing you dread. Protect the craft and delegate the perimeter around it.',
-    directive:'Raise the standard on <b>the business</b>, not just the work. Your standards built the product — now point them at the machine that delivers it.',
-    agent:'You are my perimeter agent. The work I am best at is [SUPER]. Your job is to protect that. Take everything around it off my plate: draft quotes, write follow-ups, prep scheduling messages, chase invoices — always in my voice, never touching the actual craft. Ask me for the details you need, one question at a time.',
-    week:{
-      customers:'List the last 5 people who paid you and send each one a short personal message asking who else needs this. You already earned the trust — you just never asked.',
-      time:'Pick the one task you do every week that is not the craft. Write down its exact steps once, then have your agent run it next time.',
-      without:'Write the instructions for the one job you believe only you can do. Not to hand it over yet — just to prove it can be written down.',
-      prices:'Raise your price on the next quote you send. Not for existing clients, just the next new one. Watch what happens.'
-    }
+/* ---- The intake model -------------------------------------------------------
+   Four questions, each doing real work:
+
+     q1 STRUGGLE  what would change everything      -> the domain
+     q2 WHY       why it is still here              -> the agent's MODE
+     q3 HANDOVER  what they would hand over         -> the agent's MATERIAL
+     q4 STAKES    what happens if nothing changes   -> the agent's PRIORITY
+
+   The agent is COMPOSED from mode x material, not looked up from a label.
+   The role (Creator/Technician/Visionary) is DERIVED from q3 x q1 rather than
+   measured with its own questions.
+---------------------------------------------------------------------------- */
+
+var STRUGGLE = {
+  demand:{
+    label:'more of the right customers',
+    short:'not enough of the right work coming in',
+    name:'Demand',
+    struggle:'Not enough of the right work coming in \u2014 and too much of the wrong work when it does.',
+    multiply:'Demand is the only problem that makes every other problem smaller. Fix the flow of the right customers and pricing, hiring and time all get easier by consequence.',
+    own:'a pipeline that fills without you personally chasing it'
   },
-  operator:{
-    name:'The Technician',
-    alias:'The Builder',
-    lives:'You live in the past — in order, precision, and what has already been proven.',
-    mission:{
-      customers:'To turn the process in your head into <b>a pipeline that never forgets</b> — where every enquiry is handled the same way, on time, whether or not you remember it. You already built the machine. This points it outward.',
-      time:'To buy back <b>the cheapest hours in the business</b> — yours. You are the only one who already knows every step, which makes you the only one who can hand them over cleanly. That is an advantage, not an admission.',
-      without:'To be <b>one document away from an asset</b> — because you already are. The process you carry <em>is</em> the company; written down and automated, it keeps earning while you are somewhere else entirely.',
-      prices:'To get paid for <b>the invisible work you have been absorbing</b> — the checking, the fixing, the carrying nobody sees. Make it visible and the price corrects itself.'
-    },
-    chips:['Write it down','Automate the loop','Stop carrying it'],
-    outcome:{
-      customers:'<b>You will own a pipeline that runs on its own</b> — every lead handled to your standard, without you holding the whole thing in your head.',
-      time:'<b>You will own the loops you used to run manually</b> — handed off, documented, and executing without you.',
-      without:'<b>You will own an asset instead of a job</b> — the process out of your head and into something that cannot forget or burn out.',
-      prices:'<b>You will own a price that includes everything you actually do</b> — including the work that was invisible until now.'
-    },
-    purpose:'Your purpose is to <em>make it repeatable</em> — and then to make it run without you holding it.',
-    mult:{
-      customers:'You already have a process that works. Pointed outward and running automatically, it stops being a habit and becomes <b>a pipeline</b> — every enquiry handled the same way, whether or not you remember.',
-      time:'You are the only role that can hand work off cleanly, because you are the only one who already knows every step. That makes <b>your time the cheapest in the business to buy back.</b>',
-      without:'You are one document away from an asset. The process in your head <b>is</b> the company — written down and automated, it keeps earning while you are somewhere else.',
-      prices:'You are almost certainly underpricing, because you absorb invisible work nobody sees. <b>Make it visible and the price corrects itself.</b>'
-    },
-    strength:'You are the reason it holds together. Processes exist, details do not vanish, and nothing gets dropped on your watch. You have the rare gift of making a chaotic thing repeatable.',
-    trap:'You optimise the engine and forget to ask where the car is going. You will polish a process that should have been deleted, and you will say yes to carrying more rather than building something that carries it for you.',
-    cost:'Flawless execution of the wrong priority is the most expensive thing in business. <b>Your ceiling is your own capacity.</b>',
-    hand:'The repeating loops you have already mastered. You know the steps exactly, which makes you the best person alive at handing them off. Onboarding, data cleanup, reporting, reminders.',
-    directive:'Work <b>on</b> the business, not just <b>in</b> it. You already know how to run the machine — now build the one that runs without you.',
-    agent:'You are my systems agent. What I am best at is [SUPER]. I will describe a process I currently run manually, step by step. Turn it into a repeatable checklist, tell me which steps you can execute yourself, and flag any step that exists only out of habit. Be blunt about what should be deleted.',
-    week:{
-      customers:'Take your best repeatable process and point it outward. One consistent follow-up sequence for every new enquiry, running whether or not you remember.',
-      time:'Pick the loop you run most often and hand it to an agent this week. You already know every step — that is the whole advantage.',
-      without:'Document the one process nobody else knows. That single document is the difference between a job and an asset.',
-      prices:'Audit where your time actually goes, then work out your true hourly rate. Most Technicians are underpricing because they absorb invisible work.'
-    }
+  money:{
+    label:'the money actually working',
+    short:'the money not working \u2014 pricing, margin or cash',
+    name:'Money',
+    struggle:'The revenue is there. What is left after it is not \u2014 pricing, margin, or cash timing is eating it.',
+    multiply:'Money problems are almost never volume problems. When price and margin are right, the same work you already do starts paying for the business instead of just feeding it.',
+    own:'a price and a margin that survive contact with a busy month'
   },
-  entrepreneur:{
-    name:'The Visionary',
-    alias:'The Scout',
-    lives:'You live in the future — in what could be.',
-    mission:{
-      customers:'To stop hunting and start <b>compounding what already worked</b> — the one channel that produced, run again deliberately, five more times. You do not need a new idea. You need the last good one finished.',
-      time:'To get back <b>a clear head</b> — the only thing you actually need. Your time is not lost to work, it is lost to switching. Something else holds the open loops so you can point at what is next.',
-      without:'To become <b>the owner who hands things over</b> — because vision is worthless unhanded. The moment someone else can run your proven idea, you are free to go find the next one, which is the only job you ever wanted.',
-      prices:'To charge properly for <b>the offer you are already bored of</b> — because to the customer it is brand new. Raise it, sell it again, and stop discounting your own best work out of restlessness.'
-    },
-    chips:['Finish one thing','Hold the loops','Hand it over'],
-    outcome:{
-      customers:'<b>You will own a channel that runs without your attention</b> — repeating the thing that already worked while you go find the next one.',
-      time:'<b>You will own a machine that holds every open loop</b> — so nothing dies at 80% just because you looked away.',
-      without:'<b>You will own a proven idea someone else can run</b> — which is the only way you ever get to start the next one.',
-      prices:'<b>You will own a price that reflects the value, not your boredom</b> — on the offer you already know converts.'
-    },
-    purpose:'Your purpose is to <em>see what is coming</em> — and to finish enough of it to matter.',
-    mult:{
-      customers:'You do not need a new channel. You need the one that already worked run five more times, deliberately. Cover follow-through and <b>your best idea stops dying at 80%.</b>',
-      time:'Your time is not lost to work — it is lost to switching. A machine that holds the open loops gives back the only thing you actually need: <b>a clear head to point at the next thing.</b>',
-      without:'Vision is worthless unhanded. The moment someone else can run your proven idea, <b>you are free to go find the next one</b> — which is the only job you ever wanted.',
-      prices:'You are bored of your best offer, so you undersell it. To the customer it is brand new. <b>Raise it and sell it again.</b>'
-    },
-    strength:'You create direction. Opportunities appear because you go looking for them, and you can pull people toward something that does not exist yet. Nobody else in the building does that.',
-    trap:'Ten things started, none finished. You mistake motion for progress, and the new idea always feels more urgent than the boring thing that is 80% done and actually printing money.',
-    cost:'An unfinished idea is worth exactly zero. <b>Your ceiling is your own follow-through.</b>',
-    hand:'Follow-through itself. Let a machine hold the checklist, chase the loose ends and turn your ideas into shipped work while you keep scouting.',
-    directive:'Momentum without execution is noise. Pick the thing closest to done and finish it this week.',
-    agent:'You are my follow-through agent. What I am best at is [SUPER]. I will dump half-finished ideas on you. For each one: tell me how close to done it actually is, what the remaining steps are, and which single step unlocks the rest. Then hold me to it and ask me about it. Do not let me start anything new until I answer.',
-    week:{
-      customers:'Stop hunting for a new channel. Take the one that already worked and run it again, deliberately, five more times.',
-      time:'Write down every unfinished project. Kill three of them today. The relief is the point.',
-      without:'Pick your one proven idea and write the instructions for someone else to run it. Vision is worthless unhanded.',
-      prices:'You are probably underpricing your best offer because you are already bored of it. Raise it and sell it again.'
-    }
+  time:{
+    label:'your time back',
+    short:'the week being full while nothing moves forward',
+    name:'Time',
+    struggle:'The business has your whole week and you are still behind. Every hour goes somewhere, and none of it goes to the work that grows anything.',
+    multiply:'Time is the only input you cannot buy more of. Free it and you get the one thing every other fix requires: room to actually do it.',
+    own:'a week with room in it \u2014 and the discipline that keeps the room there'
+  },
+  people:{
+    label:'your people performing without you',
+    short:'the work slipping the moment you stop watching',
+    name:'People',
+    struggle:'It works when you are watching. It slips when you are not. You are the quality control, permanently.',
+    multiply:'A team that performs without you is the difference between owning a business and being employed by one. Cover this and the business stops being a function of your attention.',
+    own:'a team that holds the standard when you are not in the room'
+  },
+  visibility:{
+    label:'knowing what is actually going on',
+    short:'deciding on feel because the real numbers arrive too late',
+    name:'Visibility',
+    struggle:'You are making decisions on feel because the real numbers arrive too late, or not at all.',
+    multiply:'You cannot fix what you cannot see. Visibility is not a reporting problem \u2014 it is the thing standing between guessing and deciding.',
+    own:'a clear picture of the business, arriving before you need it'
   }
 };
 
-/* ---- Scoring: [artist, operator, entrepreneur] ---- */
-var WEIGHTS = {
-  q1:{ doing:[3,0,0], running:[0,3,0], chasing:[0,0,3], fires:[1,2,0] },
-  q2:{ systems:[2,0,1], ideas:[1,2,0], quality:[0,1,2], sleep:[1,2,0] },
-  q3:{ admin:[2,0,2], visible:[2,1,0], finishing:[1,0,3], letgo:[3,1,0] },
-  q4:{ proud:[0,1,3], uneasy:[3,0,0], relieved:[0,3,1], restless:[0,0,3] },
-  q5:{ me:[2,2,0], time:[1,2,0], focus:[0,0,3], systems:[1,3,0] }
+var WHY = {
+  nevertime:{
+    mode:'Execution',
+    because:'you already know the answer and have never had the spare hour',
+    diag:'This is not a knowledge problem, so no amount of further learning will touch it. You already hold the answer \u2014 what you do not hold is a spare hour to execute it. That makes this the most fixable version of the problem, and the most likely to still be here in a year, because nothing about your week creates that hour on its own.',
+    instruction:'to do the work, not to advise me on it',
+    detail:'Assume I will never find time to do it myself. Draft, prepare and complete \u2014 bring me things to approve, not things to start.'
+  },
+  dontknow:{
+    mode:'Advisory',
+    because:'the right move has never actually been made explicit',
+    diag:'You are not stuck from laziness, you are stuck from ambiguity \u2014 and ambiguity is where capable people freeze longest. The instinct is to gather more information, but more input rarely resolves it. What resolves it is forcing the options into the open, naming the tradeoff out loud, and committing to the least reversible one first.',
+    instruction:'to help me decide, and then commit',
+    detail:'Lay out the real options with the tradeoff named. Recommend one. Then tell me what would have to be true for you to be wrong.'
+  },
+  didntstick:{
+    mode:'Systems',
+    because:'the last attempt depended on you to keep it alive',
+    diag:'This is the most useful answer you could have given, because it means the fix was never the problem \u2014 the maintenance was. Whatever you built depended on you remembering to run it, and you were the busiest part of the system. Anything built next has to survive your worst week, or it fails exactly the same way.',
+    instruction:'to be the part that remembers',
+    detail:'Assume I will forget, and that my worst week is the real test. Hold the running state yourself and re-surface it without being asked.'
+  },
+  others:{
+    mode:'Accountability',
+    because:'nothing closes unless you personally reopen it',
+    diag:'You have handed the work over but kept the anxiety, which is the worst of both. The gap is not capability, it is follow-through \u2014 nothing closes unless you personally reopen it. Chasing is a real job. Right now it is your job, performed badly, because you resent doing it.',
+    instruction:'to close the loops I am tired of chasing',
+    detail:'Track every open commitment, whose it is, and how long it has been open. Draft the chase message before I have to think about it.'
+  },
+  cantsee:{
+    mode:'Diagnostic',
+    because:'the problem is not yet visible enough to aim at',
+    diag:'You are being asked to solve something you cannot yet describe, which is why every attempt has felt like guessing. This is the one case where acting immediately is the wrong move. The first job is not to fix it \u2014 it is to make it visible enough that the fix becomes obvious.',
+    instruction:'to make it visible before we act',
+    detail:'Do not propose solutions yet. Tell me what I would need to see to understand this, and the fastest way to see it.'
+  }
+};
+
+var HANDOVER = {
+  pursuit:{
+    noun:'Pursuit',
+    material:'chasing people \u2014 leads, replies, follow-ups',
+    takes:'First replies, second and third follow-ups, the re-approach to everyone who went quiet, and the nudge you keep meaning to send.',
+    role:'entrepreneur',
+    week:'Pick the five people who went quiet in the last ninety days and send each one a single line asking whether it is still on their list. Not a pitch. One line.'
+  },
+  writing:{
+    noun:'Writing',
+    material:'the writing \u2014 emails, proposals, updates, posts',
+    takes:'Emails, proposals, updates, posts, descriptions \u2014 everything where you know the substance and stall on the sentence.',
+    role:'artist',
+    week:'Take the one message you have been avoiding writing and say it out loud into your phone instead of typing it. Have the agent clean it up. Send it today.'
+  },
+  decisions:{
+    noun:'Decision',
+    material:'the judgment calls \u2014 priorities and tradeoffs',
+    takes:'Framing the options, naming the tradeoff, pressure-testing your reasoning, and telling you which call is least reversible.',
+    role:'entrepreneur',
+    week:'Write down the decision you have been carrying for more than a month. Just the decision, in one sentence. That sentence is usually the entire problem.'
+  },
+  tracking:{
+    noun:'Tracking',
+    material:'the tracking \u2014 numbers, status, who owes what',
+    takes:'Who owes what, what is open, what moved, what did not, and the report you keep meaning to build.',
+    role:'operator',
+    week:'Pick the one number you currently check by feel instead of by fact. Write down its real value today. That gap is your baseline.'
+  },
+  comms:{
+    noun:'Comms',
+    material:'the communication \u2014 meetings, updates, check-ins',
+    takes:'Agendas, recaps, the follow-up nobody sends, status updates, and the check-ins that exist only because nobody wrote anything down.',
+    role:'operator',
+    week:'Cancel the recurring meeting that could be a written update. Send the written update instead. See whether anybody notices.'
+  }
+};
+
+var STAKES = {
+  stall:{
+    label:'stalling at this size',
+    owns:'breaking the stall',
+    priority:'Your priority is <b>momentum</b>. Move something visible every week and tell me what moved.',
+    instruction:'Your priority is momentum. Move something visible every week, and tell me what moved.',
+    closing:'Another year at this size is not neutral \u2014 it is a year of your best energy spent maintaining a ceiling.'
+  },
+  burnout:{
+    label:'burning out',
+    owns:'keeping you out of the fire',
+    priority:'Your priority is <b>relief</b>. Nothing you do should add to the plate you are meant to be clearing.',
+    instruction:'Your priority is my relief. Do not add a single thing to my plate in order to keep you running. Batch your questions into one message a day.',
+    closing:'You are the asset that is depreciating. Nothing else on the list matters if that continues.'
+  },
+  losing:{
+    label:'losing ground',
+    owns:'never letting anything go cold',
+    priority:'Your priority is <b>speed</b>. Nothing waits, and anything going cold gets flagged before it does.',
+    instruction:'Your priority is speed. Nothing I hand you waits more than a day, and if something is going cold, tell me before it does.',
+    closing:'Ground lost while you were busy is the most expensive kind, because someone else is now the default.'
+  },
+  trapped:{
+    label:'staying trapped in it',
+    owns:'running without you',
+    priority:'Your priority is <b>autonomy</b>. Operate without needing me, and improve without being told twice.',
+    instruction:'Your priority is autonomy. Do as much as possible without asking me, and get better at it without being told twice.',
+    closing:'A business that cannot run without you is not an asset. It is a job with extra risk.'
+  }
+};
+
+/* Role is derived, not asked. What someone is willing to hand over, combined
+   with the struggle they name, says more than a temperament quiz does. */
+/* Weights were tuned by brute-forcing all 500 answer paths so that no role
+   dominates and near-ties stay uncommon. Each option keeps its intended lean;
+   only the magnitudes were solved for.
+   Result: Creator 31%, Technician 36%, Visionary 33%, splits 15%. */
+var ROLE_WEIGHTS = {
+  q3:{ pursuit:[0,1,5], writing:[6,0,1], decisions:[1,0,5], tracking:[0,5,1], comms:[0,5,2] },
+  q1:{ demand:[1,0,5], money:[6,1,0], time:[5,0,0], people:[0,6,2], visibility:[1,4,0] },
+  q2:{ nevertime:[6,1,0], dontknow:[0,0,6], didntstick:[1,5,0], others:[1,3,0], cantsee:[0,1,6] }
 };
 var ORDER = ['artist','operator','entrepreneur'];
-var GOAL_LABEL = {
-  customers:'more of the right customers',
-  time:'your time back',
-  without:'a business that runs without you',
-  prices:'higher prices for the same work'
-};
 
 function score(ans){
   var s={artist:0,operator:0,entrepreneur:0};
-  ['q1','q2','q3','q4','q5'].forEach(function(q){
-    var w=WEIGHTS[q][ans[q]];
+  ['q3','q1','q2'].forEach(function(q){
+    var w=ROLE_WEIGHTS[q][ans[q]];
     if(!w) return;
     s.artist+=w[0]; s.operator+=w[1]; s.entrepreneur+=w[2];
   });
   return s;
 }
 
-/* Rank with a defined tie-break so results are reproducible:
-   1. higher score wins
-   2. the role that Q1 (the behavioural question) pointed at wins
-   3. fixed order: entrepreneur > artist > operator  */
+/* Reproducible tie-break: score, then whichever role q3 pointed at, then order. */
 function rank(s, ans){
-  var q1w=WEIGHTS.q1[ans.q1]||[0,0,0];
-  var q1Top=null, best=-1;
-  ORDER.forEach(function(r,i){ if(q1w[i]>best){ best=q1w[i]; q1Top=r; } });
+  var w=ROLE_WEIGHTS.q3[ans.q3]||[0,0,0];
+  var top=null, best=-1;
+  ORDER.forEach(function(r,i){ if(w[i]>best){ best=w[i]; top=r; } });
   var prio={entrepreneur:0,artist:1,operator:2};
   return ORDER.slice().sort(function(a,b){
     if(s[b]!==s[a]) return s[b]-s[a];
-    if(a===q1Top) return -1;
-    if(b===q1Top) return 1;
+    if(a===top) return -1;
+    if(b===top) return 1;
     return prio[a]-prio[b];
   });
 }
 
-/* ---- Role tiles: tap to see what a role means ----------------------------
-   These tiles previously looked like buttons but did nothing. Now each opens a
-   short profile and offers a shortcut straight to that full card, for people who
-   already know which one they are and do not want the questionnaire. */
+/* Agent name = The {material} {mode} Agent */
+function agentName(ans){
+  return 'The '+HANDOVER[ans.q3].noun+' '+WHY[ans.q2].mode+' Agent';
+}
+
+function agentPromptFor(ans, sp){
+  var W=WHY[ans.q2], H=HANDOVER[ans.q3], S=STRUGGLE[ans.q1], K=STAKES[ans.q4];
+  return 'You are my '+agentName(ans).replace('The ','')+'.\n\n'+
+    'What I am best at is "'+sp+'". Protect that \u2014 it is the reason this business '+
+    'exists, and it is not what I am handing you.\n\n'+
+    'My real struggle is '+S.short+'. It is still here because '+W.because+'.\n\n'+
+    'Your job is '+W.instruction+', specifically with '+H.material+'. '+W.detail+'\n\n'+
+    K.instruction+'\n\n'+
+    'Start by asking me the three questions you most need answered to do this well. '+
+    'Ask them one at a time, and do not give me any advice until you have all three.';
+}
+
+/* ---- The three roles: reference copy only ---------------------------------
+   The role is no longer measured with its own questions \u2014 it is derived from
+   what the person says they would hand over and what they name as the struggle.
+   This block exists so the card can name and explain the result. */
+var ROLES = {
+  artist:{
+    name:'The Creator',
+    alias:'The Maker',
+    lives:'You live in the work itself.',
+    strength:'Quality is never your problem. Your standards <b>are</b> the product, and customers can feel the difference. The business exists because you are good at the thing.',
+    trap:'You are the bottleneck. It cannot grow past your own two hands, and it stops earning the week you stop working.',
+    directive:'Raise the standard on <b>the business</b>, not just the work. Your standards built the product \u2014 now point them at the machine that delivers it.'
+  },
+  operator:{
+    name:'The Technician',
+    alias:'The Builder',
+    lives:'You live in order, precision, and what has already been proven.',
+    strength:'You are the reason it holds together. Processes exist, details do not vanish, and nothing gets dropped on your watch. You have the rare gift of making a chaotic thing repeatable.',
+    trap:'You optimise the engine and forget to ask where the car is going. You will polish a process that should have been deleted, and you will say yes to carrying more rather than building something that carries itself.',
+    directive:'Work <b>on</b> the business, not just <b>in</b> it. You already know how to run the machine \u2014 now build the one that runs without you.'
+  },
+  entrepreneur:{
+    name:'The Visionary',
+    alias:'The Scout',
+    lives:'You live in what could be.',
+    strength:'You create direction. Opportunities appear because you go looking for them, and you can pull people toward something that does not exist yet.',
+    trap:'Ten things started, none finished. You mistake motion for progress, and the new idea always feels more urgent than the boring thing that is 80% done and actually printing money.',
+    directive:'Momentum without execution is noise. Pick the thing closest to done and finish it this week.'
+  }
+};
+
+/* ---- Role tiles: tap to see what a role means ---------------------------- */
 var peeking=null;
 function peek(r){
   var box=document.getElementById('peekbox');
@@ -818,12 +879,10 @@ function peek(r){
 
   box.innerHTML =
     '<div class="pk-role">'+R.name+'</div>'+
-    '<div class="pk-lives">'+R.alias+' · '+R.lives+'</div>'+
-    '<div class="pk-purpose">'+R.purpose+'</div>'+
+    '<div class="pk-lives">'+R.alias+' \u00b7 '+R.lives+'</div>'+
     '<div class="pk-line">'+R.strength+'</div>'+
     '<div class="pk-act">'+
-      '<button class="btn-sm" onclick="pickRole(\''+r+'\')">This is me — build my card</button>'+
-      '<button class="btn-sm btn-ghost-sm" onclick="toWizard()">Not sure — ask me questions</button>'+
+      '<button class="btn-sm" onclick="toWizard()">Build my battle card</button>'+
     '</div>';
   box.classList.remove('hidden');
   peeking=r;
@@ -835,67 +894,35 @@ function toWizard(){
   document.getElementById('superpower').focus({preventScroll:true});
 }
 
-/* Shortcut path: they already know their role. We still need the superpower text
-   and the goal, so we send them to step 1 and remember the forced role. */
-var forcedRole=null;
-function pickRole(r){
-  forcedRole=r;
-  trk('role_picked_'+r);
-  var box=document.getElementById('peekbox');
-  box.innerHTML='<div class="pk-role">'+ROLES[r].name+'</div>'+
-    '<div class="pk-lives">Locked in · answer two quick things below</div>'+
-    '<div class="pk-line">Tell us your superpower and what you want this year, and we will build the '+
-    ROLES[r].name.replace('The ','')+' card. <button class="btn-sm btn-ghost-sm" style="margin-left:6px;" onclick="clearRole()">Undo</button></div>';
-  setStep(0);
-  document.getElementById('superpower').focus({preventScroll:true});
-}
-function clearRole(){
-  forcedRole=null;
-  var b=document.getElementById('peekbox');
-  b.classList.add('hidden');
-  document.querySelectorAll('.triad button').forEach(function(x){
-    x.classList.remove('on'); x.setAttribute('aria-expanded','false');
-  });
-  peeking=null;
-}
-
-/* Which role the card currently on screen resolved to. Used to attribute the
-   star rating and the value answer to a specific role. */
+/* Which role the card on screen resolved to \u2014 used to attribute the star
+   rating and the value answer to a specific role rather than averaging it away. */
 var lastPrimary=null;
+var lastAgent=null;
 
-var idx=0, TOTAL=7, paneIds=['s1','s2','s3','s4','s5','s6','s7'];
+var idx=0, TOTAL=5, paneIds=['s1','s2','s3','s4','s5'];
 function setStep(i){
   idx=i;
   for(var k=0;k<TOTAL;k++){ document.getElementById(paneIds[k]).classList.toggle('hidden', k!==i); }
-  /* On the self-declared path only 2 of 7 panes are used, so the progress
-     readout would otherwise claim 'Step 1 of 7' and then jump to the end. */
-  var shown = forcedRole ? 2 : TOTAL;
-  var pos   = forcedRole ? (i===0?1:2) : (i+1);
-  document.getElementById('pfill').style.width = Math.round((pos/shown)*100)+'%';
-  document.getElementById('pnum').textContent = 'Step '+pos+' of '+shown;
+  document.getElementById('pfill').style.width = Math.round(((i+1)/TOTAL)*100)+'%';
+  document.getElementById('pnum').textContent = 'Step '+(i+1)+' of '+TOTAL;
   document.getElementById('wizard').scrollIntoView({behavior:'smooth', block:'center'});
   clearNeed();
 }
 
-/* Advance. On the shortcut path, step 1 jumps straight to the goal question. */
+/* Advance. Each step requires its own answer before moving on, rather than
+   silently allowing an empty step and only complaining at the very end. */
 function next(i){
-  if(forcedRole && i===1){ setStep(6); trackStep(6); return; }
-  /* Require the current answer before moving on, rather than silently allowing
-     an empty step and only complaining at the very end. */
-  if(i>=2 && i<=6){
-    var q='q'+(i-1);
-    if(!val(q)){ showNeed('Pick one to continue.'); return; }
-  }
   if(i===1){
     var sp=(document.getElementById('superpower').value||'').trim();
     if(!sp){ showNeed('Tell us your superpower first.'); return; }
   }
+  if(i>=2 && i<=4){
+    var q='q'+(i-1);
+    if(!val(q)){ showNeed('Pick one to continue.'); return; }
+  }
   setStep(i); trackStep(i);
 }
-function prev(i){
-  if(forcedRole && i===5){ setStep(0); return; }   // back from goal -> superpower
-  setStep(i);
-}
+function prev(i){ setStep(i); }
 function val(n){ var e=document.querySelector('input[name="'+n+'"]:checked'); return e? e.value : null; }
 
 /* Inline validation message, shown in the active pane. */
@@ -926,57 +953,33 @@ function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 
 function build(){
   var sp=(document.getElementById('superpower').value||'').trim();
-  var ans={q1:val('q1'),q2:val('q2'),q3:val('q3'),q4:val('q4'),q5:val('q5')};
-  var goal=val('goal');
+  var ans={q1:val('q1'),q2:val('q2'),q3:val('q3'),q4:val('q4')};
 
-  /* Superpower is always required — it is the first line of the card. */
+  /* Superpower is always required - it is the first line of the card. */
   if(!sp){ setStep(0); showNeed('Tell us your superpower first.'); return; }
-
-  /* On the shortcut path the role is already chosen, so the five diagnostic
-     questions are skipped; we only still need the goal. */
-  if(!forcedRole){
-    var qs=['q1','q2','q3','q4','q5'];
-    for(var i=0;i<qs.length;i++){
-      if(!ans[qs[i]]){ setStep(i+1); showNeed('Pick one to continue.'); return; }
-    }
-  }
-  if(!goal){ setStep(6); showNeed('Pick what would change everything.'); return; }
-
-  var s, ordered, primary, secondary, split;
-
-  if(forcedRole){
-    /* Self-declared: give the chosen role a clear lead so the mix bars still
-       render sensibly, and derive the secondary from the fixed order. */
-    primary=forcedRole;
-    s={artist:0,operator:0,entrepreneur:0};
-    s[primary]=9;
-    var rest=ORDER.filter(function(r){ return r!==primary; });
-    s[rest[0]]=4; s[rest[1]]=2;
-    secondary=rest[0];
-    ordered=[primary,rest[0],rest[1]];
-    split=false;
-  }else{
-    s=score(ans);
-    ordered=rank(s,ans);
-    primary=ordered[0]; secondary=ordered[1];
-    split=(s[primary]-s[secondary])<=2;
+  var qs=['q1','q2','q3','q4'];
+  for(var i=0;i<qs.length;i++){
+    if(!ans[qs[i]]){ setStep(i+1); showNeed('Pick one to continue.'); return; }
   }
 
+  var S=STRUGGLE[ans.q1], W=WHY[ans.q2], H=HANDOVER[ans.q3], K=STAKES[ans.q4];
+
+  /* Role is derived from the answers, not measured separately. */
+  var s=score(ans);
+  var ordered=rank(s,ans);
+  var primary=ordered[0], secondary=ordered[1];
+  var split=(s[primary]-s[secondary])<=1;
   var R=ROLES[primary], R2=ROLES[secondary];
   var total=s.artist+s.operator+s.entrepreneur || 1;
 
-  var blend = forcedRole
-    ? 'You told us this one yourself — <b>'+R.name.replace('The ','')+'</b>. If you want the diagnostic to check it, start over and answer the questions.'
-    : (split
-      ? 'You are a genuine split: <b>'+R.name.replace('The ','')+'</b> and <b>'+R2.name.replace('The ','')+'</b> are running almost neck and neck. That is a real advantage and a real risk — you can cover both, so you never build anything that covers them for you.'
-      : 'Primarily <b>'+R.name.replace('The ','')+'</b>, with a <b>'+R2.name.replace('The ','')+'</b> streak underneath.');
-
+  var AN=agentName(ans);
   var superquote='"'+esc(sp)+'"';
-  var agentPrompt=R.agent.split('[SUPER]').join(superquote);
-  var week=R.week[goal];
+  var prompt=agentPromptFor(ans, sp);
 
-  var chips='';
-  (R.chips||[]).forEach(function(c){ chips+='<span class="chip">'+c+'</span>'; });
+  var blend = split
+    ? 'You read as a genuine split: <b>'+R.name.replace('The ','')+'</b> and <b>'+R2.name.replace('The ','')+
+      '</b> almost neck and neck. You can cover both, which is exactly why you have never built anything that covers them for you.'
+    : 'You read primarily as <b>'+R.name.replace('The ','')+'</b>, with a <b>'+R2.name.replace('The ','')+'</b> streak underneath.';
 
   var mixrows='';
   ORDER.forEach(function(r){
@@ -987,68 +990,74 @@ function build(){
 
   var h='';
   h+='<div class="bc-top">';
-  h+='<div class="lbl">Your Superpower · '+R.name.replace('The ','')+'</div>';
-  h+='<div class="name">'+R.name+'</div>';
-  h+='<div class="alias">'+R.alias+' · '+R.lives+'</div>';
+  h+='<div class="lbl">Battle Card \u00b7 '+S.name+'</div>';
+  h+='<div class="name">'+AN+'</div>';
+  h+='<div class="alias">Built for '+S.label+' \u00b7 priority: '+K.label+'</div>';
   h+='<div class="super">'+superquote+'</div>';
   h+='<div class="blend">'+blend+'</div>';
   h+='</div>';
 
-  /* Section order mirrors the reference card:
-     Superpower -> Mission -> Multiply It -> Fix Now -> Agent -> What You'll Own.
-     The mix bars and the trap sit between Mission and Multiply, because the
-     diagnostic result is the reason the rest of the card says what it says. */
   h+='<div class="bc-body">';
 
-  h+='<div class="sec"><div class="h">Your Mission · New Purpose</div>'+
-     '<div class="purpose">'+R.purpose+'</div>'+
-     '<div class="mission">'+R.mission[goal]+'</div></div>';
+  /* 1. The struggle, named back to them plainly. */
+  h+='<div class="sec"><div class="h">Your Struggle</div>'+
+     '<div class="purpose">'+S.struggle+'</div></div>';
 
-  h+='<div class="sec"><div class="h">Your Mix</div><div class="mix">'+mixrows+'</div>'+
-     '<p style="margin-top:13px;">'+R.strength+'</p></div>';
+  /* 2. Why it is still here - the diagnosis. This is the value-given part. */
+  h+='<div class="sec"><div class="h">Why It Is Still Here</div>'+
+     '<div class="mission">'+W.diag+'</div></div>';
 
-  h+='<div class="sec"><div class="h">The Trap</div><p>'+R.trap+'</p><p>'+R.cost+'</p></div>';
+  /* 3. The derived role, with the trap that comes with it. */
+  h+='<div class="sec"><div class="h">How You Operate</div><div class="mix">'+mixrows+'</div>'+
+     '<p style="margin-top:13px;">'+R.strength+'</p>'+
+     '<p style="margin-top:10px;">'+R.trap+'</p></div>';
 
+  /* 4. What changes when it is covered. */
   h+='<div class="sec"><div class="h">Multiply It</div>'+
-     '<div class="mult"><div class="mh">Pointed at '+GOAL_LABEL[goal]+'</div>'+R.mult[goal]+'</div>'+
-     '<div class="chips">'+chips+'</div></div>';
+     '<div class="mult"><div class="mh">Pointed at '+S.label+'</div>'+S.multiply+'</div>'+
+     '<div class="chips"><span class="chip">'+W.mode+' mode</span>'+
+     '<span class="chip">'+H.noun+'</span>'+
+     '<span class="chip">'+K.label+'</span></div></div>';
 
-  h+='<div class="sec"><div class="h">Fix Now · This Week</div><div class="thisweek">'+week+'</div></div>';
+  /* 5. One concrete action, from what they would hand over. */
+  h+='<div class="sec"><div class="h">Fix Now \u00b7 This Week</div>'+
+     '<div class="thisweek">'+H.week+'</div></div>';
 
-  h+='<div class="sec"><div class="h">Your Agent · To Multiply It</div><p>'+R.hand+'</p>'+
-     '<div class="agentbox"><div class="tag">Paste-and-run prompt</div>'+esc(agentPrompt)+'</div>'+
-     '<p style="margin-top:11px;color:#9aa0b5;font-size:13px;">Copy that into ChatGPT as your first message. '+
-     'It is written for your role, in your words.</p></div>';
+  /* 6. The agent - named, specified, and pasteable. */
+  h+='<div class="sec"><div class="h">Your Agent \u00b7 '+AN.replace('The ','')+'</div>'+
+     '<p>'+H.takes+'</p>'+
+     '<p style="margin-top:10px;">'+K.priority+'</p>'+
+     '<div class="agentbox"><div class="tag">Paste-and-run prompt</div>'+esc(prompt)+'</div>'+
+     '<p style="margin-top:11px;color:#9aa0b5;font-size:13px;">Copy that into ChatGPT, Claude or Gemini as your '+
+     'first message. It is built from your answers, in your words.</p></div>';
 
+  /* 7. The payoff, plus the cost of doing nothing. */
   h+='<div class="sec"><div class="h">What You\'ll Own</div>'+
-     '<div class="outcome">'+R.outcome[goal]+'</div>'+
-     '<p style="margin-top:12px;">'+R.directive+'</p></div>';
+     '<div class="outcome"><b>You will own '+S.own+'</b> \u2014 and an agent whose only job is '+K.owns+'.</div>'+
+     '<p style="margin-top:12px;">'+K.closing+'</p>'+
+     '<p style="margin-top:10px;">'+R.directive+'</p></div>';
 
   h+='</div>';
-  h+='<div class="bcard-foot"><div>The Three Roles · Legion</div><div>Creator · Technician · Visionary</div></div>';
+  h+='<div class="bcard-foot"><div>Battle Card \u00b7 Legion</div><div>'+AN.replace('The ','')+'</div></div>';
 
   document.getElementById('bcard').innerHTML=h;
   document.getElementById('wizard').classList.add('hidden');
   document.getElementById('resultView').classList.remove('hidden');
   lastPrimary=primary;
+  lastAgent=ans.q3+'_'+ans.q2;
 
-  /* ---- Anonymous analytics: fixed menu keys only, never the typed text ----
-     On the shortcut path q1-q5 are null, so those beacons are skipped rather
-     than sent as 'q1_null' — the server allowlist would reject them anyway. */
+  /* ---- Anonymous analytics: fixed menu keys only, never the typed text ---- */
   trk('card_created');
   if(firstBuildOnThisBrowser()) trk('card_created_unique');
-  trk('role_'+primary);                 // which of the three roles came out on top
-  trk('secondary_'+secondary);          // the blend underneath
-  if(split) trk('role_split');          // near-tie between the top two
-  if(forcedRole){
-    trk('path_selfdeclared');           // they picked their own role from the tiles
-  }else{
-    trk('path_diagnostic');
-    trk('q1_'+ans.q1); trk('q2_'+ans.q2); trk('q3_'+ans.q3);
-    trk('q4_'+ans.q4); trk('q5_'+ans.q5);
-  }
-  trk('goal_'+goal);
-  trk('rolecombo_'+primary+'_'+secondary+'_'+goal);
+  trk('struggle_'+ans.q1);              // which of the five struggles
+  trk('why_'+ans.q2);                   // why it persists -> agent mode
+  trk('handover_'+ans.q3);              // what they would hand over -> material
+  trk('stakes_'+ans.q4);                // what happens if nothing changes
+  trk('agent_'+ans.q3+'_'+ans.q2);      // the composed agent, 25 combinations
+  trk('role_'+primary);                 // the derived role
+  trk('secondary_'+secondary);
+  if(split) trk('role_split');
+  trk('intake_'+ans.q1+'_'+ans.q2+'_'+ans.q3);
 
   document.getElementById('resultView').scrollIntoView({behavior:'smooth'});
 }
@@ -1119,7 +1128,13 @@ function again(){
   trk('card_again'); resetRating();
   document.getElementById('resultView').classList.add('hidden');
   document.getElementById('wizard').classList.remove('hidden');
-  clearRole();                 // drop any self-declared role so the diagnostic runs
+  /* Close any open role tile so the page returns to a clean state. */
+  var pb=document.getElementById('peekbox');
+  if(pb) pb.classList.add('hidden');
+  document.querySelectorAll('.triad button').forEach(function(x){
+    x.classList.remove('on'); x.setAttribute('aria-expanded','false');
+  });
+  peeking=null;
   setStep(0);
   document.getElementById('superpower').value='';
   document.querySelectorAll('input[type=radio]').forEach(function(x){x.checked=false;});

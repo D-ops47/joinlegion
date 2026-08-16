@@ -11,8 +11,15 @@
 import {
   EVENTS,
   GOALS,
+  HANDOVERS,
+  HANDOVER_NOUNS,
   QUESTIONS,
   ROLES,
+  STAKES,
+  STRUGGLES,
+  WHYS,
+  WHY_MODES,
+  agentLabel,
   pct,
   rateOk,
   resolveKey,
@@ -38,7 +45,55 @@ check('card_created_unique present', EVENTS.has('card_created_unique'));
 check('rating_v1..v5 present',
   [1, 2, 3, 4, 5].every((i) => EVENTS.has(`rating_v${i}`)));
 
-console.log('\n--- allowlist: three-role model (current) ---');
+console.log('\n--- allowlist: the intake model (current) ---');
+check('5 struggles present',
+  STRUGGLES.length === 5 && STRUGGLES.every((s) => EVENTS.has(`struggle_${s}`)),
+  STRUGGLES.join(','));
+check('5 whys present',
+  WHYS.length === 5 && WHYS.every((w) => EVENTS.has(`why_${w}`)),
+  WHYS.join(','));
+check('5 handovers present',
+  HANDOVERS.length === 5 && HANDOVERS.every((h) => EVENTS.has(`handover_${h}`)),
+  HANDOVERS.join(','));
+check('4 stakes present',
+  STAKES.length === 4 && STAKES.every((k) => EVENTS.has(`stakes_${k}`)),
+  STAKES.join(','));
+
+// The composed agent is the point of the whole intake: 5 materials x 5 modes.
+const agentKeys = [];
+for (const h of HANDOVERS) for (const w of WHYS) agentKeys.push(`agent_${h}_${w}`);
+check('all 25 composed agents allowlisted',
+  agentKeys.length === 25 && agentKeys.every((k) => EVENTS.has(k)),
+  `n=${agentKeys.length}`);
+
+const agentNames = new Set();
+for (const h of HANDOVERS) for (const w of WHYS) agentNames.add(agentLabel(h, w));
+check('25 agent names are all distinct', agentNames.size === 25, `n=${agentNames.size}`);
+check('agent name format is "The {material} {mode} Agent"',
+  agentLabel('tracking', 'didntstick') === 'The Tracking Systems Agent',
+  agentLabel('tracking', 'didntstick'));
+check('every handover has a noun',
+  HANDOVERS.every((h) => typeof HANDOVER_NOUNS[h] === 'string' && HANDOVER_NOUNS[h]));
+check('every why has a mode',
+  WHYS.every((w) => typeof WHY_MODES[w] === 'string' && WHY_MODES[w]));
+check('all 5 modes are distinct',
+  new Set(WHYS.map((w) => WHY_MODES[w])).size === 5);
+
+// 5 x 5 x 5 full intake shapes
+const intakeKeys = [];
+for (const s of STRUGGLES)
+  for (const w of WHYS)
+    for (const h of HANDOVERS) intakeKeys.push(`intake_${s}_${w}_${h}`);
+check('all 125 intake profiles allowlisted',
+  intakeKeys.length === 125 && intakeKeys.every((k) => EVENTS.has(k)),
+  `n=${intakeKeys.length}`);
+
+check('an unknown struggle is rejected',
+  resolveKey('struggle_madeup', '').status === 403);
+check('an unknown agent pair is rejected',
+  resolveKey('agent_pursuit_madeup', '').status === 403);
+
+console.log('\n--- allowlist: three-role model (derived) ---');
 check('all 3 primary roles present',
   ROLES.every((r) => EVENTS.has(`role_${r}`)), ROLES.join(','));
 check('all 3 secondary roles present',

@@ -53,8 +53,68 @@ export const ROLE_ALIASES = {
   entrepreneur: 'The Scout',
 };
 
-// The five diagnostic questions and their option vocabularies, mirroring
-// WEIGHTS in card.html. Kept here so per-answer distributions can be reported.
+// --- THE INTAKE: four questions, each doing real work ------------------------
+// q1 STRUGGLE  -> the domain      q2 WHY       -> the agent's MODE
+// q3 HANDOVER  -> the material    q4 STAKES    -> the agent's PRIORITY
+// The agent is COMPOSED as "The {material} {mode} Agent", giving 25 named
+// agents rather than one generic recommendation per role.
+
+export const STRUGGLES = ['demand', 'money', 'time', 'people', 'visibility'];
+export const WHYS = ['nevertime', 'dontknow', 'didntstick', 'others', 'cantsee'];
+export const HANDOVERS = ['pursuit', 'writing', 'decisions', 'tracking', 'comms'];
+export const STAKES = ['stall', 'burnout', 'losing', 'trapped'];
+
+export const STRUGGLE_LABELS = {
+  demand: 'More of the right customers',
+  money: 'Making the money work',
+  time: 'Getting my time back',
+  people: 'People performing without me',
+  visibility: 'Knowing what is going on',
+};
+export const WHY_LABELS = {
+  nevertime: 'Knows the answer, never gets to it',
+  dontknow: 'Does not know the right move',
+  didntstick: 'Tried it, it did not stick',
+  others: 'Depends on other people',
+  cantsee: 'Cannot see it clearly enough',
+};
+// The mode each "why" resolves to — this is the half of the agent name that
+// says what kind of help the person actually needs.
+export const WHY_MODES = {
+  nevertime: 'Execution',
+  dontknow: 'Advisory',
+  didntstick: 'Systems',
+  others: 'Accountability',
+  cantsee: 'Diagnostic',
+};
+export const HANDOVER_LABELS = {
+  pursuit: 'Chasing people',
+  writing: 'Writing things',
+  decisions: 'Deciding things',
+  tracking: 'Tracking things',
+  comms: 'Talking to people',
+};
+export const HANDOVER_NOUNS = {
+  pursuit: 'Pursuit',
+  writing: 'Writing',
+  decisions: 'Decision',
+  tracking: 'Tracking',
+  comms: 'Comms',
+};
+export const STAKES_LABELS = {
+  stall: 'We stall',
+  burnout: 'I burn out',
+  losing: 'We lose ground',
+  trapped: 'I stay trapped',
+};
+
+/** "The Tracking Systems Agent" — mirrors agentName() in card.html. */
+export function agentLabel(handover, why) {
+  return `The ${HANDOVER_NOUNS[handover]} ${WHY_MODES[why]} Agent`;
+}
+
+// --- LEGACY: the five-question diagnostic it replaced ------------------------
+// Retained so historical counts still resolve and stale cached pages get a 200.
 export const QUESTIONS = {
   q1: ['doing', 'running', 'chasing', 'fires'],
   q2: ['systems', 'ideas', 'quality', 'sleep'],
@@ -127,7 +187,8 @@ function buildAllowlist() {
     'example_view',
   ]);
 
-  // The builder is now 7 steps (intro + 5 questions + goal), up from 5.
+  // The builder is 5 screens (superpower + 4 questions). Kept at 7 so any
+  // still-cached copy of the previous 7-step page does not start 403ing.
   for (let i = 1; i <= 7; i++) ev.add(`step_${i}_reached`);
   for (let i = 1; i <= 5; i++) ev.add(`rating_v${i}`);
   ev.add('rating');
@@ -149,6 +210,22 @@ function buildAllowlist() {
   }
   ev.add('path_diagnostic');
   ev.add('path_selfdeclared');
+
+  // --- current: the intake ---
+  for (const s of STRUGGLES) ev.add(`struggle_${s}`);
+  for (const w of WHYS) ev.add(`why_${w}`);
+  for (const h of HANDOVERS) ev.add(`handover_${h}`);
+  for (const k of STAKES) ev.add(`stakes_${k}`);
+
+  // The composed agent: 5 materials x 5 modes = 25.
+  for (const h of HANDOVERS)
+    for (const w of WHYS) ev.add(`agent_${h}_${w}`);
+
+  // Full intake shape, 5 x 5 x 5 = 125. Enumerated so the allowlist stays a
+  // closed set rather than a pattern match.
+  for (const s of STRUGGLES)
+    for (const w of WHYS)
+      for (const h of HANDOVERS) ev.add(`intake_${s}_${w}_${h}`);
 
   // --- ratings and value signal ---
   // rating_given counts respondents; rating_positive/negative are quick rollups;
