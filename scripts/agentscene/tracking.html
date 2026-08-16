@@ -299,7 +299,10 @@ at(typeEnd+400, function(){ document.getElementById('t4').classList.remove('acti
                             moveTo(900,600,700); });
 
 /* expose the total so the recorder knows how long to capture */
-window.SCENE_MS = typeEnd + 1900;
+/* Hold on the finished report long enough to actually read it. The report
+   is the payoff of the whole clip, so it gets ~5.4s on screen instead of
+   the 1.5s it had, which read as a flash before the loop restarted. */
+window.SCENE_MS = typeEnd + 5400;
 window.SCENE_READY = true;
 </script>
 </body>

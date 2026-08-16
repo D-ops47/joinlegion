@@ -184,6 +184,12 @@ function buildAllowlist() {
     'card_created_unique',
     'card_download',
     'card_again',
+    // Save-to-home-screen funnel. `card_save_home` is the tap on "Save this";
+    // `card_saved_home` only fires when the OS install actually completed, so
+    // the gap between the two measures how many people abandon the prompt or
+    // the iOS instruction sheet.
+    'card_save_home',
+    'card_saved_home',
     'course_start',
     'course_view',
     'example_view',

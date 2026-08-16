@@ -25,6 +25,10 @@
 <meta name="theme-color" content="#9933FF">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png">
+<!-- Manifest + service worker make the page installable, which is what lets
+     Android/Chrome fire a real "Add to Home screen" prompt from Save this.
+     iOS ignores the prompt API entirely and gets the instruction sheet. -->
+<link rel="manifest" href="/site.webmanifest">
 <title>Build Your Battle Card | LEGION</title>
 <link rel="canonical" href="https://joinlegion.ai/card">
 <meta name="description" content="Answer four questions about what is actually costing you and get a battle card with the AI agent built to cover it. Free, no email, nothing stored.">
@@ -345,9 +349,89 @@
   .takes .tk-h{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.2em;
     text-transform:uppercase;color:var(--purple3);margin-bottom:8px;}
 
+  /* ---- The category claim, at display size -------------------------------
+     Roughly 3x the section headings. "agents" carries the brand gradient so
+     the emphasis is visual as well as dimensional. clamp() keeps it from
+     overflowing narrow phones. */
+  .bigclaim{font-family:'Anton',sans-serif;font-weight:400;text-transform:uppercase;
+    font-size:clamp(38px,7.4vw,74px);line-height:.92;letter-spacing:-.005em;
+    color:var(--metal);margin:2px 0 14px;}
+  .bigclaim em{font-style:normal;background:var(--numgrad);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 26px rgba(153,51,255,.5));}
+  .claimsub{font-size:15px;line-height:1.62;color:#d6dbe8;margin-bottom:15px;
+    max-width:56ch;}
+
   /* How it actually works. */
   .mech{border-left:2px solid var(--purple2);padding-left:14px;font-size:14.5px;
     line-height:1.68;color:var(--bone);}
+
+  /* ---- AI vs AI agent comparison ----------------------------------------
+     Two columns on desktop, stacked on phones. The agent column is the lit
+     one; the tool column is deliberately still legible and not mocked. */
+  .vs{margin-top:18px;border:1px solid var(--pline);border-radius:13px;
+    background:rgba(10,8,18,.55);overflow:hidden;}
+  .vs-h{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--purple3);padding:13px 17px 0;}
+  .vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:12px 0 0;}
+  .vs-col{padding:14px 17px 16px;}
+  .vs-tool{border-right:1px solid var(--pline-soft);}
+  .vs-agent{background:linear-gradient(180deg,rgba(153,51,255,.09),rgba(153,51,255,.02));}
+  .vs-cap{font-family:'Anton',sans-serif;font-size:22px;text-transform:uppercase;
+    line-height:1;margin-bottom:3px;color:var(--dust);}
+  .vs-agent .vs-cap{background:var(--numgrad);-webkit-background-clip:text;
+    background-clip:text;color:transparent;filter:drop-shadow(0 0 16px rgba(153,51,255,.45));}
+  .vs-role{font-family:'Oswald',sans-serif;font-size:10px;letter-spacing:.15em;
+    text-transform:uppercase;color:var(--faint);margin-bottom:11px;}
+  .vs-col ul{list-style:none;margin:0;padding:0;}
+  .vs-col li{position:relative;padding-left:15px;font-size:13.2px;line-height:1.5;
+    color:var(--dust);margin-bottom:8px;}
+  .vs-col li::before{content:'';position:absolute;left:0;top:7px;width:5px;height:5px;
+    border-radius:50%;background:#3a3352;}
+  .vs-agent li{color:#e9ecf4;}
+  .vs-agent li::before{background:var(--purple);box-shadow:0 0 8px rgba(153,51,255,.8);}
+  .vs-kicker{font-family:'Oswald',sans-serif;font-size:13px;letter-spacing:.05em;
+    text-align:center;color:#fff;padding:13px 17px 15px;border-top:1px solid var(--pline-soft);
+    background:rgba(153,51,255,.06);}
+  @media(max-width:640px){
+    .vs-grid{grid-template-columns:1fr;}
+    .vs-tool{border-right:none;border-bottom:1px solid var(--pline-soft);}
+  }
+
+  /* ---- Employment terms on the payoff ---------------------------------- */
+  .terms{margin-top:14px;border:1px solid var(--pline-soft);border-radius:12px;
+    padding:15px 17px;background:rgba(10,8,18,.45);}
+  .tm-h{font-family:'Oswald',sans-serif;font-size:10.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--purple3);margin-bottom:11px;}
+  .tm{position:relative;padding-left:17px;font-size:13.4px;line-height:1.56;
+    color:var(--dust);margin-bottom:9px;}
+  .tm:last-child{margin-bottom:0;}
+  .tm::before{content:'';position:absolute;left:0;top:6px;width:6px;height:6px;
+    border-radius:50%;background:var(--purple);box-shadow:0 0 9px rgba(153,51,255,.75);}
+  .tm b{color:#fff;font-weight:600;}
+
+  /* ---- Add-to-home-screen sheet ---------------------------------------- */
+  .installsheet{position:relative;margin-top:16px;border:1px solid var(--pline);
+    border-radius:13px;padding:19px 21px 17px;background:var(--panel);
+    box-shadow:0 0 30px rgba(153,51,255,.16);}
+  .is-x{position:absolute;top:9px;right:12px;background:none;border:none;
+    color:var(--faint);font-size:22px;line-height:1;cursor:pointer;padding:4px 6px;}
+  .is-x:hover{color:#fff;}
+  .is-h{font-family:'Oswald',sans-serif;font-size:14px;letter-spacing:.06em;
+    text-transform:uppercase;color:#fff;margin-bottom:12px;}
+  .is-steps{display:flex;flex-direction:column;gap:10px;}
+  .is-step{display:flex;align-items:flex-start;gap:11px;font-size:13.4px;
+    line-height:1.5;color:var(--dust);}
+  .is-step b{color:#fff;font-weight:600;}
+  .is-n{flex:none;width:21px;height:21px;border-radius:50%;background:var(--grad);
+    color:#fff;font-family:'Oswald',sans-serif;font-size:11px;display:flex;
+    align-items:center;justify-content:center;margin-top:1px;}
+  .is-ic{display:inline-block;vertical-align:-2px;margin:0 2px;}
+  .is-alt{margin-top:14px;padding-top:12px;border-top:1px solid var(--pline-soft);
+    font-size:12px;color:var(--faint);}
+  .is-link{background:none;border:none;color:var(--purple3);font-size:12px;
+    cursor:pointer;text-decoration:underline;padding:0;font-family:inherit;}
+  .is-link:hover{color:#fff;}
 
   /* The agent-at-work clip. 16:9 box reserved up front so the card never
      reflows when the video loads. */
@@ -601,9 +685,9 @@
     <div class="bcard" id="bcard"></div>
     <div class="actbar no-print">
       <div class="rate">
-        <!-- Reworded: the old copy asked people to grade us. This asks them to price
-             the outcome, which is better signal for the build queue and a softer ask. -->
-        <div class="rateask">If we built this agent for you, would it change your week?</div>
+        <!-- Reworded: the old copy asked people to grade us. This asks whether the
+             KNOWLEDGE is worth having, which is the thing the course sells. -->
+        <div class="rateask">If you learn this, would it be valuable to you?</div>
         <div class="ratesub">Rate how valuable that would be:</div>
         <div class="stars" id="stars"><span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span></div>
         <div class="ratethanks hidden" id="ratethanks">Logged — anonymous, nothing collected.</div>
@@ -621,11 +705,20 @@
         <div class="avgline hidden" id="avgline"></div>
       </div>
       <div>
-        <button class="btn-sm" onclick="downloadCard()">Save this</button>
+        <button class="btn-sm" id="savebtn" onclick="saveToHome()">Save this</button>
         <button class="btn-sm btn-ghost-sm" onclick="again()" style="margin-left:7px;">Start over</button>
       </div>
     </div>
-    <div class="done_hint no-print">This stays on your device. Save it or screenshot it — it's yours.</div>
+
+    <!-- Add-to-home-screen sheet. Shown only when the browser gives us no way to
+         do it programmatically (iOS Safari has no install API at all), so the
+         person gets the two taps spelled out instead of a button that fails. -->
+    <div class="installsheet hidden no-print" id="installsheet">
+      <button class="is-x" onclick="closeInstall()" aria-label="Close">&times;</button>
+      <div class="is-h">Put Legion on your home screen</div>
+      <div class="is-steps" id="isSteps"></div>
+      <div class="is-alt">Prefer a copy on file? <button class="is-link" onclick="printCard()">Save as PDF</button></div>
+    </div>
     <div class="tut-cta no-print">
       <div class="tut-q">Now build the machine that covers your weak side.</div>
       <div class="cd-status" id="cdStatus">Agent course deploys in</div>
@@ -699,7 +792,7 @@ function videoBlock(material){
       '<source src="'+base+'.webm" type="video/webm">'+
       '<source src="'+base+'.mp4" type="video/mp4">'+
     '</video>'+
-    '<div class="vidcap">No one is touching the keyboard. That is the whole point.</div>'+
+    '<div class="vidcap">AI demo. No one is touching the keyboard.</div>'+
   '</div>';
 }
 
@@ -1186,12 +1279,52 @@ function build(){
      '<div class="takes"><div class="tk-h">It takes this over permanently</div>'+H.takes+'</div>'+
      '<p style="margin-top:12px;">'+K.priority+'</p></div>';
 
-  /* 5. How AI actually does it - the mechanism, plus the video. Abstract claims
-     do not convince; showing the work does. */
-  h+='<div class="sec"><div class="h">How AI Actually Does This</div>'+
+  /* 5. The category distinction, at display size. This is the single idea the
+     whole page turns on: not "use AI", but "employ an agent". The claim is made
+     big, then proved by the clip, then made concrete by the comparison. */
+  h+='<div class="sec"><div class="bigclaim">AI <em>agents</em>,<br>not AI.</div>'+
+     '<div class="claimsub">It reads the same sources you do. It works around the clock, '+
+     'never calls in sick, gets sharper the longer it runs \u2014 and it wants to be there.</div>'+
      '<div class="mech">'+MECH[ans.q3]+'</div>'+
      videoBlock(ans.q3)+
-     '<p style="margin-top:13px;">We teach you to build it in plain language. No code, no integrations to wire, '+
+
+     /* The comparison. The left column is written as genuinely useful work, not
+        a strawman: owners already use AI that way and know it helps. The point
+        is the delegation gap, not that tools are worthless. */
+     '<div class="vs">'+
+       '<div class="vs-h">The difference</div>'+
+       '<div class="vs-grid">'+
+         '<div class="vs-col vs-tool">'+
+           '<div class="vs-cap">AI</div>'+
+           '<div class="vs-role">A tool you operate</div>'+
+           '<ul>'+
+             '<li>You ask, it answers</li>'+
+             '<li>Generates an image</li>'+
+             '<li>Talks an idea through with you</li>'+
+             '<li>Writes you an email template</li>'+
+             '<li>Gives you a contract outline</li>'+
+             '<li>Brainstorms the options</li>'+
+             '<li>Stops the moment you close the tab</li>'+
+           '</ul>'+
+         '</div>'+
+         '<div class="vs-col vs-agent">'+
+           '<div class="vs-cap">An AI agent</div>'+
+           '<div class="vs-role">Someone who does the work</div>'+
+           '<ul>'+
+             '<li>You assign, it delivers</li>'+
+             '<li>Puts the finished asset where it belongs</li>'+
+             '<li>Runs the idea out to a result</li>'+
+             '<li>Sends it, then follows up on the reply</li>'+
+             '<li>Fills it, files it, flags what is missing</li>'+
+             '<li>Picks one, executes it, reports back</li>'+
+             '<li>Still working when you wake up</li>'+
+           '</ul>'+
+         '</div>'+
+       '</div>'+
+       '<div class="vs-kicker">One is a better pen. The other is a hire.</div>'+
+     '</div>'+
+
+     '<p style="margin-top:14px;">We teach you to build it in plain language. No code, no integrations to wire, '+
      'nothing to install. You describe the job once and it holds the job from then on.</p></div>';
 
   /* 6. What it does for the business - kept, because it earns the promise. */
@@ -1202,10 +1335,21 @@ function build(){
   h+='<div class="sec"><div class="h">Start Today</div>'+
      '<div class="thisweek">'+H.week+'</div></div>';
 
-  /* 8. The payoff, plus the cost of doing nothing. */
+  /* 8. The payoff. Framed as employment terms, because that is the comparison
+     the buyer is actually making: this versus hiring a person to do it. */
   h+='<div class="sec"><div class="h">What You\'ll Own</div>'+
-     '<div class="outcome"><b>You will own '+S.own+'</b> \u2014 and an agent whose only job is '+K.owns+'.</div>'+
-     '<p style="margin-top:12px;">'+K.closing+'</p></div>';
+     '<div class="outcome"><b>You will own '+S.own+'</b> \u2014 and the AI agent that holds it, '+
+     'whose only job is '+K.owns+'.</div>'+
+     '<div class="terms">'+
+       '<div class="tm-h">What you are getting</div>'+
+       '<div class="tm"><b>On duty 24/7.</b> No shifts, no coverage gaps, nothing waiting for Monday.</div>'+
+       '<div class="tm"><b>No salary, no benefits, no payroll tax.</b> A fraction of what the same role costs as a hire.</div>'+
+       '<div class="tm"><b>Never sick, never late, never quits.</b> It does not have a bad week.</div>'+
+       '<div class="tm"><b>Does the job right every single time.</b> No drift, no skipped steps, no variation because it got busy.</div>'+
+       '<div class="tm"><b>It wants to be there.</b> Nothing to manage, motivate, or performance-review.</div>'+
+       '<div class="tm"><b>It gets better the longer it runs.</b> Every correction you give it sticks permanently.</div>'+
+     '</div>'+
+     '<p style="margin-top:13px;">'+K.closing+'</p></div>';
 
   h+='</div>';
   h+='<div class="bcard-foot"><div>Battle Card \u00b7 Legion</div><div>'+AN.replace('The ','')+'</div></div>';
@@ -1298,6 +1442,136 @@ function resetRating(){
   valueAnswered=false;
 }
 function downloadCard(){ trk('card_download'); try{window.print();}catch(x){} }
+
+/* ---- Save this: put LEGION on the home screen -----------------------------
+   There is no single API that works everywhere, so this branches by what the
+   browser actually supports rather than by sniffing the user agent alone:
+
+     Android / Chrome / Edge  beforeinstallprompt fires, we stash the event and
+                              replay it on the tap. That is a real OS-level
+                              "Add to Home screen" dialog.
+     iOS Safari               no install API exists at all, in any version.
+                              Apple only allows it from the Share menu, so the
+                              honest move is to show the two taps.
+     Already installed        display-mode is standalone; nothing to do.
+     Desktop                  offer the PDF instead, which is the useful
+                              equivalent of "keep this".
+
+   Registering the service worker is what makes the Android branch possible;
+   without it Chrome never considers the page installable. */
+
+var deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', function(e){
+  /* Suppress Chrome's own mini-infobar so the install happens on our button,
+     at the moment the card is finished and the person wants to keep it. */
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+window.addEventListener('appinstalled', function(){
+  deferredPrompt = null;
+  trk('card_saved_home');
+  var b=document.getElementById('savebtn');
+  if(b) b.textContent='Saved to home screen';
+});
+
+function isStandalone(){
+  return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+         || window.navigator.standalone === true;
+}
+function isIOS(){
+  /* iPadOS reports as Macintosh, so touch capability is the tell. */
+  return /iphone|ipad|ipod/i.test(navigator.userAgent)
+         || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+function isAndroid(){ return /android/i.test(navigator.userAgent); }
+
+/* The step lists. Written per platform because the wording of the menu item
+   differs, and a generic instruction is the fastest way to lose someone. */
+var INSTALL_STEPS = {
+  ios: [
+    'Tap the <b>Share</b> icon at the bottom of Safari <span class="is-ic">&#x2191;</span>',
+    'Scroll down and tap <b>Add to Home Screen</b>',
+    'Tap <b>Add</b> — the LEGION helmet lands on your home screen'
+  ],
+  android: [
+    'Tap the <b>&#8942;</b> menu in the top right of Chrome',
+    'Tap <b>Add to Home screen</b>, then <b>Install</b>',
+    'The LEGION helmet lands on your home screen'
+  ],
+  desktop: [
+    'Look for the <b>install icon</b> in your address bar, or open the browser menu',
+    'Choose <b>Install</b> or <b>Add to Home screen</b>',
+    'LEGION opens in its own window from then on'
+  ]
+};
+
+function showInstall(kind){
+  var sheet=document.getElementById('installsheet');
+  var steps=document.getElementById('isSteps');
+  if(!sheet||!steps) return;
+  var list=INSTALL_STEPS[kind]||INSTALL_STEPS.desktop;
+  steps.innerHTML = list.map(function(s,i){
+    return '<div class="is-step"><span class="is-n">'+(i+1)+'</span><span>'+s+'</span></div>';
+  }).join('');
+  sheet.classList.remove('hidden');
+  sheet.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+function closeInstall(){
+  var sheet=document.getElementById('installsheet');
+  if(sheet) sheet.classList.add('hidden');
+}
+
+function printCard(){
+  closeInstall();
+  trk('card_download');
+  try{ window.print(); }catch(x){}
+}
+
+function saveToHome(){
+  trk('card_save_home');
+  var btn=document.getElementById('savebtn');
+
+  /* Already on the home screen — say so instead of opening a pointless sheet. */
+  if(isStandalone()){
+    if(btn) btn.textContent='Already saved';
+    return;
+  }
+
+  /* The real prompt, where it exists. */
+  if(deferredPrompt){
+    var p=deferredPrompt;
+    deferredPrompt=null;
+    p.prompt();
+    p.userChoice.then(function(res){
+      if(res && res.outcome==='accepted'){
+        trk('card_saved_home');
+        if(btn) btn.textContent='Saved to home screen';
+      }else{
+        /* Declined or dismissed. Put the event back so a second tap works,
+           and fall back to instructions in case the dialog was missed. */
+        deferredPrompt=p;
+        showInstall(isAndroid()?'android':'desktop');
+      }
+    }).catch(function(){ showInstall(isAndroid()?'android':'desktop'); });
+    return;
+  }
+
+  /* No prompt available: spell out the taps for the platform in hand. */
+  if(isIOS())      showInstall('ios');
+  else if(isAndroid()) showInstall('android');
+  else             showInstall('desktop');
+}
+
+/* Register the worker after load so it never competes with first paint. */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){ /* non-fatal */ });
+  });
+}
+
 function again(){
   trk('card_again'); resetRating();
   document.getElementById('resultView').classList.add('hidden');

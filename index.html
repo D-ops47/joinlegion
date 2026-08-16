@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta name="description" content="LEGION gives you an operator, not another toolkit. Real AI that does the work, on your team.">
+<meta name="description" content="Learn how to use AI agents, not just AI. Stay current on every new tool and deploy agents that operate for you. Lifetime access for Mastery members.">
 <meta name="robots" content="index, follow">
 <!-- ===== Link preview (Open Graph). Absolute URLs are REQUIRED: iMessage and
      most scrapers silently ignore relative image paths. ===== -->
 <meta property="og:site_name" content="LEGION AI">
 <meta property="og:title" content="The power of AI unleashed">
-<meta property="og:description" content="Creator, Technician or Visionary — find your dominant role, then deploy the AI that covers the gap. No email required.">
+<meta property="og:description" content="The future is now. Learn how to use AI agents, not just AI — and deploy agents that operate for you. No email required.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://joinlegion.ai/">
 <meta property="og:locale" content="en_US">
@@ -23,10 +23,11 @@
 <!-- X/Twitter reads its own namespace and will not fall back to og:* for card type -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="The power of AI unleashed">
-<meta name="twitter:description" content="Creator, Technician or Visionary — find your dominant role, then deploy the AI that covers the gap.">
+<meta name="twitter:description" content="The future is now. Learn how to use AI agents, not just AI — and deploy agents that operate for you.">
 <meta name="twitter:image" content="https://joinlegion.ai/assets/og-legion.jpg">
 <meta name="twitter:image:alt" content="The LEGION AI armored helmet with a glowing purple eye">
 <meta name="theme-color" content="#9933FF">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/icon-180.png">
 <link rel="canonical" href="https://joinlegion.ai/">
@@ -164,12 +165,22 @@
   .benefits{display:flex;flex-direction:column;gap:13px;margin-bottom:6px;animation:rise .9s .35s ease both;}
   .benefit{display:flex;align-items:flex-start;gap:14px;font-size:16.5px;line-height:1.45;color:#d6dbe8;}
   .benefit .mark{font-family:'Anton',sans-serif;font-size:20px;line-height:1;min-width:22px;padding-top:2px;}
-  .benefit.no .mark{color:#7b3bff;}
   .benefit.yes .mark{color:#22c55e;text-shadow:0 0 14px rgba(34,197,94,.6);}
   .benefit .tx em{font-style:normal;color:#fff;font-weight:700;}
   .benefit.yes .tx{color:#e6f6ff;}
   .benefit.yes .tx em{color:#fff;}
   .benefit .who{display:block;font-size:13px;color:var(--faint);margin-top:3px;}
+
+  /* Lifetime access line. Sits below the checkmarks as its own tier: a thin
+     purple rule and letterspaced Oswald mark it as a standing membership fact
+     rather than another benefit bullet competing for the same attention. */
+  .lifetime{display:inline-flex;align-items:center;gap:9px;align-self:flex-start;
+    font-family:'Oswald',sans-serif;font-size:12.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--purple3);margin-top:20px;
+    padding:9px 15px;border:1px solid rgba(153,51,255,.34);border-radius:20px;
+    background:rgba(153,51,255,.07);animation:rise .9s .42s ease both;}
+  .lifetime::before{content:'';width:6px;height:6px;border-radius:50%;
+    background:var(--purple);box-shadow:0 0 10px rgba(153,51,255,.9);}
 
   .status{font-family:'Oswald',sans-serif;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--purple3);margin:40px 0 16px;animation:rise .9s .45s ease both;}
   .countdown{display:flex;gap:14px;justify-content:flex-start;align-items:flex-start;flex-wrap:wrap;animation:rise .9s .52s ease both;}
@@ -217,6 +228,9 @@
     h1{font-size:clamp(46px,15vw,72px);}
     .countdown{gap:8px;}.unit{min-width:70px;}.num{font-size:38px;}.colon{font-size:26px;padding-top:12px;}
     .benefit{font-size:15px;}.sub{font-size:16px;}
+    /* The badge is the widest single line in the block; drop the tracking and
+       size a touch so it never forces a horizontal scroll on small screens. */
+    .lifetime{font-size:10.5px;letter-spacing:.13em;padding:8px 12px;margin-top:16px;}
     /* lighter smoke on mobile for battery/perf */
     .smoke .s4,.smoke .s5{display:none;}
     .smoke span{filter:blur(38px);}
@@ -229,7 +243,7 @@
 
   @media (prefers-reduced-motion: reduce){
     .aura i,.scan,.colon,.cta::after,.smoke span,.smoke-edge,.live .dot{animation:none;}
-    h1,.sub,.benefits,.status,.countdown,.cta,.micro,.grad-line,.privacy{animation:none;}
+    h1,.sub,.benefits,.lifetime,.status,.countdown,.cta,.micro,.grad-line,.privacy{animation:none;}
     html{scroll-behavior:auto;}
   }
 </style>
@@ -261,27 +275,33 @@
 <div class="hud"><i class="bl"></i><i class="br"></i></div>
 
 <div class="stage">
-  <h1>This changes<br><span class="purple">everything.</span></h1>
+  <!-- The ask was one three-sentence line. At Anton display size that would
+       push the countdown below the fold, so the punch stays in the H1 and the
+       rest carries in the subline directly under it. Same words, distributed. -->
+  <h1>The future is<br><span class="purple">now.</span></h1>
 
-  <p class="sub">The old way gives you tools and walks away. <b>Legion gives you an operator.</b></p>
+  <p class="sub">Don't get left behind by AI. <b>Join Legion.</b></p>
 
   <div class="benefits">
-    <div class="benefit no">
-      <span class="mark">✕</span>
-      <span class="tx">No more toolkits you have to <em>figure out alone.</em></span>
-    </div>
-    <div class="benefit no">
-      <span class="mark">✕</span>
-      <span class="tx">No more <em>chat-to-chat</em> and waiting around.</span>
+    <div class="benefit yes">
+      <span class="mark">✓</span>
+      <span class="tx">Learn how to use <em>AI agents, not just AI.</em></span>
     </div>
     <div class="benefit yes">
       <span class="mark">✓</span>
-      <span class="tx">Real AI that <em>operates for you</em> — it does the work, on your team.</span>
-      <span class="who">Built for people who already know their trade.</span>
+      <span class="tx">Stay current on <em>every new tool</em> and how it fits into your business.</span>
+    </div>
+    <div class="benefit yes">
+      <span class="mark">✓</span>
+      <span class="tx"><em>AI agents that operate for you</em> — they do the work, on your team.</span>
     </div>
   </div>
 
-  <div class="status">Agent course deploys in</div>
+  <!-- Membership perk, set apart from the checkmarks so it reads as a standing
+       fact about access rather than a fourth feature. -->
+  <div class="lifetime">Lifetime access for Mastery members</div>
+
+  <div class="status">Legion deploys in</div>
   <div class="countdown" id="countdown">
     <div class="unit"><div class="box"><div class="num" id="days">00</div></div><div class="label">Days</div></div>
     <div class="colon">:</div>

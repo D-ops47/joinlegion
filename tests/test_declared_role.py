@@ -111,7 +111,14 @@ with sync_playwright() as p:
         chk("no 'You are my' prompt text", "you are my" not in card.lower())
         chk("plan section present", "what we are going to do" in card.lower())
         chk("agent section present", "the agent that ends this" in card.lower())
-        chk("mechanism section present", "how ai actually does this" in card.lower())
+        # The mechanism section is now headed by the display-size claim rather
+        # than the old "How AI Actually Does This" heading. A <br> sits between
+        # "agents," and "not AI.", so match on the first half.
+        chk("mechanism section present", "ai agents," in card.lower())
+        chk("comparison block present", "the other is a hire" in card.lower())
+        chk("device hint removed", "stays on your device" not in card.lower())
+        chk("rating ask reworded",
+            "would it be valuable to you" in pg.inner_text("#resultView").lower())
 
     # ---- validation: cannot build without picking a role --------------------
     print("\n--- role is required ---")
