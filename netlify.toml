@@ -154,17 +154,32 @@
 # URL (verified: clicking Learn/Help/Legion leaves the address untouched, and
 # the document contains no internal <a href> at all). There are therefore no
 # deep links that could escape the proxy prefix.
-[[redirects]]
-  from = "/app"
-  to = "/app/"
-  status = 301
-  force = true
-
+#
+# ORDER AND `force` BELOW ARE BOTH DELIBERATE. Netlify normalises trailing
+# slashes when matching, so a rule written `from = "/app"` matches BOTH /app and
+# /app/. Written with force = true it therefore captures /app/ as well and
+# redirects it to /app/ — itself — which is an infinite 301 loop. That is not
+# hypothetical; it was deployed and measured (final=301 after 5 hops).
+#
+# The fix is order plus the absence of force:
+#   1. the proxy is FIRST, so /app/ and everything deeper is answered with 200
+#      before the slash redirect is ever consulted
+#   2. the slash redirect has NO force, so it only fires for the bare /app that
+#      nothing above it served
+#
+# Reading this file cannot prove the loop is gone, because the rule list looks
+# correct either way. Only requesting the URLs can. Verify both /app and /app/
+# after any change here.
 [[redirects]]
   from = "/app/*"
   to = "https://your-first-agent.lovable.app/:splat"
   status = 200
   force = true
+
+[[redirects]]
+  from = "/app"
+  to = "/app/"
+  status = 301
 
 # The app requests exactly one path absolutely: <script src="/~flock.js">.
 # Being absolute, under the proxy it resolves to joinlegion.ai/~flock.js, which
