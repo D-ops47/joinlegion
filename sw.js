@@ -11,10 +11,10 @@
      - cache-first only the immutable assets (icons and the agent clips)
    Everything else falls through to the network untouched. */
 
-/* Bumped to v2 when the agent clips changed from mp4/webm to animated WebP.
+/* Bumped to v3 when /app/* was excluded from caching (proxied Lovable app).
    The activate handler deletes every cache whose name is not the current one,
    so bumping this is what evicts the old video files from returning visitors. */
-const CACHE = 'legion-v2';
+const CACHE = 'legion-v3';
 
 /* Static, content-stable files. Safe to serve from cache because they change
    only when their filename changes. */
@@ -58,6 +58,16 @@ self.addEventListener('fetch', (e) => {
      any copy changes are current the moment they deploy. */
   if (url.pathname.startsWith('/api/')) return;
   if (req.mode === 'navigate' || req.destination === 'document') return;
+
+  /* /app/* is the Lovable app, proxied through this origin. It ships its own
+     service worker and its own fingerprinted bundles, and it is redeployed
+     independently of this site. Caching any of it here would let an old build
+     survive a Publish, so everything under /app/ goes straight to the network
+     and is left entirely to the app's own worker.
+
+     This matters specifically because /app/assets/* would otherwise match the
+     /assets/ test below. */
+  if (url.pathname === '/app' || url.pathname.startsWith('/app/')) return;
 
   /* Immutable media and icons: cache-first, then fill the cache on miss. */
   const cacheable = /^\/assets\//.test(url.pathname);

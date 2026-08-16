@@ -46,7 +46,42 @@
     # keeps the policy correct if a real <video> or <audio> is ever added back.
     Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
 
+# ---------------------------------------------------------------------------
+# CSP for the proxied app at /app/*.
+#
+# The app is fetched from Lovable but served from OUR origin, so the site-wide
+# CSP above applies to it. That policy is deliberately tight for a static
+# marketing site and would break the app, which:
+#   - loads a webfont from https://cdn.gpteng.co
+#   - is a bundled SPA that evaluates inline and blob-backed script
+#   - stores its own icons and preview images
+#
+# Rather than loosen the site-wide policy and weaken every page for the sake of
+# one path, this header overrides CSP for /app/* only. Netlify applies the most
+# specific matching header block, so the homepage and card keep the strict
+# policy untouched.
+#
+# This is still a real policy, not an opt-out: object-src stays 'none',
+# base-uri stays 'self', and frame-ancestors stays 'none' so the app cannot be
+# framed. It is looser than the marketing pages because it has to be, and no
+# looser than that.
+#
+# NOTE: whoever owns the Lovable project can add third-party origins at any
+# time by editing the app. If something in the app silently stops working after
+# a Lovable change, check the browser console for a CSP violation here FIRST —
+# it will work on the .lovable.app URL (no CSP) and fail only under the proxy,
+# which makes it look like a proxy bug when it is a policy gap.
+[[headers]]
+  for = "/app/*"
+  [headers.values]
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data: https://cdn.gpteng.co; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' https:; worker-src 'self' blob:; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+
 # Long-cache static assets.
+#
+# Scoped to /assets/* on THIS site. The proxied app's own bundles live under
+# /app/assets/* and are intentionally NOT matched here: Lovable fingerprints
+# its filenames and sets its own cache headers, and a year-long immutable cache
+# applied by us would keep serving a stale build after the user hits Publish.
 [[headers]]
   for = "/assets/*"
   [headers.values]
@@ -93,53 +128,54 @@
   status = 302
   force = true
 
-# 3. APP GATE.
+# 3. THE APP — proxied, not redirected.
 #
-# /app is the permanent public address for the LEGION app. It exists BEFORE the
-# app does, so any link shared today keeps working on launch day and nothing
-# downstream ever needs editing.
+# /app/ serves the LEGION app, which is built and hosted on Lovable. status=200
+# makes Netlify fetch it server-side and return it as our own response, so the
+# address bar stays on joinlegion.ai/app/. A 301/302 would hand the visitor to
+# your-first-agent.lovable.app and every link shared from inside the app would
+# carry that address instead of ours.
 #
-# Right now it serves app.html — a real branded page with a countdown, not a
-# 404 and not a bounce to the card. Someone who typed /app is showing intent.
+# THE TRAILING SLASH IS LOAD-BEARING. The app's own HTML references its assets
+# relatively:
 #
-# TO GO LIVE when the app is hosted ELSEWHERE: uncomment the block below and
-# set `to` to the real address. This 302 then takes over and app.html is never
-# served. Keep it ABOVE the clean-URL rules so it matches first.
+#     <script src="./assets/index-*.js">
+#     <link href="manifest.webmanifest">
+#     <link href="icons/icon-192.png">
 #
-# 302, not 301: a 301 is cached by browsers effectively forever, so if the app
-# address ever changes, visitors would keep hitting the old one. Switch it to
-# 301 only once the destination is truly permanent.
+# From /app/ those resolve to /app/assets/..., which the proxy rule forwards.
+# From /app (no slash) the browser treats "app" as a FILE, so ./assets/x.js
+# resolves to /assets/x.js at the site root — where nothing exists, and every
+# script, style and icon 404s. Hence the 301 below: it is not cosmetic, it is
+# what keeps the app from loading blank.
 #
-# [[redirects]]
-#   from = "/app"
-#   to = "https://app.joinlegion.ai"
-#   status = 302
-#   force = true
-#
-# [[redirects]]
-#   from = "/app/*"
-#   to = "https://app.joinlegion.ai/:splat"
-#   status = 302
-#   force = true
+# Client-side routing is not a concern here, which is why there is no SPA
+# fallback rule. The app's navigation is button-driven and never changes the
+# URL (verified: clicking Learn/Help/Legion leaves the address untouched, and
+# the document contains no internal <a href> at all). There are therefore no
+# deep links that could escape the proxy prefix.
+[[redirects]]
+  from = "/app"
+  to = "/app/"
+  status = 301
+  force = true
 
-# Until the app ships, deep links under /app land on the gate rather than the
-# branded 404 — /app/login and /app/anything are addresses people guess and
-# paste. Remove or replace this when the app owns its own sub-routes.
-#
-# Two non-obvious details, both learned the hard way:
-#
-#   1. The target must be /app.html, not /app. A redirect pointing at a
-#      clean-URL alias does not resolve, and the request falls through to the
-#      404 catch-all instead.
-#
-#   2. force = false. With force = true this rule ALSO captured /app itself and
-#      bounced it to /app.html, which the clean-URL rule below sent straight
-#      back to /app — a redirect loop on the page's own address. Leaving force
-#      off lets the real file win for /app while sub-paths still redirect.
 [[redirects]]
   from = "/app/*"
-  to = "/app.html"
-  status = 302
+  to = "https://your-first-agent.lovable.app/:splat"
+  status = 200
+  force = true
+
+# The app requests exactly one path absolutely: <script src="/~flock.js">.
+# Being absolute, under the proxy it resolves to joinlegion.ai/~flock.js, which
+# does not exist on this site and would fall through to the 404 page. This
+# forwards it to Lovable so the request succeeds instead of failing silently in
+# the console. If Lovable ever drops that file this rule becomes harmless.
+[[redirects]]
+  from = "/~flock.js"
+  to = "https://your-first-agent.lovable.app/~flock.js"
+  status = 200
+  force = true
 
 # 4. Clean URLs.
 #
@@ -163,9 +199,17 @@
   status = 301
   force = true
 
+# /app.html is the holding page that /app served before the app shipped. The
+# file is deliberately KEPT in the repo: if the app ever has to come down for
+# maintenance, commenting out the proxy above restores a branded page with a
+# countdown instead of leaving visitors on a Netlify error.
+#
+# This 301 retires its .html address the same way every other page's is
+# retired, and now lands on the proxied app rather than the holding page —
+# which is correct, since anyone reaching /app.html today wants the app.
 [[redirects]]
   from = "/app.html"
-  to = "/app"
+  to = "/app/"
   status = 301
   force = true
 
